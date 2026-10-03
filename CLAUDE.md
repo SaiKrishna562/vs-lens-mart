@@ -4,32 +4,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: quality, tradition, family ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
+Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: warm, traditional, trustworthy family business; quality first ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
 Status: planning/design phase. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
 
-Source documents in `docs/`: the project plan (`.docx`, the v1.1 navigation update is the current version), `changelog.md`, `client-answers.md`, `open-questions.md`, the homepage design image, and `vs_lens_mart_navbar_mega_menu.html` (navigation mockup). Per-page requirements go in `docs/requirements/` (`Requirements_<Page>.md`), and HTML mockups for client sign-off go in `mockups/`. Don't invent client facts (prices, brands, founder story, email). Mark unknowns as TODO and check `docs/open-questions.md`.
+Don't invent client facts (prices, brands, founder story, email, hours, phone numbers). Mark unknowns as `TODO (client)` and check `docs/open-questions.md`.
+
+### Scope
+
+- MVP vs later modules and sprint order: `ROADMAP.md`.
+- **Telugu:** not in the MVP, possibly later. Build no language toggle, Telugu font or translations unless `ROADMAP.md` adds them.
+
+## Source of truth
+
+When documents disagree, the higher one wins:
+
+1. `CLAUDE.md`: global rules
+2. `ROADMAP.md`: scope
+3. `docs/requirements/Requirements_<Page>.md`: page details
+4. `docs/plan/VS_Lens_Mart_Plan_v1.1.docx`: background only. Older versions are in `docs/plan/archive/`; don't use them.
+
+Other docs:
+- `docs/client-answers.md` and `docs/open-questions.md`: what the client has and hasn't confirmed.
+- `docs/changelog.md`: the change history.
+- `docs/ai-fluency-log.md`: the AI usage log.
+- The homepage design image and `docs/vs_lens_mart_navbar_mega_menu.html`: the navigation mockup.
+
+## Working rules
+
+- One feature per session.
+- Before working on a page, read its `docs/requirements/Requirements_<Page>.md`. If it doesn't exist, write it and get it approved first.
+- After any change, add an entry at the top of `docs/changelog.md` (newest first) in this format:
+
+  ```
+  ## YYYY-MM-DD · Phase/Sprint · Area
+  - **Changed:** what changed
+  - **Why:** the reason or decision behind it
+  - **Files:** paths touched
+  ```
+
+## Folder rules
+
+| What | Where |
+|---|---|
+| Pages and routes | `src/app/<route>/` (e.g. `src/app/frames/[slug]/page.tsx`) |
+| Staff admin pages | `src/app/admin/` |
+| Shared UI | `src/components/` |
+| Supabase client, helpers | `src/lib/` |
+| Shop facts (hours, phone, WhatsApp, addresses) | `src/lib/site-config.ts` only. Never hard-code them in components. |
+| Database schema and row-level security | `supabase/schema.sql` |
+| Playwright tests | `tests/` |
+| HTML mockups for client sign-off | `mockups/` |
+| Requirements | `docs/requirements/Requirements_<Page>.md` |
 
 ## Stack
 
 | Layer | Choice |
 |---|---|
-| Framework | Next.js (App Router) + TypeScript, app in `src/` (`src/app`, `src/components`, `src/lib`) |
-| Styling | Tailwind CSS, with design tokens below in the Tailwind config |
+| Framework | Next.js (App Router) + TypeScript |
+| Styling | Tailwind CSS, with the design tokens below in the Tailwind config |
 | Animation | Framer Motion, fades and slides only |
-| Database | Supabase PostgreSQL, schema in `supabase/schema.sql` |
+| Database | Supabase PostgreSQL |
 | Files / auth | Supabase Storage (buckets: frames, lenses, camps, gallery); Supabase Auth for the staff-only `/admin` |
 | Forms | Server actions + Zod validation |
-| Messaging | WhatsApp `wa.me` links to 9550685417 (no API in MVP) |
+| Messaging | WhatsApp `wa.me` links (no API in MVP) |
 | Maps | Google Maps embed |
-| Testing | Playwright in `tests/`, run at 360 / 768 / 1440 px |
+| Testing | Playwright, run at 360 / 768 / 1440 px |
 | Hosting | GitHub + Netlify, auto-deploy from `main` |
 
 ### Data security (Supabase)
 
 - Row-level security is on for every table.
-- Public tables (frames, frame_images, lenses, eye_camps, camp_photos, gallery_photos, testimonials, branches): anyone can read rows where `is_active` / `is_visible` is true, and only staff can write.
-- customers, prescriptions, appointments, enquiries and orders are staff-only for both read and write. The public booking form may **insert** into appointments but never select.
+- **Public tables** (frames, frame_images, lenses, eye_camps, camp_photos, gallery_photos, testimonials, branches): anyone can read rows where `is_active` / `is_visible` is true, and only staff can write.
+- **Private tables** (customers, prescriptions, appointments, enquiries, orders): staff-only for both read and write. The public booking form may **insert** into appointments but never select.
 - Every form that collects a name and phone needs a consent checkbox (DPDP Act 2023). The site needs a `/privacy` page.
 - Supabase keys live only in `.env.local` and Netlify env vars. The service-role key never reaches the browser.
 
@@ -46,44 +93,49 @@ Source documents in `docs/`: the project plan (`.docx`, the v1.1 navigation upda
 | Heading font | Plus Jakarta Sans, ExtraBold | Headlines |
 | Body font | Inter, Regular | Paragraphs, forms |
 | Buttons | Pill shape, 48px tall | Gold filled = primary, white outline = secondary |
-| Animation | Fade and slide up on scroll, 300–500 ms | No 3D, respect reduced-motion |
+| Animation: page / section | Fade and slide up on scroll, 300–500 ms | No 3D, respect reduced-motion |
+| Animation: menus | Open / close in 300 ms or less | No animation when reduced-motion is on |
 
-Hero pattern: "Trust / Care / Innovation" eyebrow, headline with a white line, a gold line and a white line, a gold "Explore our frames" button and an outline "Book an eye test" button, and a navy gradient overlay behind text on photos. Use "Since 1999" and compute the years in code. Never hard-code "25 years".
+**Hero pattern:**
+- "Trust / Care / Innovation" eyebrow.
+- A headline with a white line, a gold line and a white line.
+- A gold "Explore our frames" button and an outline "Book an eye test" button.
+- A navy gradient overlay behind any text on photos.
 
-## Navigation (v1.1, product-first mega menu)
+Use "Since 1999" and compute the years in code. Never hard-code "25 years".
 
-| Item | Type | Contents |
-|---|---|---|
-| Utility bar (top strip) | Always visible | Since 1999 · Open 7 days, 9 AM–9:30 PM · Call 9550685417 · 2 branches · gold "Book an eye test" button |
-| Logo | Link to `/` | VS logo + LENS MART, EST. 1999. Replaces the "Home" menu item |
-| Frames | Mega menu | Men / Women / Kids photo tiles · Frame type (full rim, half rim, rimless) · Shape · Brands · Price range "from ₹" |
-| Sunglasses | Mega menu | Men / Women / Kids tiles · Lens type (polarized, UV, tinted, power sunglasses) · Shape · Price range |
-| Lenses | Mega menu | Spectacle lenses (single vision, progressive, bifocal, blue-cut, photochromic) · Contact lenses (daily, monthly, toric, colour) · Reading-power chips · Care · Lens brands |
-| Eye care | Photo cards | Book an eye test · Our branches · Eye camps |
-| Eye camps | Plain link | `/eye-camps` |
-| About | Plain link | `/about`: journey, family, team, Gallery, Reviews (Gallery lives under About) |
-| Contact | Plain link | `/contact`: both branches, maps, enquiry form |
-| Right side | Icons | Search and WhatsApp (replaces the shopping bag) |
+## Navigation
 
-Behaviour rules:
-- **Desktop:** mega menus open on hover and on click, and close on Esc or when the mouse leaves. They must be fully keyboard-usable (Tab, Enter, Esc).
-- **Mobile:** the hamburger opens a full-screen accordion. Product menus expand with + / −, and plain links go straight to the page. A sticky bottom bar (Call, WhatsApp, Book test) is always visible.
-- **Data:** brands, lens brands and "from ₹" prices come from the database. Hide the price column if a category has no products.
-- The active page shows a gold underline. Keep to a maximum of 7 top-level items, so remove one before adding one.
-- **Never in the menu:** cart, account or wishlist icons, offer columns (unless the client runs real offers), or long brand lists.
+Full spec (mega-menu contents, mobile accordion, sticky bar, behaviour, acceptance criteria): `docs/requirements/Requirements_Navigation.md`.
 
-Routes: `/`, `/about`, `/frames`, `/frames/[slug]`, `/sunglasses` (frames table, category = sunglasses), `/lenses`, `/eye-care`, `/book-eye-test`, `/eye-camps`, `/gallery`, `/contact`, `/privacy`, `/admin`. Every page shares the utility bar, nav and a footer with both branch addresses, hours, phone, quick links and privacy link.
+The logo links to `/`; there's no "Home" item. The 7 top-level items, in order:
+
+1. **Frames:** mega menu
+2. **Sunglasses:** mega menu
+3. **Lenses:** mega menu
+4. **Eye care:** photo cards
+5. **Eye camps:** plain link to `/eye-camps`
+6. **About:** plain link to `/about`
+7. **Contact:** plain link to `/contact`
+
+On the right are Search and WhatsApp icons. There are never cart, account or wishlist icons. To add an item, remove one first.
+
+**Routes:**
+- `/`, `/about`, `/frames`, `/frames/[slug]`, `/sunglasses` (frames table, category = sunglasses)
+- `/lenses`, `/eye-care`, `/book-eye-test`, `/eye-camps`
+- `/gallery`: its own page, linked from About and the footer, not from the top menu
+- `/contact`, `/privacy`, `/admin`
+
+Every page shares the utility bar, the nav, and a footer with both branch addresses, hours, phone, quick links and the privacy link. Hours and phone are `TODO (client)`: the opening time (9:00 or 9:30 AM) and whether both branches share 9550685417 are both unconfirmed. They're read from `src/lib/site-config.ts`.
 
 ## Never do
-
-- No Telugu translation or language toggle (dropped from scope by the developer, overriding the plan).
 
 - Never use stock photos or generated people on the live site.
 - Never expose customer, prescription, appointment, enquiry or order data to the public.
 - Never hard-code secrets; use environment variables.
-- Always design mobile-first and check at 360 px.
-- Follow the design system tokens; don't invent new colours.
 - No 3D or heavy animation; fades and slides only.
+- Never use colours outside the design-system tokens.
+- Always design mobile-first and check at 360 px.
 
 ## Repo conventions
 

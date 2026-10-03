@@ -30,8 +30,7 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 | Orders tracking | Depends on customer records. |
 | Email alerts for bookings and enquiries | Waiting on the client's enquiry email address. |
 | Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. |
-
-Telugu translation is **not** a later module. It's out of scope (section 6).
+| Telugu (possible) | Not in the MVP, possibly later. It was the developer's suggestion; the client never asked for it. Revisit only if the client requests it. |
 
 ## 3. Before the sprints: Foundation (Phase 4)
 
@@ -87,5 +86,5 @@ Client inputs block **launch**, not building (see `docs/open-questions.md`):
 | Home order | 5.2, built second, static content first | Still 5.2, but built after 5.5 | Its database sections can then be built once against real tables, not built static and redone |
 | Sunglasses | Not in the sprint table | Added to 5.3 | It shares the frames table and admin (category = sunglasses) |
 | Search | Not scheduled; the nav requirements left it as a developer TODO | Basic search in 5.6 | The search icon is in the v1.1 nav |
-| Telugu | Toggle in 5.6; full translation later | Removed completely: no toggle, no Telugu font, no translation | The developer dropped it from scope |
+| Telugu | Toggle in 5.6; full translation later | Not in the MVP, possibly later: no toggle, font or translation in any sprint | It was the developer's suggestion, and the client never asked for it. It's recorded in the changelog and will go into plan v1.2. |
 | Estimate | 3–4 weeks of development | About 19–26 days including Foundation | More realistic for one part-time developer; flag this to the client |
