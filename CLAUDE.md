@@ -45,7 +45,6 @@ Source documents in `docs/`: the project plan (`.docx`, the v1.1 navigation upda
 | Text dark / light | `#1A1A1A` / `#FFFFFF` | Body text on light / dark |
 | Heading font | Plus Jakarta Sans, ExtraBold | Headlines |
 | Body font | Inter, Regular | Paragraphs, forms |
-| Telugu font | Noto Sans Telugu | Telugu language toggle |
 | Buttons | Pill shape, 48px tall | Gold filled = primary, white outline = secondary |
 | Animation | Fade and slide up on scroll, 300–500 ms | No 3D, respect reduced-motion |
 
@@ -73,9 +72,11 @@ Behaviour rules:
 - The active page shows a gold underline. Keep to a maximum of 7 top-level items, so remove one before adding one.
 - **Never in the menu:** cart, account or wishlist icons, offer columns (unless the client runs real offers), or long brand lists.
 
-Routes: `/`, `/about`, `/frames`, `/frames/[slug]`, `/sunglasses` (frames table, category = sunglasses), `/lenses`, `/eye-care`, `/book-eye-test`, `/eye-camps`, `/gallery`, `/contact`, `/privacy`, `/admin`. Every page shares the utility bar, nav, Telugu/English toggle and a footer with both branch addresses, hours, phone, quick links and privacy link.
+Routes: `/`, `/about`, `/frames`, `/frames/[slug]`, `/sunglasses` (frames table, category = sunglasses), `/lenses`, `/eye-care`, `/book-eye-test`, `/eye-camps`, `/gallery`, `/contact`, `/privacy`, `/admin`. Every page shares the utility bar, nav and a footer with both branch addresses, hours, phone, quick links and privacy link.
 
 ## Never do
+
+- No Telugu translation or language toggle (dropped from scope by the developer, overriding the plan).
 
 - Never use stock photos or generated people on the live site.
 - Never expose customer, prescription, appointment, enquiry or order data to the public.

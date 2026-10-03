@@ -72,10 +72,6 @@ Always visible above the main navigation on desktop.
 
 Never show cart, account or wishlist icons.
 
-### 4.4 Telugu / English toggle
-
-Every page needs the toggle (plan: global elements). **TODO (design):** decide where it sits, either the utility bar or the right-side icons. Only the toggle is MVP: translating every page into Telugu is a later module.
-
 ## 5. Mega menu contents (desktop)
 
 General rules:
@@ -208,4 +204,4 @@ Done when:
 | Is the eye test free? | Client |
 | Real photos for Men/Women/Kids tiles and Eye care cards | Client |
 | Search behaviour | Developer |
-| Telugu toggle placement; utility bar on mobile | Developer / design |
+| Utility bar on mobile | Developer / design |
