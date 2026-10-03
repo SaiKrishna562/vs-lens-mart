@@ -291,6 +291,42 @@ The acceptance criteria cover:
 
 ---
 
+## ROADMAP.md — Feature Planning (Phase 2), 2026-10-03
+
+### Delegation
+
+Claude was asked to use Plan Mode to propose `ROADMAP.md` from `CLAUDE.md` and `docs/requirements/`. It had to cover:
+
+- The MVP vs Later split
+- Dependencies between features
+- Build sprints
+- Rough effort per sprint
+
+No code or files were to be written until the plan was approved.
+
+### Description
+
+The prompt asked Claude to read `CLAUDE.md` and every requirements file, propose the roadmap, and show the plan before writing anything.
+
+### Discernment
+
+The plan was reviewed before approval, and Claude's output was corrected in three places.
+
+1. **Telugu translation removed from scope.** Claude's plan listed "Full Telugu translation of all pages" as a later module, with the toggle and fonts in the MVP. This was rejected, and Telugu was removed from the project completely:
+   - Claude also removed the toggle, since a toggle with no translation does nothing, and asked for confirmation instead of assuming.
+   - After confirmation, Telugu was also removed from `CLAUDE.md` and `Requirements_Navigation.md`.
+   - A "Never do" rule was added to `CLAUDE.md` so a later session does not bring it back from the original plan.
+2. **Sprint structure didn't follow the plan document.** Claude's first `ROADMAP.md` invented its own sprint numbers (S0–S6) instead of using the plan's Phase 5 sprint table. It was rewritten using sprints 5.1–5.6 as the base, with a "done when" line for each sprint.
+3. **Changes from the plan had to be visible.** Claude proposed moving Home after the content modules, adding a separate Foundation step, adding Sunglasses and basic search, and a longer estimate. These changes were accepted, but they are recorded in a "Changes from the plan" table in `ROADMAP.md`. The plan document stays the reference, and every deviation can be traced.
+
+### Diligence
+
+- The final `ROADMAP.md` was checked against the plan's Phase 5 sprint table and MVP / Later list.
+- Every MVP page and route in `CLAUDE.md` appears in a sprint.
+- A repo-wide search confirmed that no remaining Telugu references contradict the decision. Only the original plan `.docx` files and the changelog still mention it, and they are kept as history.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.
@@ -321,6 +357,7 @@ The project documentation currently includes:
 - `docs/ai-fluency-log.md`
 - `CLAUDE.md`
 - `CLAUDE.local.md`
+- `ROADMAP.md`
 
 ---
 

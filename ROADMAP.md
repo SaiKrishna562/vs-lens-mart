@@ -1,20 +1,25 @@
 # ROADMAP
 
-VS Lens Mart website: MVP vs later modules, build order, and sprints. This follows the v1.1 navigation update of the project plan.
+VS Lens Mart website: MVP vs later modules, sprints, and build order. It's based on the Phase 5 sprint table of the project plan (v1.1 navigation update), with the changes agreed in the Phase 2 planning session (section 6).
 
 Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/client-answers.md`, and the v1.1 project plan. Navigation is the only page with a requirements file so far. Write each page's `docs/requirements/Requirements_<Page>.md` before its sprint starts.
 
 ## 1. MVP (first launch)
 
-| Area | Features |
-|---|---|
-| Foundation | Next.js + TypeScript + Tailwind with design tokens and fonts; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); staff login; Netlify preview deploys; Playwright setup |
-| Layout | Utility bar, v1.1 mega-menu navigation, mobile accordion, sticky Call / WhatsApp / Book bar, footer |
-| Products | `/frames` with filters, `/frames/[slug]`, `/sunglasses`, `/lenses`; admin add/edit with photo upload |
-| Customer actions | `/book-eye-test` (appointments insert-only), enquiry form on `/contact`, branches with maps, prefilled WhatsApp links, consent checkboxes, `/privacy` |
-| Content | `/eye-care` (static), `/eye-camps` (upcoming and past, plus detail pages), `/gallery`, testimonials, `/about` journey timeline; admin for each |
-| Home | All 13 sections, with the database-driven ones (featured frames, eye camps, reviews, branches) wired to live data |
-| Polish | SEO titles, Open Graph images, alt text, loading states, 404 page, basic search (frames and lenses by name or brand), Lighthouse pass |
+- Home
+- Navigation with mega menus
+- About / Our Journey
+- Frames, plus frame detail
+- Sunglasses
+- Lenses
+- Eye Care
+- Book an eye test
+- Eye Camps
+- Gallery
+- Contact
+- Privacy policy
+- Admin panel: frames, lenses, camps, gallery, reviews, bookings
+- Basic search of frames and lenses by name or brand (added, see section 6)
 
 ## 2. Later modules
 
@@ -26,24 +31,47 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 | Email alerts for bookings and enquiries | Waiting on the client's enquiry email address. |
 | Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. |
 
-## 3. Dependencies (build order)
+Telugu translation is **not** a later module. It's out of scope (section 6).
+
+## 3. Before the sprints: Foundation (Phase 4)
+
+| Scope | Done when | Effort |
+|---|---|---|
+| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); staff login; `.env.example`; Netlify preview deploy; Playwright config | A logged-out user can't read any private table, and the preview deploys | 2–3 days |
+
+## 4. Sprints (Phase 5)
+
+Sprints keep the plan's numbers, but they are **built in this order: 5.1 → 5.3 → 5.4 → 5.5 → 5.2 → 5.6** (see section 6). Estimates assume one part-time developer.
+
+| Sprint | Features | Done when | Effort |
+|---|---|---|---|
+| 5.1 Layout | Utility bar; mega-menu navigation (brands and prices from the database); mobile accordion menu; sticky Call / WhatsApp / Book bar; footer; design tokens; fonts | Every page shares the layout, the menus work by mouse, touch and keyboard, and it works at 360 px | 3–4 days |
+| 5.2 Home | All 13 homepage sections, with the database sections (featured frames, eye camps, reviews, branches) wired to live data | It matches the signed-off mockup | 2–3 days |
+| 5.3 Admin + frames | Staff login, add/edit frames and sunglasses with photo upload (size and type checks), Frames page with filters, Sunglasses page, Frame detail, nav brand and price hookup | Staff upload a frame on a phone and it appears on the site | 4–5 days |
+| 5.4 Booking + contact | Book an eye test, enquiry form, branches with maps, prefilled WhatsApp links, consent checkboxes, privacy policy | A booking is saved, a logged-out user can't read it, and the WhatsApp message opens | 2–3 days |
+| 5.5 Content modules | Lenses, eye care, eye camps, gallery, testimonials (admin and public pages), About / Journey timeline | Staff can add each type of content | 4–5 days |
+| 5.6 Polish | SEO titles, Open Graph images, alt text, loading states, 404 page, basic search | Lighthouse checks pass, with no console errors | 2–3 days |
+
+The total, including Foundation, is about 19–26 working days, roughly 4–5 weeks part-time.
+
+## 5. Dependencies
 
 ```
 Foundation (schema + row-level security, auth, buckets, tokens)
- ├─> Layout/nav ─────────────> every page
+ ├─> 5.1 Layout/nav ─────────> every page
  │     (mega-menu brands and prices: hidden until products exist)
- ├─> Staff login ─> Admin shell ─> Frames admin + upload
+ ├─> Staff login ─> Admin shell ─> 5.3 Frames admin + upload
  │        ├─> /frames, /frames/[slug], /sunglasses
  │        ├─> nav brands / "from ₹"
- │        └─> Home "featured frames"
+ │        └─> 5.2 Home "featured frames"
  ├─> branches table ─> footer, /contact, booking branch picker, Eye care cards
  ├─> appointments (insert-only) + consent + /privacy ─> /book-eye-test
  ├─> enquiries + consent + /privacy ─> contact enquiry form
- ├─> Lenses admin ─> /lenses, nav lens brands
- ├─> Eye camps admin ─> /eye-camps, Home camps section
- ├─> Gallery admin ─> /gallery (linked from /about)
- └─> Testimonials admin ─> /about reviews, Home reviews
-Mockups signed off (Phase 3) ─> each page sprint
+ ├─> 5.5 Lenses admin ─> /lenses, nav lens brands
+ ├─> 5.5 Eye camps admin ─> /eye-camps, 5.2 Home camps section
+ ├─> 5.5 Gallery admin ─> /gallery (linked from /about)
+ └─> 5.5 Testimonials admin ─> /about reviews, 5.2 Home reviews
+Mockups signed off (Phase 3) ─> each page's sprint
 ```
 
 Client inputs block **launch**, not building (see `docs/open-questions.md`):
@@ -51,26 +79,13 @@ Client inputs block **launch**, not building (see `docs/open-questions.md`):
 - **Contact details:** opening time (9:00 or 9:30 AM), the phone number for each branch, the enquiry email.
 - **Branding:** the final logo, and whether the eye test is free.
 
-## 4. Sprints and rough effort
+## 6. Changes from the plan (agreed in Phase 2)
 
-Estimates assume one part-time developer.
-
-| Sprint | Scope | Done when | Effort |
+| Change | Plan said | Roadmap says | Why |
 |---|---|---|---|
-| S0 Foundation | Scaffold, Tailwind tokens and fonts, `schema.sql` with row-level security, buckets, staff login, `.env.example`, Netlify preview, Playwright config | A logged-out user can't read any private table; the preview deploys | 2–3 days |
-| S1 Layout + nav | Everything in `Requirements_Navigation.md`, plus the footer | Navigation acceptance criteria pass at 360 / 768 / 1440 px | 3–4 days |
-| S2 Admin + frames | Admin shell, frames and sunglasses add/edit with upload (size and type checks), listing filters, detail page, nav data hookup | Staff upload a frame on a phone and it appears in the listing and the nav | 4–5 days |
-| S3 Booking + contact | Branches, maps, booking form, enquiry form, WhatsApp prefill, consent, `/privacy` | A booking is saved, a logged-out user can't read it, and WhatsApp opens | 2–3 days |
-| S4 Content modules | Lenses, eye care, eye camps, gallery, testimonials, about (admin and public pages) | Staff can add each content type | 4–5 days |
-| S5 Home | All 13 sections, wired to live data | Matches the signed-off mockup | 2–3 days |
-| S6 Polish | SEO, Open Graph, alt text, loading states, 404, search, Lighthouse | Lighthouse checks pass, no console errors | 2–3 days |
-
-The total is about 19–26 working days, roughly 4–5 weeks part-time.
-
-### Changes from the v1.1 plan
-
-- **Home moves after the content modules.** Its database sections can then be built once, against real tables.
-- **S0 Foundation is a sprint of its own.** Row-level security then exists before any form or admin page.
-- **The estimate is longer.** 19–26 days is a little over the plan's 3–4 weeks.
-- **A basic search is in the MVP.** The navigation requirements left its behaviour open.
-- **Telugu is dropped.** The language toggle and the Telugu translation are not in this roadmap.
+| Foundation step | Part of Phase 4 | A separate step before 5.1, with "done when" and effort | Row-level security has to exist before any form or admin page |
+| Home order | 5.2, built second, static content first | Still 5.2, but built after 5.5 | Its database sections can then be built once against real tables, not built static and redone |
+| Sunglasses | Not in the sprint table | Added to 5.3 | It shares the frames table and admin (category = sunglasses) |
+| Search | Not scheduled; the nav requirements left it as a developer TODO | Basic search in 5.6 | The search icon is in the v1.1 nav |
+| Telugu | Toggle in 5.6; full translation later | Removed completely: no toggle, no Telugu font, no translation | The developer dropped it from scope |
+| Estimate | 3–4 weeks of development | About 19–26 days including Foundation | More realistic for one part-time developer; flag this to the client |
