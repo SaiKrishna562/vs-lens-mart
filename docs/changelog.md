@@ -4,6 +4,53 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: home page + shared site chrome
+
+- **Changed:**
+  - **Requirements:** `Requirements_HomePage.md` approved with the developer's decisions:
+    - the design's headline "{years} Years of Trust. A Clearer Vision for Tomorrow.", with the year count calculated from 1999 (27 in 2026), never hard-coded;
+    - the design image's AI photo as a `DUMMY` hero (C12, never live);
+    - dummy frames;
+    - dummy reviews, to be swapped for Google reviews later;
+    - the "Scroll" cue dropped.
+  - **`mockups/home.html`:** all homepage sections, each with an empty state:
+    - hero and quick cards (WhatsApp branch picker, Visit a store);
+    - trust strip;
+    - Welcome;
+    - category tiles;
+    - 8 featured frames (Sold out, Available at, a favourite saved on the device, Enquire with a prefilled WhatsApp message);
+    - lenses and the 4 services;
+    - eye camps;
+    - a rotating, pausable quote band;
+    - reviews;
+    - branches with their own numbers;
+    - the eye-test band (hands branch and date to `/book-eye-test` and stores nothing);
+    - the footer with social links.
+  - **New `mockups/site.js`:** the header, mega menus, drawer, sticky bar, branch picker and mockup controls now live in one shared script. `nav.html` uses it too, so every page mockup shares one header. The branch picker now:
+    - works for buttons added later;
+    - accepts a prefilled WhatsApp message;
+    - opens above its button near the bottom of the screen;
+    - closes on scroll.
+  - **`mockups/styles.css`:** a new "Page sections" block, reusable by the next mockups.
+  - **`mockups/assets/hero-dummy.jpg`:** cropped from the design image.
+  - **`docs/dummy-data.md`:** C12 and the Q8 headline.
+- **Why:** this is the Home page for Phase 3. The shared script keeps the remaining 12 mockups consistent.
+- **Checked:**
+  - In the browser at 1440 and 375 px: no horizontal scroll and no console errors.
+  - Enquire, favourites, the quick cards, the book band and the dummy-number guard all work.
+  - `nav.html` still works after the refactor.
+- **Files:** `docs/requirements/Requirements_HomePage.md`, `docs/dummy-data.md`, `mockups/home.html`, `mockups/site.js`, `mockups/nav.html`, `mockups/styles.css`, `mockups/assets/hero-dummy.jpg`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Home page (draft)
+
+- **Changed:** added `docs/requirements/Requirements_HomePage.md`. It covers the 13 sections from plan v1.2 Figure 1 plus the quick cards below the hero, with the data source, empty state, mobile behaviour and acceptance criteria for each.
+- **Why:** this is the first page of Phase 3. `CLAUDE.md` requires a requirements file before a page's mockup. Key decisions in the draft:
+  - The design image's "25 Years of Trust" headline and its generated people are replaced (with a `DUMMY` headline and a photo placeholder).
+  - Featured frames show only approved frames.
+  - Reviews stay hidden until real ones exist.
+  - The eye-test band hands off to `/book-eye-test` without storing data.
+- **Files:** `docs/requirements/Requirements_HomePage.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 2 · Plan v1.2
 
 - **Changed:** created `docs/plan/VS_Lens_Mart_Plan_v1.2.docx` from v1.1, and moved v1.1 to `docs/plan/archive/`. v1.2 brings the plan in line with `CLAUDE.md` and `ROADMAP.md`:

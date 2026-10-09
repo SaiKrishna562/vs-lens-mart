@@ -50,6 +50,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | C8 | Testimonials (3) | "Sample Customer 1/2/3" with short dummy quotes about careful testing, honest advice and quick fitting | [ ] |
 | C9 | Eye camps (2) | Upcoming: "Free Eye Camp, Patelguda", 2026-11-15, 9 AM–1 PM. Past: "Community Eye Camp, Indresham", 2026-08-10, "120 participants" | [ ] |
 | C10 | Team | 3 placeholder cards: "Optometrist", "Frame stylist", "Branch manager", no names | [ ] |
+| C12 | Homepage hero photo | The photo part of `docs/Premium Eyewear Visionary Hero.png` (AI-generated people), cropped to `mockups/assets/hero-dummy.jpg`. Mockups only; never live | [ ] |
 | C11 | Photos | Grey placeholders with a label (already in `mockups/styles.css`). Internet photos only after approval, see section 6 | [ ] |
 
 ## 4. Dummy answers to the 8 (+1) contradictions
@@ -73,7 +74,7 @@ See `docs/open-questions.md` section 2 for the original answers.
 | Q | Question | Dummy answer | Replaced |
 |---|---|---|---|
 | 3b | Preferred brand colours | None; keep the `CLAUDE.md` design tokens | [ ] |
-| 8 | Homepage headline | "Clear vision." / "Honest advice." / "A family that cares." (white / gold / white, from the plan's quotes) | [ ] |
+| 8 | Homepage headline | "{years} Years of Trust." / "A Clearer Vision" / "for Tomorrow." (white / gold / white, from the design image; years calculated from 1999). Developer decision 2026-10-10; client to confirm | [ ] |
 | 10 | Above the fold | Headline, "Since 1999", Explore frames + Book an eye test buttons, WhatsApp button, today's hours | [ ] |
 | 59 | Other prescription fields | **Answered by the card** (section 1) | [x] |
 | 68 | How advance payment is recorded | Amount, method (Cash / UPI), date, receipt number | [ ] |
