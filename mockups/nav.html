@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Navigation mockup · VS Lens Mart</title>
-<meta name="description" content="Mockup for client sign-off: VS Lens Mart site navigation (v1.1).">
+<meta name="description" content="Mockup for client sign-off: VS Lens Mart site navigation (v1.2, updated with the client's form).">
 <meta name="theme-color" content="#0D1B2A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,12 +93,14 @@
         <li class="u-hours">
           <svg class="icon"><use href="#i-clock"/></svg>
           Open 7 days, 9 AM–9:30 PM
-          <span class="todo" title="Client answer says 9:00 AM; plan asks 9:00 or 9:30 AM">TODO (client): opening time</span>
         </li>
         <li class="u-phone">
           <svg class="icon"><use href="#i-phone"/></svg>
-          <a href="tel:+919550685417">Call 9550685417</a>
-          <span class="todo">TODO (client): same number for both branches?</span>
+          <a href="tel:+919550685417">Indresham <span class="u-num">9550685417</span></a>
+        </li>
+        <li class="u-phone">
+          <a href="tel:+910000000000" data-dummy>Patelguda <span class="u-num">+91 00000 00000</span></a>
+          <span class="todo u-num" title="Client hasn't sent the Patelguda number yet (dummy-data.md D2)">DUMMY</span>
         </li>
         <li class="u-branches">
           <svg class="icon"><use href="#i-pin"/></svg>
@@ -132,22 +134,14 @@
           </button>
           <div class="mega" id="mega-frames" role="region" aria-label="Frames">
             <div class="container mega__inner">
-              <div class="mega__grid" style="--cols: 1.5fr 1fr 1fr 1fr 1.1fr">
+              <div class="mega__grid" style="--cols: 1.5fr 1fr 1fr 1.1fr">
                 <div class="mega__col">
                   <h3><a href="/frames">Shop for</a></h3>
                   <div class="tiles">
-                    <a class="tile" href="/frames?for=men"><div class="ph">Photo<br>TODO (client)</div><span>Men</span></a>
-                    <a class="tile" href="/frames?for=women"><div class="ph">Photo<br>TODO (client)</div><span>Women</span></a>
-                    <a class="tile" href="/frames?for=kids"><div class="ph">Photo<br>TODO (client)</div><span>Kids</span></a>
+                    <a class="tile" href="/frames?for=men"><div class="ph">Product photo<br>TODO (client)</div><span>Men</span></a>
+                    <a class="tile" href="/frames?for=women"><div class="ph">Product photo<br>TODO (client)</div><span>Women</span></a>
+                    <a class="tile" href="/frames?for=kids"><div class="ph">Product photo<br>TODO (client)</div><span>Kids</span></a>
                   </div>
-                </div>
-                <div class="mega__col">
-                  <h3><a href="/frames">Frame type</a></h3>
-                  <ul class="mega__list">
-                    <li><a href="/frames?type=full-rim">Full rim</a></li>
-                    <li><a href="/frames?type=half-rim">Half rim</a></li>
-                    <li><a href="/frames?type=rimless">Rimless</a></li>
-                  </ul>
                 </div>
                 <div class="mega__col">
                   <h3><a href="/frames">Shape</a></h3>
@@ -162,18 +156,23 @@
                 </div>
                 <div class="mega__col">
                   <h3><a href="/frames">Brands</a></h3>
-                  <p class="card__text">Brand names appear here automatically when staff add frames in admin.</p>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">TODO (client): brands stocked</span></p>
+                  <ul class="mega__list">
+                    <li><a href="/frames?brand=ray-ban">Ray-Ban</a></li>
+                    <li><a href="/frames?brand=vogue">Vogue Eyewear</a></li>
+                    <li><a href="/frames?brand=titan">Titan</a></li>
+                    <li><a href="/frames?brand=fastrack">Fastrack</a></li>
+                  </ul>
+                  <p class="mock-only" style="margin-top:8px"><span class="todo">DUMMY brands. Live site lists the brands of approved frames from admin</span></p>
                   <p style="margin-top:12px"><a class="link-arrow" href="/frames#brands">All brands <svg class="icon"><use href="#i-arrow"/></svg></a></p>
                 </div>
                 <div class="mega__col">
                   <h3><a href="/frames">Price range</a></h3>
                   <ul class="mega__list">
-                    <li><a href="/frames?tier=everyday">Everyday <span class="mega__price">from ₹ —</span></a></li>
-                    <li><a href="/frames?tier=premium">Premium <span class="mega__price">from ₹ —</span></a></li>
-                    <li><a href="/frames?for=kids">Kids <span class="mega__price">from ₹ —</span></a></li>
+                    <li><a href="/frames?tier=everyday">Everyday <span class="mega__price">from ₹999</span></a></li>
+                    <li><a href="/frames?tier=premium">Premium <span class="mega__price">from ₹3,999</span></a></li>
+                    <li><a href="/frames?for=kids">Kids <span class="mega__price">from ₹999</span></a></li>
                   </ul>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">Prices come from the database. TODO (client): tier names and boundaries</span></p>
+                  <p class="mock-only" style="margin-top:8px"><span class="todo">DUMMY prices. Live prices come from the database. TODO (client): tier names and boundaries</span></p>
                 </div>
               </div>
               <div class="mega__foot">
@@ -222,10 +221,10 @@
                 <div class="mega__col">
                   <h3><a href="/sunglasses">Price range</a></h3>
                   <ul class="mega__list">
-                    <li><a href="/sunglasses?tier=everyday">Everyday <span class="mega__price">from ₹ —</span></a></li>
-                    <li><a href="/sunglasses?tier=branded">Branded <span class="mega__price">from ₹ —</span></a></li>
+                    <li><a href="/sunglasses?tier=everyday">Everyday <span class="mega__price">from ₹999</span></a></li>
+                    <li><a href="/sunglasses?tier=branded">Branded <span class="mega__price">from ₹2,999</span></a></li>
                   </ul>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">Prices come from the database. TODO (client): tiers</span></p>
+                  <p class="mock-only" style="margin-top:8px"><span class="todo">DUMMY prices. Live prices come from the database. TODO (client): tiers</span></p>
                 </div>
               </div>
               <div class="mega__foot">
@@ -243,49 +242,34 @@
           </button>
           <div class="mega" id="mega-lens" role="region" aria-label="Lenses">
             <div class="container mega__inner">
-              <div class="mega__grid" style="--cols: 1fr 1fr 1.2fr 1.2fr">
+              <div class="mega__grid" style="--cols: 1fr 1fr 1.4fr">
                 <div class="mega__col">
                   <h3><a href="/lenses#spectacle">Spectacle lenses</a></h3>
                   <ul class="mega__list">
                     <li><a href="/lenses?type=single-vision">Single vision</a></li>
-                    <li><a href="/lenses?type=progressive">Progressive</a></li>
                     <li><a href="/lenses?type=bifocal">Bifocal</a></li>
+                    <li><a href="/lenses?type=progressive">Progressive</a></li>
                     <li><a href="/lenses?type=blue-cut">Blue-cut / computer</a></li>
                     <li><a href="/lenses?type=photochromic">Photochromic</a></li>
                   </ul>
-                </div>
-                <div class="mega__col">
-                  <h3><a href="/lenses#contact">Contact lenses</a></h3>
-                  <ul class="mega__list">
-                    <li><a href="/lenses?contact=daily">Daily</a></li>
-                    <li><a href="/lenses?contact=monthly">Monthly</a></li>
-                    <li><a href="/lenses?contact=toric">Toric</a></li>
-                    <li><a href="/lenses?contact=colour">Colour</a></li>
-                  </ul>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">TODO (client): types stocked</span></p>
-                </div>
-                <div class="mega__col">
-                  <h3><a href="/lenses#reading">Reading glasses</a></h3>
-                  <div class="chips" aria-label="Reading power">
-                    <a class="chip" href="/lenses?power=1.0">+1.0</a>
-                    <a class="chip" href="/lenses?power=1.25">+1.25</a>
-                    <a class="chip" href="/lenses?power=1.5">+1.5</a>
-                    <a class="chip" href="/lenses?power=1.75">+1.75</a>
-                    <a class="chip" href="/lenses?power=2.0">+2.0</a>
-                    <a class="chip" href="/lenses?power=2.5">+2.5</a>
-                  </div>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">Example powers only. TODO (client): powers stocked</span></p>
-                  <h3 style="margin-top:20px"><a href="/lenses#care">Care</a></h3>
-                  <ul class="mega__list">
-                    <li><a href="/lenses#care">Solutions and accessories</a></li>
-                  </ul>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">TODO (client): care products sold?</span></p>
+                  <p class="mock-only" style="margin-top:8px"><span class="todo">TODO (client): confirm blue-cut and photochromic</span></p>
                 </div>
                 <div class="mega__col">
                   <h3><a href="/lenses#brands">All branded lenses</a></h3>
-                  <p class="card__text">Lens brand names appear here when staff add them in admin.</p>
-                  <p class="mock-only" style="margin-top:8px"><span class="todo">TODO (client): lens brand names</span></p>
-                  <p style="margin-top:16px"><a class="link-arrow" href="/book-eye-test">Not sure? Book an eye test <svg class="icon"><use href="#i-arrow"/></svg></a></p>
+                  <ul class="mega__list">
+                    <li><a href="/lenses?brand=essilor">Essilor</a></li>
+                    <li><a href="/lenses?brand=zeiss">ZEISS</a></li>
+                    <li><a href="/lenses?brand=hoya">Hoya</a></li>
+                    <li><a href="/lenses?brand=kodak">Kodak Lens</a></li>
+                    <li><a href="/lenses?brand=crizal">Crizal</a></li>
+                  </ul>
+                  <p class="mock-only" style="margin-top:8px"><span class="todo">DUMMY brands. Live site lists lens brands from admin</span></p>
+                </div>
+                <div class="mega__col">
+                  <h3><a href="/book-eye-test">Not sure which lens?</a></h3>
+                  <p class="card__text">Our optometrist checks your eyes and suggests the right lens for your power and daily use.</p>
+                  <p style="margin-top:16px"><a class="link-arrow" href="/book-eye-test">Book an eye test <svg class="icon"><use href="#i-arrow"/></svg></a></p>
+                  <p class="mock-only" style="margin-top:12px"><span class="todo">Contact lenses, reading glasses and care products removed until the client confirms they sell them</span></p>
                 </div>
               </div>
               <div class="mega__foot">
@@ -303,11 +287,22 @@
           </button>
           <div class="mega" id="mega-care" role="region" aria-label="Eye care">
             <div class="container mega__inner">
+              <div class="mega__grid" style="--cols: 1fr 3.4fr">
+              <div class="mega__col">
+                <h3><a href="/eye-care">Our services</a></h3>
+                <ul class="mega__list">
+                  <li><a href="/eye-care#eye-testing">Eye testing</a></li>
+                  <li><a href="/eye-care#lens-fitting">Instant lens fitting (spherical powers)</a></li>
+                  <li><a href="/eye-care#frame-adjustment">Frame adjustment</a></li>
+                  <li><a href="/eye-care#frame-repair">Frame repair</a></li>
+                </ul>
+                <p class="card__text" style="margin-top:8px">At both branches.</p>
+              </div>
               <div class="cards">
                 <a class="card" href="/book-eye-test">
                   <div class="ph"><span><svg class="icon icon--lg" style="margin:0 auto 6px"><use href="#i-eye"/></svg>Photo of the test room<br>TODO (client)</span></div>
                   <span class="card__title">Book an eye test <svg class="icon"><use href="#i-arrow"/></svg></span>
-                  <span class="card__text">Pick a branch, date and time. We'll confirm on WhatsApp.</span>
+                  <span class="card__text">Free eye test. <span class="todo mock-only">DUMMY: is it free?</span> Pick a branch, date and time. To reschedule, call or WhatsApp the branch.</span>
                 </a>
                 <a class="card" href="/contact#branches">
                   <div class="ph"><span><svg class="icon icon--lg" style="margin:0 auto 6px"><use href="#i-store"/></svg>Storefront photos<br>TODO (client)</span></div>
@@ -320,8 +315,9 @@
                   <span class="card__text">Upcoming camps near you, and photos from past ones.</span>
                 </a>
               </div>
+              </div>
               <div class="mega__foot">
-                <span class="mock-only"><span class="todo">Is the eye test free? Copy must not say "free" until the client confirms.</span></span>
+                <span class="mock-only"><span class="todo">"Free" is DUMMY (D7). The live site won't say "free" until the client confirms.</span></span>
                 <a class="link-arrow" href="/eye-care">Eye care tips and FAQ <svg class="icon"><use href="#i-arrow"/></svg></a>
               </div>
             </div>
@@ -338,9 +334,9 @@
         <button class="icon-btn icon-btn--search" type="button" aria-label="Search" aria-expanded="false" aria-controls="search">
           <svg class="icon"><use href="#i-search"/></svg>
         </button>
-        <a class="icon-btn icon-btn--wa" href="https://wa.me/919550685417" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <button class="icon-btn icon-btn--wa" type="button" data-picker="whatsapp" aria-label="Chat on WhatsApp" aria-haspopup="true" aria-expanded="false" aria-controls="picker">
           <svg class="icon"><use href="#i-wa"/></svg>
-        </a>
+        </button>
         <button class="icon-btn burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
           <svg class="icon"><use href="#i-menu"/></svg>
         </button>
@@ -384,14 +380,12 @@
         <div class="acc__panel" id="acc-frames"><div><div class="acc__group">
           <h4>Shop for</h4>
           <a href="/frames?for=men">Men</a><a href="/frames?for=women">Women</a><a href="/frames?for=kids">Kids</a>
-          <h4>Frame type</h4>
-          <a href="/frames?type=full-rim">Full rim</a><a href="/frames?type=half-rim">Half rim</a><a href="/frames?type=rimless">Rimless</a>
           <h4>Shape</h4>
           <a href="/frames?shape=rectangle">Rectangle</a><a href="/frames?shape=square">Square</a><a href="/frames?shape=round">Round</a><a href="/frames?shape=cat-eye">Cat-eye</a><a href="/frames?shape=aviator">Aviator</a>
-          <h4>Price range</h4>
-          <a href="/frames?tier=everyday">Everyday <span class="mega__price">from ₹ —</span></a>
-          <a href="/frames?tier=premium">Premium <span class="mega__price">from ₹ —</span></a>
-          <a href="/frames?for=kids">Kids <span class="mega__price">from ₹ —</span></a>
+          <h4>Price range <span class="todo">DUMMY</span></h4>
+          <a href="/frames?tier=everyday">Everyday <span class="mega__price">from ₹999</span></a>
+          <a href="/frames?tier=premium">Premium <span class="mega__price">from ₹3,999</span></a>
+          <a href="/frames?for=kids">Kids <span class="mega__price">from ₹999</span></a>
           <a class="acc__all" href="/frames">View all frames</a>
         </div></div></div>
       </li>
@@ -404,9 +398,9 @@
           <a href="/sunglasses?lens=polarized">Polarized</a><a href="/sunglasses?lens=uv">UV protection</a><a href="/sunglasses?lens=tinted">Tinted</a><a href="/sunglasses?lens=power">Power sunglasses</a>
           <h4>Shape</h4>
           <a href="/sunglasses?shape=aviator">Aviator</a><a href="/sunglasses?shape=wayfarer">Wayfarer</a><a href="/sunglasses?shape=round">Round</a><a href="/sunglasses?shape=square">Square</a>
-          <h4>Price range</h4>
-          <a href="/sunglasses?tier=everyday">Everyday <span class="mega__price">from ₹ —</span></a>
-          <a href="/sunglasses?tier=branded">Branded <span class="mega__price">from ₹ —</span></a>
+          <h4>Price range <span class="todo">DUMMY</span></h4>
+          <a href="/sunglasses?tier=everyday">Everyday <span class="mega__price">from ₹999</span></a>
+          <a href="/sunglasses?tier=branded">Branded <span class="mega__price">from ₹2,999</span></a>
           <a class="acc__all" href="/sunglasses">View all sunglasses</a>
         </div></div></div>
       </li>
@@ -414,21 +408,21 @@
         <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-lens">Lenses <span class="acc__sign" aria-hidden="true"></span></button>
         <div class="acc__panel" id="acc-lens"><div><div class="acc__group">
           <h4>Spectacle lenses</h4>
-          <a href="/lenses?type=single-vision">Single vision</a><a href="/lenses?type=progressive">Progressive</a><a href="/lenses?type=bifocal">Bifocal</a><a href="/lenses?type=blue-cut">Blue-cut / computer</a><a href="/lenses?type=photochromic">Photochromic</a>
-          <h4>Contact lenses</h4>
-          <a href="/lenses?contact=daily">Daily</a><a href="/lenses?contact=monthly">Monthly</a><a href="/lenses?contact=toric">Toric</a><a href="/lenses?contact=colour">Colour</a>
-          <h4>Reading glasses</h4>
-          <div class="chips">
-            <a class="chip" href="/lenses?power=1.0">+1.0</a><a class="chip" href="/lenses?power=1.5">+1.5</a><a class="chip" href="/lenses?power=2.0">+2.0</a><a class="chip" href="/lenses?power=2.5">+2.5</a>
-          </div>
-          <h4>Care</h4>
-          <a href="/lenses#care">Solutions and accessories</a>
+          <a href="/lenses?type=single-vision">Single vision</a><a href="/lenses?type=bifocal">Bifocal</a><a href="/lenses?type=progressive">Progressive</a><a href="/lenses?type=blue-cut">Blue-cut / computer</a><a href="/lenses?type=photochromic">Photochromic</a>
+          <h4>All branded lenses <span class="todo">DUMMY</span></h4>
+          <a href="/lenses?brand=essilor">Essilor</a><a href="/lenses?brand=zeiss">ZEISS</a><a href="/lenses?brand=hoya">Hoya</a><a href="/lenses?brand=kodak">Kodak Lens</a><a href="/lenses?brand=crizal">Crizal</a>
           <a class="acc__all" href="/book-eye-test">Not sure? Book an eye test</a>
         </div></div></div>
       </li>
       <li>
         <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-care">Eye care <span class="acc__sign" aria-hidden="true"></span></button>
         <div class="acc__panel" id="acc-care"><div><div class="acc__group">
+          <h4>Our services</h4>
+          <a href="/eye-care#eye-testing">Eye testing</a>
+          <a href="/eye-care#lens-fitting">Instant lens fitting (spherical powers)</a>
+          <a href="/eye-care#frame-adjustment">Frame adjustment</a>
+          <a href="/eye-care#frame-repair">Frame repair</a>
+          <h4>More</h4>
           <a href="/book-eye-test">Book an eye test</a>
           <a href="/contact#branches">Our branches</a>
           <a href="/eye-camps">Eye camps</a>
@@ -441,7 +435,7 @@
     </ul>
     <div class="drawer__foot">
       <span>Since 1999 · Indresham and Patelguda</span>
-      <span>Open 7 days, 9 AM–9:30 PM <span class="todo">TODO (client)</span></span>
+      <span>Open 7 days, 9 AM–9:30 PM</span>
     </div>
   </div>
 </div>
@@ -449,17 +443,25 @@
 <!-- ========== Sticky bottom bar (mobile) ========== -->
 <div class="stickybar" role="navigation" aria-label="Quick actions">
   <div class="stickybar__inner">
-    <a href="tel:+919550685417"><svg class="icon"><use href="#i-phone"/></svg>Call</a>
-    <a href="https://wa.me/919550685417" target="_blank" rel="noopener"><svg class="icon"><use href="#i-wa"/></svg>WhatsApp</a>
+    <button type="button" data-picker="call" aria-haspopup="true" aria-expanded="false" aria-controls="picker"><svg class="icon"><use href="#i-phone"/></svg>Call</button>
+    <button type="button" data-picker="whatsapp" aria-haspopup="true" aria-expanded="false" aria-controls="picker"><svg class="icon"><use href="#i-wa"/></svg>WhatsApp</button>
     <a class="stickybar__book" href="/book-eye-test"><svg class="icon"><use href="#i-cal"/></svg>Book test</a>
   </div>
+</div>
+
+<!-- ========== Branch picker (Call / WhatsApp) ==========
+     Each branch has its own number. Numbers come from src/lib/site-config.ts on the live site. -->
+<div class="picker" id="picker" role="dialog" aria-modal="false" aria-labelledby="picker-title">
+  <p class="picker__title" id="picker-title">Which branch?</p>
+  <div class="picker__list"></div>
+  <span class="todo">Branch picker is a proposal for client review. Patelguda number is DUMMY</span>
 </div>
 
 <!-- ========== Review area (mockup only) ========== -->
 <main id="main" class="container review">
   <div class="review__head">
     <h1>Navigation mockup</h1>
-    <p>This is the header that sits on every page of the site. Try it with a mouse, a keyboard and on a phone. The dashed gold tags are notes for review and won't appear on the live site.</p>
+    <p>This is the header that sits on every page of the site. Try it with a mouse, a keyboard and on a phone. The dashed gold tags are notes for review and won't appear on the live site. Anything tagged <span class="todo">DUMMY</span> is placeholder data until you send the real details.</p>
   </div>
 
   <div class="review__grid">
@@ -468,21 +470,32 @@
       <ol class="steps">
         <li><span>Hover or click <strong>Frames</strong>, <strong>Sunglasses</strong>, <strong>Lenses</strong> and <strong>Eye care</strong> to open each menu.</span></li>
         <li><span>Press <kbd>Tab</kbd> to move through the menu, <kbd>Enter</kbd> to open one, and <kbd>Esc</kbd> to close it.</span></li>
-        <li><span>Make the window narrow, or open this file on a phone. The menu becomes a full-screen list, with Call, WhatsApp and Book test buttons pinned to the bottom.</span></li>
+        <li><span>Click the <strong>WhatsApp</strong> icon. Each branch has its own number, so you choose Indresham or Patelguda first.</span></li>
+        <li><span>Make the window narrow, or open this file on a phone. The menu becomes a full-screen list, with Call, WhatsApp and Book test buttons pinned to the bottom. Call and WhatsApp also ask which branch.</span></li>
         <li><span>Links to pages that aren't mocked up yet show where they'll go.</span></li>
       </ol>
     </section>
 
     <section>
+      <h2>Changed since the last version</h2>
+      <ul class="open-items">
+        <li><span>Hours confirmed: 9 AM–9:30 PM, 7 days</span><span>Your form</span></li>
+        <li><span>Each branch has its own number; Call and WhatsApp ask which branch</span><span>Your form</span></li>
+        <li><span>Eye care lists your 4 services</span><span>Your form</span></li>
+        <li><span>Removed: rim-type filter, contact lenses, reading glasses, care products</span><span>Until confirmed</span></li>
+      </ul>
+    </section>
+
+    <section>
       <h2>Waiting on the client</h2>
       <ul class="open-items">
-        <li><span>Opening time: 9:00 or 9:30 AM</span><span>Hours</span></li>
-        <li><span>One phone number for both branches?</span><span>Phone</span></li>
-        <li><span>Final logo file. The current one spells "FAMLY" in the ring.</span><span>Logo</span></li>
+        <li><span>Patelguda phone / WhatsApp number</span><span>Phone</span></li>
+        <li><span>Do you like the branch picker for Call and WhatsApp?</span><span>Approve</span></li>
+        <li><span>High-res logo file. The current one spells "FAMLY" in the ring.</span><span>Logo</span></li>
         <li><span>Frame and lens brand names</span><span>Menus</span></li>
         <li><span>Price tiers and "from ₹" amounts</span><span>Menus</span></li>
-        <li><span>Shapes, contact lens types, reading powers and care products stocked</span><span>Menus</span></li>
-        <li><span>Real photos: Men / Women / Kids, test room, storefronts, a past camp</span><span>Photos</span></li>
+        <li><span>Shapes stocked; blue-cut and photochromic lenses; do you sell contact lenses, reading glasses or care products?</span><span>Menus</span></li>
+        <li><span>Real product photos for Men / Women / Kids; test room, storefronts, a past camp</span><span>Photos</span></li>
         <li><span>Is the eye test free?</span><span>Copy</span></li>
       </ul>
     </section>
@@ -616,9 +629,68 @@
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
+  /* ---------- Branch picker (Call / WhatsApp) ---------- */
+  // Mirrors src/lib/site-config.ts. Patelguda is DUMMY (docs/dummy-data.md D2).
+  const BRANCHES = [
+    { name: 'Indresham', phone: '9550685417', display: '9550685417' },
+    { name: 'Patelguda', phone: '0000000000', display: '+91 00000 00000', dummy: true },
+  ];
+  const picker = document.getElementById('picker');
+  const pickerList = picker.querySelector('.picker__list');
+  const pickerTitle = document.getElementById('picker-title');
+  let pickerOwner = null;
+
+  function openPicker(btn) {
+    const kind = btn.dataset.picker;
+    pickerTitle.textContent = kind === 'call' ? 'Call which branch?' : 'WhatsApp which branch?';
+    pickerList.innerHTML = '';
+    BRANCHES.forEach(b => {
+      const a = document.createElement('a');
+      a.href = kind === 'call' ? `tel:+91${b.phone}` : `https://wa.me/91${b.phone}`;
+      if (kind !== 'call') { a.target = '_blank'; a.rel = 'noopener'; }
+      if (b.dummy) a.dataset.dummy = '';
+      a.innerHTML = `<span>${b.name}</span><span class="picker__num">${b.display}</span>`;
+      pickerList.append(a);
+    });
+    const inStickybar = !!btn.closest('.stickybar');
+    picker.classList.toggle('picker--bottom', inStickybar);
+    picker.classList.toggle('picker--top', !inStickybar);
+    if (!inStickybar) {
+      const r = btn.getBoundingClientRect();
+      picker.style.top = `${r.bottom + 8}px`;
+      picker.style.right = `${Math.max(12, innerWidth - r.right)}px`;
+    } else {
+      picker.style.top = picker.style.right = '';
+    }
+    closeAll(false); closeSearch();
+    if (pickerOwner) pickerOwner.setAttribute('aria-expanded', 'false');
+    pickerOwner = btn;
+    btn.setAttribute('aria-expanded', 'true');
+    picker.classList.add('is-open');
+    setTimeout(() => pickerList.querySelector('a').focus(), reduce.matches ? 0 : 50);
+  }
+  function closePicker(returnFocus) {
+    if (!picker.classList.contains('is-open')) return false;
+    picker.classList.remove('is-open');
+    if (pickerOwner) {
+      pickerOwner.setAttribute('aria-expanded', 'false');
+      if (returnFocus) pickerOwner.focus();
+    }
+    pickerOwner = null;
+    return true;
+  }
+  document.querySelectorAll('[data-picker]').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    pickerOwner === btn ? closePicker(true) : openPicker(btn);
+  }));
+  document.addEventListener('click', e => {
+    if (!picker.contains(e.target)) closePicker(false);
+  });
+
   /* ---------- Esc ---------- */
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
+    if (closePicker(true)) return;
     if (drawer.classList.contains('is-open')) return setDrawer(false);
     if (search.classList.contains('is-open')) return closeSearch(true);
     if (openId) closeAll(true);
@@ -632,6 +704,13 @@
     clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('is-on'), 2600);
   }
   document.addEventListener('click', e => {
+    // Dummy numbers must never dial or open a chat
+    const d = e.target.closest('a[data-dummy]');
+    if (d) {
+      e.preventDefault();
+      closePicker(false);
+      return toast('Patelguda number is <code>DUMMY</code>. Waiting for the real number from the client');
+    }
     const a = e.target.closest('a[href^="/"]');
     if (!a) return;
     e.preventDefault();

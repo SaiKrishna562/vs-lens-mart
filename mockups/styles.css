@@ -217,7 +217,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   white-space: normal;
   vertical-align: middle;
 }
-.on-dark .todo { color: var(--white); background: var(--white-08); }
+.on-dark .todo, .drawer .todo, .picker .todo { color: var(--white); background: var(--white-08); }
 .on-dark .mega .todo { color: var(--ink); background: var(--gold-16); }
 body.notes-off .todo, body.notes-off .mock-only { display: none !important; }
 
@@ -390,7 +390,7 @@ body.notes-off .todo, body.notes-off .mock-only { display: none !important; }
 
 /* Eye care photo cards */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
-.card { display: grid; gap: var(--s-3); text-decoration: none; color: var(--ink); }
+.card { display: grid; gap: var(--s-3); align-content: start; text-decoration: none; color: var(--ink); }
 .card .ph { aspect-ratio: 16 / 10; }
 .card__title { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2);
   font-family: var(--font-display); font-weight: 800; font-size: var(--fs-md); color: var(--navy); }
@@ -495,7 +495,7 @@ body.notes-off .todo, body.notes-off .mock-only { display: none !important; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 .stickybar__inner { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: var(--s-2); padding: var(--s-2) var(--s-3); }
-.stickybar a {
+.stickybar a, .stickybar button {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
   min-height: var(--btn-h);
   border-radius: var(--r-pill);
@@ -503,10 +503,46 @@ body.notes-off .todo, body.notes-off .mock-only { display: none !important; }
   color: var(--white); text-decoration: none;
   border: 1px solid var(--white-12);
 }
-.stickybar a:hover { border-color: var(--gold); }
+.stickybar a:hover, .stickybar button:hover { border-color: var(--gold); }
 .stickybar .stickybar__book { background: var(--gold); color: var(--navy); border-color: var(--gold); }
 
-/* 6.6 Breakpoints
+/* 6.6 Branch picker: each branch has its own number, so Call and WhatsApp ask which branch.
+   Opens under the nav WhatsApp icon (desktop) or above the sticky bar (mobile). */
+.picker {
+  position: fixed; z-index: 85;
+  width: min(20rem, calc(100vw - 2 * var(--s-3)));
+  padding: var(--s-4);
+  background: var(--navy-2); color: var(--white);
+  border: 1px solid var(--white-12); border-radius: var(--r-md);
+  box-shadow: var(--shadow-panel);
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity var(--dur-menu) var(--ease-out), transform var(--dur-menu) var(--ease-out), visibility 0s linear var(--dur-menu);
+}
+.picker.is-open { opacity: 1; visibility: visible; transform: none;
+  transition: opacity var(--dur-menu) var(--ease-out), transform var(--dur-menu) var(--ease-out), visibility 0s; }
+.picker--top { top: calc(var(--utility-h) + var(--nav-h) - var(--s-2)); right: var(--gutter); }
+.picker--bottom {
+  left: var(--s-3); right: var(--s-3); margin-inline: auto;
+  bottom: calc(var(--stickybar-h) + var(--s-2) + env(safe-area-inset-bottom));
+  transform: translateY(6px);
+}
+.picker__title {
+  font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase;
+  color: var(--brass); margin-bottom: var(--s-2);
+}
+.picker__list { display: grid; gap: var(--s-2); }
+.picker__list a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+  min-height: var(--btn-h); padding: 0 var(--s-4);
+  border: 1px solid var(--white-12); border-radius: var(--r-pill);
+  color: var(--white); text-decoration: none; font-weight: 600; font-size: var(--fs-sm);
+}
+.picker__list a:hover { border-color: var(--gold); }
+.picker__num { font-weight: 400; color: var(--white-80); font-variant-numeric: tabular-nums; }
+.picker .todo { margin-top: var(--s-3); }
+.picker :focus-visible { outline-color: var(--gold); }
+
+/* 6.7 Breakpoints
    ≥1180px: full desktop bar with mega menus
    <1180px: hamburger + accordion (tablet and phone)
    <768px:  sticky Call / WhatsApp / Book bar; shortened utility strip */
@@ -521,6 +557,8 @@ body.notes-off .todo, body.notes-off .mock-only { display: none !important; }
   .nav__inner { min-height: 68px; justify-content: space-between; }
   .brand__mark { width: 44px; height: 44px; }
   .brand__name { font-size: 1.125rem; }
+  /* Tablet: branch names stay as call links, digits hide so the strip stays one line */
+  .utility__facts .u-num { display: none; }
 }
 @media (max-width: 767px) {
   :root { --utility-h: 32px; }

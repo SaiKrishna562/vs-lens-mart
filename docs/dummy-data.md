@@ -46,7 +46,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | C4 | Frame brands | Ray-Ban, Vogue Eyewear, Titan, Fastrack, Carrera, IDEE | [ ] |
 | C5 | Sunglasses brands | Ray-Ban, Fastrack, Carrera, Oakley | [ ] |
 | C6 | Lens brands | Essilor, ZEISS, Hoya, Kodak Lens, Crizal | [ ] |
-| C7 | Frame prices | ₹999–₹8,999; "from ₹999" in the nav | [ ] |
+| C7 | Frame prices | ₹999–₹8,999. Nav tiers: Frames Everyday from ₹999, Premium from ₹3,999, Kids from ₹999; Sunglasses Everyday from ₹999, Branded from ₹2,999 | [ ] |
 | C8 | Testimonials (3) | "Sample Customer 1/2/3" with short dummy quotes about careful testing, honest advice and quick fitting | [ ] |
 | C9 | Eye camps (2) | Upcoming: "Free Eye Camp, Patelguda", 2026-11-15, 9 AM–1 PM. Past: "Community Eye Camp, Indresham", 2026-08-10, "120 participants" | [ ] |
 | C10 | Team | 3 placeholder cards: "Optometrist", "Frame stylist", "Branch manager", no names | [ ] |
