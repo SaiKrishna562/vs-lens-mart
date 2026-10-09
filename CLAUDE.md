@@ -23,7 +23,7 @@ When documents disagree, the higher one wins:
 1. `CLAUDE.md`: global rules
 2. `ROADMAP.md`: scope
 3. `docs/requirements/Requirements_<Page>.md`: page details
-4. `docs/plan/VS_Lens_Mart_Plan_v1.1.docx`: background only. Older versions are in `docs/plan/archive/`; don't use them.
+4. `docs/plan/VS_Lens_Mart_Plan_v1.2.docx`: background only. Some of its figures are v1.1 drawings; their captions say what changed. Older versions are in `docs/plan/archive/`; don't use them.
 
 Other docs:
 - `docs/client-answers.md` and `docs/open-questions.md`: what the client has and hasn't confirmed. The raw form export is `docs/client-details.xlsx`.
