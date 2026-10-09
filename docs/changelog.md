@@ -4,6 +4,82 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-09 · Phase 2 · Client form vs docs: facts and scope decisions
+
+- **Changed:**
+  - **Facts** in `CLAUDE.md`, `ROADMAP.md` and `Requirements_Navigation.md`:
+    - hours 9:00 AM–9:30 PM;
+    - separate number per branch (Indresham 9550685417, Patelguda `DUMMY`), with a branch picker for Call/WhatsApp (proposal);
+    - "Since 1999" confirmed;
+    - prescription card received;
+    - logo facts ("FAMLY", no high-res file);
+    - exact ₹ prices;
+    - new docs listed (`dummy-data.md`, card, form export).
+  - **Rule:** mockups may use tagged `DUMMY` values; the live site never does.
+  - **MVP additions:**
+    - frame status draft → approved, with `admin` and `staff` roles;
+    - availability ("Sold out") separate from `is_active`;
+    - "Available at" branch;
+    - the client's frame fields and filters (no rim-type filter);
+    - device-only favourites;
+    - WhatsApp share;
+    - social links;
+    - Eye care lists the client's 4 services;
+    - contact lenses, reading glasses and care products removed from the menu;
+    - booking says "Call or WhatsApp to reschedule";
+    - `/privacy` retention period is `DUMMY` (D9).
+  - **Changes:**
+    - brand tone "trusted family shop, premium quality at affordable prices";
+    - hero keeps 2 buttons, with WhatsApp us / Visit store as quick cards and no Try-on button;
+    - model photos need written consent.
+  - **Later:**
+    - new "Store management system" phase (`ROADMAP.md` section 7): customer login, registration, prescriptions, orders, inventory, billing, reports, audit log, automatic WhatsApp;
+    - Google Analytics;
+    - online appointment changes;
+    - Google reviews.
+  - Estimate is now 20–27 days.
+- **Why:** the client's form (2026-10-07) and prescription card conflicted with the docs. Developer decisions on 2026-10-09. The missed approval → roles dependency is logged as Discernment in `docs/ai-fluency-log.md`. Tell the client about these decisions.
+- **Files:** `CLAUDE.md`, `ROADMAP.md`, `docs/requirements/Requirements_Navigation.md`, `docs/open-questions.md`, `docs/dummy-data.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
+## 2026-10-09 · Phase 2 · Dummy data, prescription card, English only
+
+- **Changed:**
+  - Added `docs/dummy-data.md`: placeholder values for every missing client detail (email, Patelguda number, founder story, brands, prices, free eye test, testimonials, eye camps, photos), a dummy decision for each contradiction, and a dummy answer for each of the 27 blank form questions. Every row has a "Replaced" box.
+  - Recorded the prescription card (`docs/prescription_card.jpg`): 9550685417 is the Indresham number, the address is "Part Block-B", and its fields answer Q59. It has no PD field, which is a new contradiction with Q58.
+  - `CLAUDE.md`: missing client facts now use `docs/dummy-data.md`, marked `DUMMY`, instead of `TODO (client)`. Language rule is now English only.
+  - Removed every other-language item from `CLAUDE.md`, `ROADMAP.md` and `docs/open-questions.md`.
+- **Why:** developer decision so mockups and development aren't blocked by missing client answers, and to fix the site to English only. Dummy values must be replaced before launch.
+- **Files:** `docs/dummy-data.md`, `docs/open-questions.md`, `CLAUDE.md`, `ROADMAP.md`, `docs/changelog.md`
+
+## 2026-10-08 · Phase 1 · Client questionnaire
+
+- **Changed:** added the client's 160-question Google Form response (submitted 2026-10-07) to `docs/client-answers.md`, copied exactly, grouped by topic. Rewrote `docs/open-questions.md`: status of the original 11 questions, 8 contradictions inside the form, scope changes to decide, and 27 blank answers.
+- **Why:** Phase 1 discovery. The form answers the opening time (9:00 AM) and says each branch has its own number, but it also asks for Telugu + Hindi, customer accounts, favourites, and a shop management system (inventory, billing, orders, staff roles). These conflict with `CLAUDE.md` and `ROADMAP.md`. They are recorded as open decisions; `CLAUDE.md` and `ROADMAP.md` are unchanged until agreed.
+- **Files:** `docs/client-details.xlsx` (added by developer), `docs/client-answers.md`, `docs/open-questions.md`, `docs/changelog.md`
+
+## 2026-10-03 · Phase 3 · Mockups: shared styles + navigation
+
+- **Changed:** added `mockups/styles.css`, the shared stylesheet every mockup links. It holds the design tokens, base styles, buttons, photo placeholders, review-note tags and the site-header component. Also added `mockups/nav.html`, the navigation mockup:
+  - utility bar;
+  - the 7-item navy menu;
+  - the Frames, Sunglasses, Lenses and Eye care mega menus;
+  - a search drawer;
+  - the mobile full-screen accordion;
+  - the sticky Call / WhatsApp / Book bar.
+- **Why:** this is Phase 3, building screens for client sign-off. Mockup sign-off also closes the MVP confirmation risk. Built to `docs/requirements/Requirements_Navigation.md`.
+- **Proposed decisions** (for review):
+  - Below 768 px the utility bar shrinks to "Since 1999 · Open 7 days, 9 AM–9:30 PM", and Call and Book move to the sticky bar.
+  - The search icon is desktop and tablet only.
+  - The hamburger menu takes over below 1180 px.
+- **Found:** `docs/logo.png` spells "FAMLY" in its ring text. This is added to the review list for the client.
+- **Files:** `mockups/styles.css`, `mockups/nav.html`, `docs/changelog.md`
+
+## 2026-10-03 · Phase 2 · AI fluency log
+
+- **Changed:** added the MVP confirmation risk to the AI fluency log as Diligence evidence.
+- **Why:** it records how the unconfirmed MVP is being handled: mockup sign-off doubles as MVP confirmation.
+- **Files:** `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-03 · Phase 2 · Scope: MVP confirmation (risk)
 
 - **Changed:** MVP not yet confirmed by client; proceeding with the v1.1 MVP list.
@@ -88,3 +164,12 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - Added a sticky WhatsApp button at the bottom-right of the website.
 - Confirmed the WhatsApp contact number for the global WhatsApp action as `9550685417`.
 - Kept the navigation aligned with the homepage visual direction: dark navy header, gold accents, and a premium minimal presentation.
+
+## v1.2 — Client Details Received
+
+**Status:** Client details received (2026-10-07 to 2026-10-09); details in the dated entries at the top
+
+- Received the client's 160-question Google Form (`docs/client-details.xlsx`) and the prescription card (`docs/prescription_card.jpg`).
+- Confirmed hours 9:00 AM–9:30 PM, separate numbers per branch (9550685417 = Indresham), and the "Part Block-B" address.
+- Added `docs/dummy-data.md` for every detail still missing.
+- Set the website to English only.

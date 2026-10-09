@@ -327,6 +327,51 @@ The plan was reviewed before approval, and Claude's output was corrected in thre
 
 ---
 
+## MVP Confirmation Risk — Phase 2 → 3, 2026-10-03
+
+### Diligence
+
+The client hasn't yet confirmed the MVP feature list. Instead of waiting, or quietly assuming it was approved, the risk was recorded in `docs/changelog.md`:
+
+> MVP not yet confirmed by client; proceeding with the v1.1 MVP list.
+
+- **Why record it:** if the client later changes the MVP, the changelog shows that the work went ahead on a known, documented assumption, not by accident.
+- **How it will be resolved:** the client gets the Phase 3 mockups to approve, rather than the feature list. Clients usually react faster to screens than to a list of features, so mockup sign-off doubles as MVP confirmation.
+- **Follow-up:** when the client signs off on the mockups (or changes the scope), add a changelog entry that closes the risk, and update `ROADMAP.md` if the MVP changes.
+
+---
+
+## Client Form vs Project Docs — Phase 2, 2026-10-09
+
+### Delegation
+
+Claude compared the client's 160-question form with `CLAUDE.md`, `ROADMAP.md` and `Requirements_Navigation.md`. It listed every conflict and recommended MVP vs later for each, in Plan Mode, without changing files. I made the scope decisions myself.
+
+### Description
+
+> Compare @docs/client-answers.md (latest client form) with @CLAUDE.md, @ROADMAP.md and @docs/requirements/Requirements_Navigation.md. List every conflict or outdated item (hours, years wording, brands, phone, email, features). Don't change files yet.
+
+### Discernment
+
+Claude found 9 outdated facts, 1 rule conflict and 19 feature conflicts. I approved the facts and rules, but corrected two things before anything was applied:
+
+1. **Missed dependency: approval needs roles.** Claude put admin approval of frames (Q37) in the MVP, but put admin vs staff roles in "later". Approval only works if one person uploads and another approves, so the two roles are needed from the start. Claude had even noted this link earlier in `docs/open-questions.md` ("needs an admin vs staff role") but didn't carry it into its recommendation. **Fix:** two roles in the MVP; the audit log and 5+ accounts stay later.
+2. **WhatsApp Business wasn't a blocker.** Claude flagged the missing WhatsApp Business account as a problem for the WhatsApp buttons. `wa.me` links work with a normal WhatsApp number. WhatsApp Business only matters later, for automatic messages.
+
+I also made decisions where Claude only had a recommendation:
+- the store management system becomes its own later phase;
+- favourites are saved on the device only, with no login;
+- branch availability is a simple "Available at" field, without stock counts;
+- the menu only lists the services the client actually named.
+
+### Diligence
+
+- Every outdated fact was traced to a line in the three files, fixed, and the files were searched again for the old wording ("9:00 or 9:30", "same number", "wishlist").
+- Each feature decision appears in `ROADMAP.md` or `docs/open-questions.md` section 3, so nothing from the form is silently dropped.
+- The git diff is reviewed before committing.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

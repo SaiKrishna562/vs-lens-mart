@@ -2,7 +2,7 @@
 
 VS Lens Mart website: MVP vs later modules, sprints, and build order. It's based on the Phase 5 sprint table of the project plan (v1.1 navigation update), with the changes agreed in the Phase 2 planning session (section 6).
 
-Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/client-answers.md`, and the v1.1 project plan. Navigation is the only page with a requirements file so far. Write each page's `docs/requirements/Requirements_<Page>.md` before its sprint starts.
+Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/client-answers.md` (including the 160-question form, 2026-10-07), `docs/dummy-data.md`, and the v1.1 project plan. Scope decisions from the form were made on 2026-10-09 (section 6). Navigation is the only page with a requirements file so far. Write each page's `docs/requirements/Requirements_<Page>.md` before its sprint starts.
 
 ## 1. MVP (first launch)
 
@@ -19,24 +19,30 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 - Contact
 - Privacy policy
 - Admin panel: frames, lenses, camps, gallery, reviews, bookings
+- Two admin roles: `staff` add frames as drafts, `admin` approves them (added, see section 6)
+- Frame availability ("Sold out" label) and "Available at: Indresham / Patelguda / both" (added)
+- Frame filters from the client: brand, price, gender, category, colour, shape, availability (added)
+- Favourites saved on the device, no login; WhatsApp share and enquiry on each frame (added)
+- Eye care services: eye testing, instant spherical lens fitting, frame adjustment, frame repair (added)
+- Social links in the footer (added)
 - Basic search of frames and lenses by name or brand (added, see section 6)
 
 ## 2. Later modules
 
 | Module | Why later / dependency |
 |---|---|
-| Customer and prescription records (counter use) | Needs the client's sample prescription card. Uses the private `customers` and `prescriptions` tables. |
-| WhatsApp/SMS reminders for check-ups and pickups | The client said yes. Needs a WhatsApp Business API provider, and the customer records module first. |
-| Orders tracking | Depends on customer records. |
+| **Store management system** (separate later phase, section 7) | Customer login, registration, prescriptions, orders, inventory, billing, reports and automatic WhatsApp messages. It's effectively a second project and must not delay the website launch. |
+| Online appointment cancel / reschedule | The MVP booking confirmation says "Call or WhatsApp to reschedule". Online changes need a way to look up a booking, which the insert-only appointments table doesn't allow. |
+| Google Analytics | Needs a consent banner and a privacy policy update first. |
+| Google reviews on the site | The client has no Google Business Profile yet. Use manual testimonials until then; recommend the client creates one (it helps local search). |
 | Email alerts for bookings and enquiries | Waiting on the client's enquiry email address. |
-| Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. |
-| Telugu (possible) | Not in the MVP, possibly later. It was the developer's suggestion; the client never asked for it. Revisit only if the client requests it. |
+| Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. No "Try-on" button anywhere until it exists. |
 
 ## 3. Before the sprints: Foundation (Phase 4)
 
 | Scope | Done when | Effort |
 |---|---|---|
-| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); staff login; `.env.example`; Netlify preview deploy; Playwright config | A logged-out user can't read any private table, and the preview deploys | 2–3 days |
+| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); login with `admin` and `staff` roles; frames `status` / `availability` / `available_at` columns; `.env.example`; Netlify preview deploy; Playwright config | A logged-out user can't read any private table, and the preview deploys | 2–3 days |
 
 ## 4. Sprints (Phase 5)
 
@@ -44,14 +50,14 @@ Sprints keep the plan's numbers, but they are **built in this order: 5.1 → 5.3
 
 | Sprint | Features | Done when | Effort |
 |---|---|---|---|
-| 5.1 Layout | Utility bar; mega-menu navigation (brands and prices from the database); mobile accordion menu; sticky Call / WhatsApp / Book bar; footer; design tokens; fonts | Every page shares the layout, the menus work by mouse, touch and keyboard, and it works at 360 px | 3–4 days |
+| 5.1 Layout | Utility bar with both branch numbers; mega-menu navigation (brands and prices from the database); mobile accordion menu; sticky Call / WhatsApp / Book bar; footer with social links; design tokens; fonts | Every page shares the layout, the menus work by mouse, touch and keyboard, and it works at 360 px | 3–4 days |
 | 5.2 Home | All 13 homepage sections, with the database sections (featured frames, eye camps, reviews, branches) wired to live data | It matches the signed-off mockup | 2–3 days |
-| 5.3 Admin + frames | Staff login, add/edit frames and sunglasses with photo upload (size and type checks), Frames page with filters, Sunglasses page, Frame detail, nav brand and price hookup | Staff upload a frame on a phone and it appears on the site | 4–5 days |
-| 5.4 Booking + contact | Book an eye test, enquiry form, branches with maps, prefilled WhatsApp links, consent checkboxes, privacy policy | A booking is saved, a logged-out user can't read it, and the WhatsApp message opens | 2–3 days |
-| 5.5 Content modules | Lenses, eye care, eye camps, gallery, testimonials (admin and public pages), About / Journey timeline | Staff can add each type of content | 4–5 days |
+| 5.3 Admin + frames | Admin/staff login; staff add/edit frames and sunglasses as drafts with up to 5 photos (size and type checks); admin approval; availability and "Available at"; Frames page with the client's filters; Sunglasses page; Frame detail with WhatsApp enquiry and share; device-only favourites; nav brand and price hookup | Staff upload a frame on a phone, an admin approves it, and only then does it appear on the site; a sold-out frame shows "Sold out" | 5–6 days |
+| 5.4 Booking + contact | Book an eye test (confirmation says "Call or WhatsApp to reschedule"), enquiry form, both branches with maps and their own numbers, prefilled WhatsApp links, consent checkboxes, privacy policy (retention period `DUMMY`) | A booking is saved, a logged-out user can't read it, and the WhatsApp message opens to the right branch | 2–3 days |
+| 5.5 Content modules | Lenses, Eye care with the 4 services, eye camps, gallery, testimonials (admin and public pages), About / Journey timeline | Staff can add each type of content | 4–5 days |
 | 5.6 Polish | SEO titles, Open Graph images, alt text, loading states, 404 page, basic search | Lighthouse checks pass, with no console errors | 2–3 days |
 
-The total, including Foundation, is about 19–26 working days, roughly 4–5 weeks part-time.
+The total, including Foundation, is about 20–27 working days, roughly 4–5 weeks part-time.
 
 ## 5. Dependencies
 
@@ -73,10 +79,11 @@ Foundation (schema + row-level security, auth, buckets, tokens)
 Mockups signed off (Phase 3) ─> each page's sprint
 ```
 
-Client inputs block **launch**, not building (see `docs/open-questions.md`):
-- **Content:** photos, frame and lens brands, the "Since 1999" / years wording, the founder story.
-- **Contact details:** opening time (9:00 or 9:30 AM), the phone number for each branch, the enquiry email.
-- **Branding:** the final logo, and whether the eye test is free.
+Client inputs block **launch**, not building. Until they arrive, use the `DUMMY` values in `docs/dummy-data.md` (see also `docs/open-questions.md`):
+- **Content:** photos, frame and lens brands, whether to show a year count next to "Since 1999", the founder story.
+- **Contact details:** the Patelguda phone/WhatsApp number, the enquiry email, social media URLs.
+- **Branding:** a high-res logo (the current PNG spells "FAMLY"), and whether the eye test is free.
+- **Privacy:** how long customer data is kept.
 
 ## 6. Changes from the plan (agreed in Phase 2)
 
@@ -86,5 +93,23 @@ Client inputs block **launch**, not building (see `docs/open-questions.md`):
 | Home order | 5.2, built second, static content first | Still 5.2, but built after 5.5 | Its database sections can then be built once against real tables, not built static and redone |
 | Sunglasses | Not in the sprint table | Added to 5.3 | It shares the frames table and admin (category = sunglasses) |
 | Search | Not scheduled; the nav requirements left it as a developer TODO | Basic search in 5.6 | The search icon is in the v1.1 nav |
-| Telugu | Toggle in 5.6; full translation later | Not in the MVP, possibly later: no toggle, font or translation in any sprint | It was the developer's suggestion, and the client never asked for it. It's recorded in the changelog and will go into plan v1.2. |
-| Estimate | 3–4 weeks of development | About 19–26 days including Foundation | More realistic for one part-time developer; flag this to the client |
+| Languages | Language toggle in 5.6; full translation later | English only, in every sprint and later module | Developer decision, 2026-10-09. Recorded in the changelog; will go into plan v1.2. |
+| Estimate | 3–4 weeks of development | About 20–27 days including Foundation | More realistic for one part-time developer; 5.3 grew by a day for approval, availability and favourites. Flag this to the client |
+| Frame approval + roles | Staff upload and it appears | Draft → approved; `admin` and `staff` roles from the start | Client wants admin approval (Q37). Approval only works if one person uploads and another approves, so two roles are needed now. Audit log and 5+ accounts wait for the store system |
+| Frame data | Men / women / kids / sunglasses filters | Client's fields and filters; availability separate from `is_active`; "Available at" a branch | Client form Q20, Q24, Q25, Q27, Q39. Real stock counts wait for the store system |
+| Favourites | Not planned; "never wishlist" | Device-only, no login | Client wants it (Q28); no accounts in the MVP |
+| Eye care menu | Contact lenses, reading glasses, care products | The client's 4 services | Client listed its services (Q92) and never mentioned the others |
+| Hero CTAs | Two buttons | Still two; WhatsApp us / Visit store as quick cards; no Try-on button | Client listed 5 CTAs (Q9); try-on doesn't exist yet |
+| Store management system | Customer and prescription records, reminders, orders as separate later modules | One later phase (section 7) | Client's form asks for a full counter system (Q51–135); it's a second project |
+
+## 7. Later phase: Store management system
+
+Starts only after the website launches. It needs its own requirements, schema, row-level security and estimate. Based on the client's form:
+
+- **Customers:** registration for first-time customers; customer login, own history and updating details (Q51–56).
+- **Prescriptions:** fields from `docs/prescription_card.jpg`. Admin-only editing with version history; retention period to confirm (Q57–66).
+- **Orders:** statuses New → Prescription Verified → Ordered → Lens Processing → Ready → Delivered / Cancelled; total, advance, balance; online order status (Q67–74).
+- **Inventory:** stock per branch, low-stock and daily stock reports, damaged/lost frames, lenses included (Q113–128).
+- **Billing:** Cash / UPI, no GST (Q129–135).
+- **Staff:** 5+ accounts, admin vs staff permissions, audit log (Q102–112).
+- **Automatic WhatsApp messages:** appointment and order confirmation, ready for pickup, eye-check reminders. Needs WhatsApp Business and an API provider (Q81–87).
