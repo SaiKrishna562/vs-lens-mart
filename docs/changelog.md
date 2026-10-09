@@ -4,6 +4,27 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: frame detail
+
+- **Changed:** added `mockups/frame-detail.html` (`Requirements_Frames.md` section 4):
+  - breadcrumb;
+  - gallery of 5 DUMMY product views, with thumbnails, arrow keys, swipe on phones and click-to-zoom on desktop;
+  - brand, model, frame code, exact price, In stock / Sold out, "Available at";
+  - Enquire on WhatsApp (branch picker, frame code prefilled), favourite and Share on WhatsApp (`wa.me/?text=`, so the customer picks the contact; DUMMY domain D4), plus Book an eye test;
+  - a 9-row details table, the lens note and the visit note;
+  - up to 4 similar frames (same shape or brand, in stock first);
+  - page title, description and `Product` structured data per frame.
+  - **Sold out:** a badge, and the button becomes "Ask about similar frames". An unknown frame shows "This frame isn't available". There's no try-on button.
+  - **Links:** `site.js` now routes `/frames/<slug>` to this page, so every frame card on Home and Frames opens its frame.
+  - **Shared files:** a new share icon in `site.js`; a "Product detail" section in `styles.css`.
+- **Fixed:** on phones the thumbnail labels pushed the gallery past the right margin. Grid columns can now shrink.
+- **Checked:** in the browser at 1440 and 375 px:
+  - a card click opens the right frame;
+  - the gallery (thumbnails, keys, swipe), Enquire text, favourite and Share link all work;
+  - the sold-out and not-found states work;
+  - every button is at least 44 px, there's no horizontal scroll and no console errors.
+- **Files:** `mockups/frame-detail.html`, `mockups/site.js`, `mockups/styles.css`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: wider layout and full-width hero
 
 - **Changed:**
