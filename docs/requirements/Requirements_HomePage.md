@@ -29,7 +29,7 @@ From top to bottom. **DB** means the section loads from the database, so it upda
 
 | # | Section | Data | Client answer |
 |---|---|---|---|
-| 1 | Header (shared navigation) | Static + DB | See `Requirements_Navigation.md` |
+| 1 | Header (shared navigation). On Home the nav bar is **semi-opaque** over the hero (see 3.1) | Static + DB | See `Requirements_Navigation.md` |
 | 2 | Hero | Static | Q8, Q9, Q11, Q12 |
 | 3 | Quick cards: WhatsApp us · Visit store | Static (`site-config.ts`) | Q9, Q154 (decision 2026-10-09) |
 | 4 | Trust strip | Static | Q12 |
@@ -50,7 +50,10 @@ Plan v1.2 Figure 1 has 13 sections. The quick cards (3) are new from the 2026-10
 
 ### 3.1 Hero
 
-Layout from the design image: navy background with a photo on the right, and text and buttons on the left.
+Layout from the design image: the photo on the right, with text and buttons on the left.
+- **Behind the whole hero:** a soft, darkened, blurred copy of the same photo, so the left side reads as the shop rather than an empty navy strip on wide screens.
+- **On top, on the right:** the sharp photo fades in from the left, with no hard edge.
+- **Behind the text:** a navy shade keeps the headline readable (developer decision 2026-10-10).
 
 | Element | Content | Source / status |
 |---|---|---|
@@ -65,6 +68,12 @@ Layout from the design image: navy background with a photo on the right, and tex
 
 - Only the two buttons in the hero. No "Virtual try-on" button until the try-on module exists.
 - The design image's "Scroll" cue is dropped: the quick cards sit where it was.
+- **Semi-opaque nav bar** (developer decision 2026-10-10, as in the design image), on Home only:
+  - The hero extends up under the main nav bar.
+  - The bar is navy at 60% with a background blur, so the photo shows through.
+  - Once the page scrolls past the hero, it becomes navy at 88%, still slightly see-through, so the white menu text and gold logo stay readable over light sections.
+  - The utility strip above stays solid, and other pages keep the solid bar.
+  - Browsers without blur support get 85% navy instead.
 - Video in the hero: no. The client was "Not sure" (Q11), and a photo loads faster on phones.
 - **Mobile (360 px):** the headline and buttons stack above the photo. The photo is cropped to keep faces visible, and the buttons are full width.
 

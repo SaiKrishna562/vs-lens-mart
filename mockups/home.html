@@ -17,7 +17,7 @@
 <main id="main">
 
   <!-- ========== 2. Hero ========== -->
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero" aria-labelledby="hero-title" style="--hero-img: url(assets/hero-dummy.jpg)">
     <div class="hero__media">
       <img src="assets/hero-dummy.jpg" alt="An optometrist showing a customer a pair of frames at the VS Lens Mart counter" width="936" height="815" fetchpriority="high">
       <span class="todo">DUMMY photo: AI-generated people from the design image. Replace with a real shop photo (with consent) before launch</span>
@@ -293,107 +293,26 @@
 
 </main>
 
-<!-- ========== 14. Footer (shared) ========== -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <div class="footer__brand">
-        <a class="brand" href="/" aria-label="VS Lens Mart, home">
-          <img class="brand__mark" src="../docs/logo.png" alt="" width="52" height="52">
-          <span class="brand__text"><span class="brand__name"><b>VS</b> LENS MART</span><span class="brand__est">EST. 1999</span></span>
-        </a>
-        <p>A family optical shop since 1999. Welcome to the Optical Family.</p>
-        <div class="footer__social">
-          <a href="https://example.com/youtube" aria-label="YouTube" data-dummy><svg class="icon"><use href="#i-yt"/></svg></a>
-          <a href="https://example.com/facebook" aria-label="Facebook" data-dummy><svg class="icon"><use href="#i-fb"/></svg></a>
-          <a href="https://example.com/instagram" aria-label="Instagram" data-dummy><svg class="icon"><use href="#i-ig"/></svg></a>
-        </div>
-        <p class="mock-only"><span class="todo">DUMMY social links (D5)</span></p>
-      </div>
-      <div>
-        <h3>Indresham</h3>
-        <address>Plot No 30/Part Block-B, Citizens Colony, Indresham, Patancheruvu, Sangareddy</address>
-        <ul style="margin-top:12px"><li><a href="tel:+919550685417">9550685417</a></li><li>Mon–Sun, 9 AM–9:30 PM</li></ul>
-      </div>
-      <div>
-        <h3>Patelguda</h3>
-        <address>Falcon One Shopping Plaza, beside Apollo Pharmacy, Ellenki College, Patelguda</address>
-        <ul style="margin-top:12px"><li><a href="tel:+910000000000" data-dummy>+91 00000 00000</a> <span class="todo">DUMMY</span></li><li>Mon–Sun, 9 AM–9:30 PM</li></ul>
-      </div>
-      <div>
-        <h3>Quick links</h3>
-        <ul>
-          <li><a href="/frames">Frames</a></li>
-          <li><a href="/sunglasses">Sunglasses</a></li>
-          <li><a href="/lenses">Lenses</a></li>
-          <li><a href="/book-eye-test">Book an eye test</a></li>
-          <li><a href="/eye-camps">Eye camps</a></li>
-          <li><a href="/gallery">Gallery</a></li>
-          <li><a href="/about">About us</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer__bottom">
-      <span>© <span data-year>2026</span> VS Lens Mart · Since 1999</span>
-      <a href="/privacy">Privacy policy</a>
-    </div>
-  </div>
-</footer>
-
 <script src="site.js"></script>
+<script src="frames-data.js"></script>
 <script>
 /* Home page behaviour (mockup). On the live site this data comes from Supabase. */
 (() => {
   const now = new Date().getFullYear();
   // "{years} Years of Trust": calculated from 1999, never hard-coded
   document.querySelectorAll('[data-years]').forEach(el => { el.textContent = now - 1999; });
-  document.querySelectorAll('[data-year]').forEach(el => { el.textContent = now; });
 
-  /* ---------- Featured frames: DUMMY data (C4, C7) ---------- */
-  const FRAMES = [
-    { code: 'VSF-1024', brand: 'Ray-Ban', model: 'RB5154 Clubmaster', price: 6490, where: 'Both branches' },
-    { code: 'VSF-1023', brand: 'Titan', model: 'Classic Rectangle', price: 2290, where: 'Indresham' },
-    { code: 'VSF-1022', brand: 'Vogue Eyewear', model: 'VO5276 Cat-eye', price: 4790, where: 'Both branches' },
-    { code: 'VSF-1021', brand: 'Fastrack', model: 'Round Acetate', price: 999, where: 'Patelguda', sold: true },
-    { code: 'VSF-1020', brand: 'Carrera', model: 'CA 8858 Square', price: 8990, where: 'Both branches' },
-    { code: 'VSF-1019', brand: 'IDEE', model: 'S2954 Half-rim', price: 3490, where: 'Indresham' },
-    { code: 'VSF-1018', brand: 'Titan', model: 'Kids Flexi', price: 1290, where: 'Both branches' },
-    { code: 'VSF-1017', brand: 'Ray-Ban', model: 'RB7047 Square', price: 5990, where: 'Patelguda' },
-  ];
-  const rupees = n => '₹' + n.toLocaleString('en-IN');
-  const favKey = 'vslm-favourites';
-  let favs = [];
-  try { favs = JSON.parse(localStorage.getItem(favKey)) || []; } catch (_) { favs = []; }
+  /* ---------- Semi-opaque nav: lighter over the hero photo, more navy once past it ---------- */
+  const nav = document.querySelector('.nav');
+  const hero = document.querySelector('.hero');
+  const onScroll = () => nav.classList.toggle('is-past-hero', hero.getBoundingClientRect().bottom <= nav.getBoundingClientRect().bottom);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
+  /* ---------- Featured frames: the 8 newest approved frames (DUMMY data in frames-data.js) ---------- */
   const row = document.getElementById('frames-row');
-  row.innerHTML = FRAMES.map(f => {
-    const slug = `/frames/${f.code.toLowerCase()}`;
-    const on = favs.includes(f.code);
-    return `
-    <article class="fcard${f.sold ? ' fcard--sold' : ''}">
-      <a class="fcard__media" href="${slug}" aria-label="${f.brand} ${f.model}">
-        <svg class="icon" aria-hidden="true"><use href="#i-glasses"/></svg>
-        ${f.sold ? '<span class="fcard__badge">Sold out</span>' : ''}
-      </a>
-      <button class="fcard__fav" type="button" data-fav="${f.code}" aria-pressed="${on}" aria-label="Save ${f.brand} ${f.model} to favourites"><svg class="icon"><use href="#i-heart"/></svg></button>
-      <span class="caps fcard__brand">${f.brand}</span>
-      <a class="fcard__name" href="${slug}">${f.model}</a>
-      <div class="fcard__meta"><span class="fcard__price">${rupees(f.price)}</span><span class="fcard__where">${f.where}</span></div>
-      <button class="btn btn--outline-dark fcard__enquire" type="button" data-picker="whatsapp" aria-haspopup="true" aria-expanded="false" aria-controls="picker"
-        data-wa-text="Hi VS Lens Mart, I'm interested in frame ${f.code} (${f.brand} ${f.model}). Is it available?">Enquire</button>
-    </article>`;
-  }).join('');
-
-  // Favourites: saved on this device only (no login)
-  row.addEventListener('click', e => {
-    const b = e.target.closest('[data-fav]');
-    if (!b) return;
-    const code = b.dataset.fav;
-    favs = favs.includes(code) ? favs.filter(c => c !== code) : [...favs, code];
-    b.setAttribute('aria-pressed', String(favs.includes(code)));
-    try { localStorage.setItem(favKey, JSON.stringify(favs)); } catch (_) {}
-  });
+  row.innerHTML = VSLM.FRAMES.slice(0, 8).map(f => VSLM.card(f)).join('');
+  VSLM.wireFavs(row);   // hearts save to this device only
 
   /* ---------- Quote band: slow rotation, pausable, still when reduced motion is on ---------- */
   const QUOTES = [

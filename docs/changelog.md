@@ -4,6 +4,62 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: wider layout and full-width hero
+
+- **Changed:**
+  - **Wider content area:** max width 1,280 → 1,440 px (`--max-w: 90rem`). At 1920 px the side margins shrink from 361 to 281 px; at 1366 px the content starts 48 px from the edge instead of about 83 px. It applies to every mockup.
+  - **Home hero:**
+    - a blurred, darkened copy of the hero photo now fills the whole hero behind everything;
+    - the sharp photo fades in from the left (CSS mask) instead of ending in a hard edge;
+    - a navy shade keeps the text readable;
+    - on phones the fade and the shade run top to bottom.
+  - The photo is passed in with `--hero-img`.
+- **Why:** developer feedback that the page looked right-aligned with empty space on the left. Measured: it was centred, with equal margins. The cause was the photo bleeding to the right edge next to a flat navy left margin, plus a narrow 1,184 px content column on a 1920 px screen.
+- **Checked:**
+  - In the browser at 1920, 1366 and 375 px: content centred and the headline clear of the face in the photo.
+  - No horizontal scroll; Frames uses the wider layout too.
+- **Files:** `mockups/styles.css`, `mockups/home.html`, `docs/requirements/Requirements_HomePage.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Mockups: semi-opaque nav on Home
+
+- **Changed:** on `home.html` the main nav bar is now semi-opaque, like the design image:
+  - navy at 60% with a background blur, with the hero photo running underneath;
+  - once scrolled past the hero, navy at 88%;
+  - 85% navy where blur isn't supported.
+  - The utility strip stays solid, and other pages keep the solid bar.
+  - `--nav-h` is now 68 px below 1180 px, so the offsets match the shorter bar.
+- **Why:** developer request. At 60% over the cream sections the bar turned washed-out grey and the gold "VS" faded, so it gets more navy (still see-through) once past the hero.
+- **Checked:** in the browser at 1440 and 375 px: the photo shows through at the top, the bar darkens past the hero, the Frames page is still solid, and there's no horizontal scroll.
+- **Files:** `mockups/styles.css`, `mockups/home.html`, `docs/requirements/Requirements_HomePage.md`, `docs/requirements/Requirements_Navigation.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Mockups: frames listing
+
+- **Changed:** `Requirements_Frames.md` was approved, so I built `mockups/frames.html`:
+  - breadcrumb and Men / Women / Kids / Unisex quick chips;
+  - the client's 7 filters in order, with counts from the frames themselves; options with no matches are disabled, and there's no rim-type filter;
+  - active-filter chips with "Clear all";
+  - sort (sold out always last), "Saved (n)" and 24 frames per "Load more";
+  - the no-results state and a help band;
+  - every filter is kept in the page link, and the mega-menu tier links map to price bands;
+  - below 1180 px the filters become a full-screen panel with "Show n frames", Esc and a focus trap.
+  - Shared pieces:
+    - `mockups/frames-data.js` holds the 30 DUMMY frames, the frame card and the device-only favourites, now used by `home.html` too.
+    - The footer moved into `site.js`, so every mockup shares it.
+    - `site.js` now opens mockups that exist (`/` → `home.html`, `/frames` → `frames.html`, keeping filters) instead of showing a toast.
+    - `styles.css` has a new "Listing pages" section.
+- **Fixed:** the mega menu's Vogue link (`brand=vogue-eyewear`); a global `[hidden]` rule; breadcrumb list styles.
+- **Checked:** in the browser at 1440 and 375 px:
+  - filters, page links, sort, Load more, Saved, "In stock only", the empty state and the menu tier link all work;
+  - the phone panel now sits above the sticky bar, so its buttons can be reached;
+  - no console errors; Home and Navigation still work.
+- **Files:** `mockups/frames.html`, `mockups/frames-data.js`, `mockups/home.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Frames.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Frames (draft)
+
+- **Changed:** added `docs/requirements/Requirements_Frames.md`. It covers the frame data, the `/frames` listing (the client's 7 filters, sort, load more, device-only favourites, empty states) and the frame detail page (gallery, Enquire and Share on WhatsApp, details, related frames, 404). Added `DUMMY` C13 (frame categories and code format).
+- **Why:** this is the next page in Phase 3. `CLAUDE.md` requires a requirements file before a page's mockup.
+- **Files:** `docs/requirements/Requirements_Frames.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: home page + shared site chrome
 
 - **Changed:**

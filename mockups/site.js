@@ -119,7 +119,7 @@
                   <h3><a href="/frames">Brands</a></h3>
                   <ul class="mega__list">
                     <li><a href="/frames?brand=ray-ban">Ray-Ban</a></li>
-                    <li><a href="/frames?brand=vogue">Vogue Eyewear</a></li>
+                    <li><a href="/frames?brand=vogue-eyewear">Vogue Eyewear</a></li>
                     <li><a href="/frames?brand=titan">Titan</a></li>
                     <li><a href="/frames?brand=fastrack">Fastrack</a></li>
                   </ul>
@@ -425,8 +425,60 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 `;
+  const FOOTER = String.raw`
+<!-- ========== Footer (shared) ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="/" aria-label="VS Lens Mart, home">
+          <img class="brand__mark" src="../docs/logo.png" alt="" width="52" height="52">
+          <span class="brand__text"><span class="brand__name"><b>VS</b> LENS MART</span><span class="brand__est">EST. 1999</span></span>
+        </a>
+        <p>A family optical shop since 1999. Welcome to the Optical Family.</p>
+        <div class="footer__social">
+          <a href="https://example.com/youtube" aria-label="YouTube" data-dummy><svg class="icon"><use href="#i-yt"/></svg></a>
+          <a href="https://example.com/facebook" aria-label="Facebook" data-dummy><svg class="icon"><use href="#i-fb"/></svg></a>
+          <a href="https://example.com/instagram" aria-label="Instagram" data-dummy><svg class="icon"><use href="#i-ig"/></svg></a>
+        </div>
+        <p class="mock-only"><span class="todo">DUMMY social links (D5)</span></p>
+      </div>
+      <div>
+        <h3>Indresham</h3>
+        <address>Plot No 30/Part Block-B, Citizens Colony, Indresham, Patancheruvu, Sangareddy</address>
+        <ul style="margin-top:12px"><li><a href="tel:+919550685417">9550685417</a></li><li>Mon–Sun, 9 AM–9:30 PM</li></ul>
+      </div>
+      <div>
+        <h3>Patelguda</h3>
+        <address>Falcon One Shopping Plaza, beside Apollo Pharmacy, Ellenki College, Patelguda</address>
+        <ul style="margin-top:12px"><li><a href="tel:+910000000000" data-dummy>+91 00000 00000</a> <span class="todo">DUMMY</span></li><li>Mon–Sun, 9 AM–9:30 PM</li></ul>
+      </div>
+      <div>
+        <h3>Quick links</h3>
+        <ul>
+          <li><a href="/frames">Frames</a></li>
+          <li><a href="/sunglasses">Sunglasses</a></li>
+          <li><a href="/lenses">Lenses</a></li>
+          <li><a href="/book-eye-test">Book an eye test</a></li>
+          <li><a href="/eye-camps">Eye camps</a></li>
+          <li><a href="/gallery">Gallery</a></li>
+          <li><a href="/about">About us</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span data-year>2026</span> VS Lens Mart · Since 1999</span>
+      <a href="/privacy">Privacy policy</a>
+    </div>
+  </div>
+</footer>
+`;
   document.body.insertAdjacentHTML('afterbegin', HEADER);
   document.body.insertAdjacentHTML('beforeend', TAIL);
+  // Footer goes straight after <main>, so it sits above the page's own scripts
+  (document.querySelector('main') || document.body.lastElementChild).insertAdjacentHTML('afterend', FOOTER);
+  document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 
   const current = {
     'frames': '[aria-controls="mega-frames"]', 'sunglasses': '[aria-controls="mega-sun"]',
@@ -626,6 +678,11 @@
   });
 
   /* ---------- Mockup only: show where internal links go ---------- */
+  // Live route → mockup file. Add a line here when a page's mockup is built.
+  const MOCKS = {
+    '/': 'home.html',
+    '/frames': 'frames.html',
+  };
   const t = document.getElementById('toast');
   let toastTimer;
   function toast(html) {
@@ -646,6 +703,13 @@
     e.preventDefault();
     closeAll(false); closeSearch();
     if (drawer.classList.contains('is-open')) setDrawer(false);
+    // Routes that already have a mockup open it (keeping filters and anchors); the rest show where they'd go
+    const u = new URL(a.getAttribute('href'), 'https://vslensmart.example');
+    const file = MOCKS[u.pathname] || (u.pathname.startsWith('/frames/') && MOCKS['/frames/*']);
+    if (file) {
+      const q = u.pathname.startsWith('/frames/') ? `?frame=${u.pathname.split('/').pop()}` : u.search;
+      return void (location.href = file + q + u.hash);
+    }
     toast(`Goes to <code>${a.getAttribute('href')}</code> (page not mocked up yet)`);
   });
 

@@ -12,7 +12,7 @@ The navigation sits on every page. It must let customers:
 - find frames, sunglasses and lenses in one or two clicks;
 - book an eye test or contact the shop on WhatsApp from anywhere on the site.
 
-It has to look like the approved homepage design: a dark navy bar, gold accents and a gold underline on the active item. There is no online checkout or customer login, so there is no cart or account icon. Favourites are saved on the device and shown as a heart on frame cards, not in the navigation.
+It has to look like the approved homepage design: a dark navy bar, gold accents and a gold underline on the active item. On the home page only, the bar is semi-opaque navy over the hero photo (`Requirements_HomePage.md` 3.1). There is no online checkout or customer login, so there is no cart or account icon. Favourites are saved on the device and shown as a heart on frame cards, not in the navigation.
 
 ## 2. Structure overview
 
