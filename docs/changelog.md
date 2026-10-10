@@ -4,6 +4,17 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: full-width check on every page
+
+- **Changed:**
+  - Re-checked every mockup for content wider than the screen, with the stricter method from the 404 work: real 360 and 768 px frames emulating a phone, measured against `clientWidth`, across the whole page (header and footer included). Intentional off-canvas parts (drawer, mega menus, search, branch picker) and horizontal scrollers (the home frame carousel) are excluded.
+  - Fixed the "not found" icons on Frame detail and Camp detail: they took 150 px of height (the SVG default). Glasses are now 120 × 50 and the camp icon 72 × 72, the same as the 404 page.
+- **Why:** the earlier check could miss overflow on phones (`docs/ai-fluency-log.md`, 2026-10-10).
+- **Checked:**
+  - 40 page-and-width checks, all passing with no page-level scroll: Home, Frames, Sunglasses, Frame detail (and not found), About, Lenses, Eye care, Book an eye test, Eye camps, Camp detail (and not found), 404 (and error), Privacy, Contact, Gallery, Admin dashboard, and Admin frame form (new and review), each at 360 and 768 px.
+  - A first run inside a desktop tab gave false alarms (a 15 px desktop scrollbar made the width 345 px); it was repeated with phone emulation.
+- **Files:** `mockups/styles.css`, `mockups/camp-detail.html`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: 404 and error page
 
 - **Changed:** added `mockups/404.html` (`Requirements_NotFound.md`, approved):

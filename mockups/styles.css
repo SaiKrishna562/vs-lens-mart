@@ -1849,8 +1849,8 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
    ========================================================================== */
 .notfound--page { padding-block: var(--s-8) var(--s-6); grid-template-columns: minmax(0, 1fr); }
 .notfound--page h1 { font-size: clamp(1.625rem, 4vw + 0.75rem, 2.5rem); }
-.notfound--page .icon { height: 50px; }   /* glasses: 120 × 50 */
-.notfound--page .icon--square { width: 72px; height: 72px; }   /* alert and camp icons are square */
+.notfound .icon { height: 50px; }   /* glasses: 120 × 50 (all "not found" states) */
+.notfound .icon--square { width: 72px; height: 72px; }   /* alert and camp icons are square */
 .notfound--page .notfound__code { color: var(--accent-ink); }
 .notfound--page p { max-width: 46ch; }
 .nf-search { display: flex; gap: var(--s-2); width: 100%; max-width: 32rem; margin-top: var(--s-2); }
