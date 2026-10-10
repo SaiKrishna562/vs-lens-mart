@@ -4,6 +4,44 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Eye camps (listing and detail)
+
+- **Changed:** added `mockups/eye-camps.html` and `mockups/camp-detail.html` (`Requirements_EyeCamps.md`, approved), plus `mockups/camps-data.js` (DUMMY C19 camps and helpers).
+  - **Listing:**
+    - hero with a totalled stat line ("5 camps · 461 people checked");
+    - the next camp with a date block, facts, what's offered, Directions, Add to calendar (`.ics`) and Share on WhatsApp;
+    - more upcoming camps as rows;
+    - past camps with year chips (from the data, kept in `?year=`) and load more;
+    - a "Bring a camp to your community" WhatsApp band and a call to action.
+  - **Detail:**
+    - an Upcoming / Past badge;
+    - upcoming: what's offered, what to bring, the actions, a WhatsApp question and `Event` structured data;
+    - past: participants and a photo gallery with a `<dialog>` large view (arrow keys, swipe, Esc, focus returns to the photo);
+    - more camps, and a not-available state.
+  - **Rule:** upcoming vs past comes from the date.
+  - **Shared files:** `site.js` routes `/eye-camps` and `/eye-camps/<slug>` (so the home page's camp link works), and `styles.css` gets an "Eye camps" section.
+- **Fixed:**
+  - `site.js` highlighted the Eye care mega-menu card instead of the top-level "Eye camps" item; About and Contact had the same issue, so all three now target top-level items only.
+  - The camp year chips shared the footer's `data-year` attribute (renamed to `data-camp-year`).
+  - Dates no longer show a stray comma.
+- **Checked:** in the browser:
+  - the menu link opens the listing, and the year filter works;
+  - past and upcoming detail pages, the gallery keyboard behaviour and the not-found state all work;
+  - on phones, single columns and 44 px targets; dark mode readable;
+  - no horizontal scroll and no console errors.
+- **Files:** `mockups/eye-camps.html`, `mockups/camp-detail.html`, `mockups/camps-data.js`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_EyeCamps.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Eye Camps (draft)
+
+- **Changed:** added `docs/requirements/Requirements_EyeCamps.md`:
+  - **Camp data** from Q100: date, place, description, what's offered, participants, photos.
+  - **Listing:** a hero with a stat line, the next camp with Directions / Add to calendar / Share on WhatsApp, more upcoming camps, past camps with year chips and load more, and a "Bring a camp to your community" band.
+  - **Camp detail:** upcoming vs past content and a keyboard-accessible photo gallery.
+  - **Rules:** camps move to Past automatically, past camps stay permanently (Q101), and there's no registration in the MVP (Q99 "Not sure").
+  - Added `DUMMY` C19 (camps).
+- **Why:** this is the next page in the plan's mockup order.
+- **Files:** `docs/requirements/Requirements_EyeCamps.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Book an eye test
 
 - **Changed:** added `mockups/book-eye-test.html` (`Requirements_Booking.md`, approved). It's a working mockup in which nothing is saved:

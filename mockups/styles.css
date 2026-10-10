@@ -1437,3 +1437,83 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .bsubmit .btn { width: 100%; }
   .bdone { padding: var(--s-5); }
 }
+
+/* ==========================================================================
+   14. Eye camps (listing and camp detail). Spec: docs/requirements/Requirements_EyeCamps.md
+   ========================================================================== */
+.camp-stat { color: var(--gold); font-weight: 600; letter-spacing: 0.04em; }
+
+/* 14.1 Next camp: date block + details + actions */
+.next-camp { display: grid; grid-template-columns: auto 1fr; gap: var(--s-6); padding: var(--s-6); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.datebox { display: grid; place-items: center; align-content: center; width: 112px; height: 112px; border-radius: var(--r-md); background: var(--navy); color: var(--white); text-align: center; }
+.datebox b { font-family: var(--font-display); font-size: 2.5rem; line-height: 1; color: var(--gold); }
+.datebox span { font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; }
+.next-camp__body { display: grid; gap: var(--s-3); align-content: start; }
+.next-camp__body h3 { font-size: var(--fs-lg); color: var(--heading); }
+.next-camp__body p { color: var(--text-muted); }
+.camp-facts { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); font-size: var(--fs-sm); color: var(--text); }
+.camp-facts span { display: inline-flex; align-items: center; gap: 6px; }
+.camp-facts .icon { width: 18px; height: 18px; color: var(--brass); }
+.camp-actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-2); }
+.camp-actions .btn { min-height: 44px; padding: 0 var(--s-4); font-size: var(--fs-sm); }
+
+/* 14.2 More upcoming: compact rows */
+.camp-rows { display: grid; gap: var(--s-2); }
+.camp-row { display: grid; grid-template-columns: 9rem 1fr auto; gap: var(--s-4); align-items: center; padding: var(--s-4) var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--text); }
+.camp-row:hover { border-color: var(--brass); }
+.camp-row time { font-weight: 600; color: var(--brass); }
+.camp-row b { color: var(--heading); display: block; }
+.camp-row small { color: var(--text-muted); }
+
+/* 14.3 Past camp cards */
+.year-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-5); }
+.past-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); }
+.ccard { display: grid; gap: var(--s-2); align-content: start; text-decoration: none; color: var(--text); }
+.ccard .ph { aspect-ratio: 3 / 2; border-radius: var(--r-md); }
+.ccard time { font-size: var(--fs-sm); color: var(--brass); font-weight: 600; }
+.ccard h3 { font-size: var(--fs-md); color: var(--heading); }
+.ccard p { font-size: var(--fs-sm); color: var(--text-muted); }
+.ccard__people { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--heading); font-size: var(--fs-sm); }
+.ccard:hover h3 { text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 0.25em; }
+
+/* 14.4 Camp detail */
+.status { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: var(--r-pill); font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; }
+.status--upcoming { background: var(--gold); color: var(--navy); }
+.status--past { background: var(--surface); color: var(--text-muted); border: 1px solid var(--line); }
+.camp-detail { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: var(--s-7); align-items: start; padding-bottom: var(--s-8); }
+.camp-detail__main { display: grid; gap: var(--s-5); }
+.camp-detail__main h2 { font-size: var(--fs-lg); color: var(--heading); }
+.camp-detail__main p { color: var(--text-muted); }
+.camp-side { position: sticky; top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)); display: grid; gap: var(--s-4); }
+.camp-side .ph { aspect-ratio: 4 / 3; border-radius: var(--r-md); }
+.people-big { font-family: var(--font-display); font-weight: 800; font-size: 3rem; line-height: 1; color: var(--brass); }
+
+/* 14.5 Photo gallery + large view (native <dialog>: focus trap and Esc built in) */
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
+.photo-grid button { padding: 0; border-radius: var(--r-sm); overflow: hidden; }
+.photo-grid .ph { aspect-ratio: 1; width: 100%; }
+.photo-grid button:hover .ph { border-color: var(--brass); }
+.lightbox { width: min(92vw, 60rem); max-height: 92vh; padding: 0; border: 0; border-radius: var(--r-md); background: var(--navy); color: var(--white); }
+.lightbox::backdrop { background: rgb(0 0 0 / 0.8); }
+.lightbox__inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--s-2); padding: var(--s-4); }
+.lightbox .ph { aspect-ratio: 4 / 3; width: 100%; }
+.lightbox__cap { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; color: var(--white-80); font-size: var(--fs-sm); }
+.lightbox .icon-btn { color: var(--white); }
+
+/* 14.6 Breakpoints */
+@media (max-width: 1179px) {
+  .past-grid { grid-template-columns: repeat(2, 1fr); }
+  .camp-detail { grid-template-columns: 1fr; }
+  .camp-side { position: static; }
+}
+@media (max-width: 767px) {
+  .next-camp { grid-template-columns: 1fr; padding: var(--s-5); }
+  .datebox { width: 88px; height: 88px; }
+  .datebox b { font-size: 2rem; }
+  .camp-row { grid-template-columns: 1fr; gap: var(--s-1); }
+  .past-grid { grid-template-columns: 1fr; }
+  .camp-actions .btn { flex: 1 1 100%; }
+  .photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .lightbox__inner { grid-template-columns: 1fr; }
+  .lightbox__nav { display: none; }
+}

@@ -491,7 +491,8 @@
   const current = {
     'frames': '[aria-controls="mega-frames"]', 'sunglasses': '[aria-controls="mega-sun"]',
     'lenses': '[aria-controls="mega-lens"]', 'eye-care': '[aria-controls="mega-care"]',
-    'eye-camps': '.menu a[href="/eye-camps"]', 'about': '.menu a[href="/about"]', 'contact': '.menu a[href="/contact"]',
+    // Top-level items only: mega-menu cards also link to these pages
+    'eye-camps': '.menu > li > a[href="/eye-camps"]', 'about': '.menu > li > a[href="/about"]', 'contact': '.menu > li > a[href="/contact"]',
   }[document.body.dataset.page];
   if (current) document.querySelector(current)?.setAttribute('aria-current', 'page');
 })();
@@ -718,6 +719,8 @@
     '/lenses': 'lenses.html',
     '/eye-care': 'eye-care.html',
     '/book-eye-test': 'book-eye-test.html',
+    '/eye-camps': 'eye-camps.html',
+    '/eye-camps/*': 'camp-detail.html',   // ?camp=<slug>
   };
   const t = document.getElementById('toast');
   let toastTimer;
@@ -741,10 +744,10 @@
     if (drawer.classList.contains('is-open')) setDrawer(false);
     // Routes that already have a mockup open it (keeping filters and anchors); the rest show where they'd go
     const u = new URL(a.getAttribute('href'), 'https://vslensmart.example');
-    const detail = u.pathname.match(/^\/(frames|sunglasses)\/(.+)$/);
+    const detail = u.pathname.match(/^\/(frames|sunglasses|eye-camps)\/(.+)$/);
     const file = MOCKS[u.pathname] || (detail && MOCKS[`/${detail[1]}/*`]);
     if (file) {
-      const q = detail ? `?frame=${detail[2]}` : u.search;
+      const q = detail ? `?${detail[1] === 'eye-camps' ? 'camp' : 'frame'}=${detail[2]}` : u.search;
       return void (location.href = file + q + u.hash);
     }
     toast(`Goes to <code>${a.getAttribute('href')}</code> (page not mocked up yet)`);
