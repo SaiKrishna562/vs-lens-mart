@@ -224,7 +224,7 @@
                     <li><a href="/lenses?brand=essilor">Essilor</a></li>
                     <li><a href="/lenses?brand=zeiss">ZEISS</a></li>
                     <li><a href="/lenses?brand=hoya">Hoya</a></li>
-                    <li><a href="/lenses?brand=kodak">Kodak Lens</a></li>
+                    <li><a href="/lenses?brand=kodak-lens">Kodak Lens</a></li>
                     <li><a href="/lenses?brand=crizal">Crizal</a></li>
                   </ul>
                   <p class="mock-only" style="margin-top:8px"><span class="todo">DUMMY brands. Live site lists lens brands from admin</span></p>
@@ -378,7 +378,7 @@
           <h4>Spectacle lenses</h4>
           <a href="/lenses?type=single-vision">Single vision</a><a href="/lenses?type=bifocal">Bifocal</a><a href="/lenses?type=progressive">Progressive</a><a href="/lenses?type=blue-cut">Blue-cut / computer</a><a href="/lenses?type=photochromic">Photochromic</a>
           <h4>All branded lenses <span class="todo">DUMMY</span></h4>
-          <a href="/lenses?brand=essilor">Essilor</a><a href="/lenses?brand=zeiss">ZEISS</a><a href="/lenses?brand=hoya">Hoya</a><a href="/lenses?brand=kodak">Kodak Lens</a><a href="/lenses?brand=crizal">Crizal</a>
+          <a href="/lenses?brand=essilor">Essilor</a><a href="/lenses?brand=zeiss">ZEISS</a><a href="/lenses?brand=hoya">Hoya</a><a href="/lenses?brand=kodak-lens">Kodak Lens</a><a href="/lenses?brand=crizal">Crizal</a>
           <a class="acc__all" href="/book-eye-test">Not sure? Book an eye test</a>
         </div></div></div>
       </li>
@@ -714,6 +714,7 @@
     '/sunglasses': 'sunglasses.html',
     '/sunglasses/*': 'frame-detail.html',
     '/about': 'about.html',
+    '/lenses': 'lenses.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;

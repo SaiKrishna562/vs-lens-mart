@@ -1195,3 +1195,67 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .gallery-grid .ph:first-child { grid-row: auto; grid-column: span 2; aspect-ratio: 16 / 9; }
 }
+
+/* ==========================================================================
+   11. Lenses page (lens types, steps, chip filters, lens cards, brands).
+       Spec: docs/requirements/Requirements_Lenses.md
+   ========================================================================== */
+
+/* 11.1 Lens type cards (reuse .value for the card itself) */
+.ltypes { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s-4); }
+.ltype { padding: var(--s-5); }
+.ltype h3 { font-size: var(--fs-md); }
+.ltype p { font-size: var(--fs-sm); }
+.ltype .link-arrow { font-size: var(--fs-sm); margin-top: auto; }
+.ltype { display: flex; flex-direction: column; gap: var(--s-3); }
+
+/* 11.2 How we choose your lens: three numbered steps */
+.steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); counter-reset: step; list-style: none; margin: 0; padding: 0; }
+.steps-row li { position: relative; padding: var(--s-5) var(--s-5) var(--s-5) calc(var(--s-5) + 44px); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.steps-row li::before {
+  counter-increment: step; content: counter(step);
+  position: absolute; left: var(--s-5); top: var(--s-5);
+  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--pressed-bg); color: var(--pressed-ink); font-weight: 600; font-size: var(--fs-sm);
+}
+.steps-row h3 { font-size: var(--fs-md); color: var(--heading); margin-bottom: var(--s-1); }
+.steps-row p { color: var(--text-muted); font-size: var(--fs-sm); }
+.steps-row a { color: var(--heading); font-weight: 600; }
+
+/* 11.3 Catalogue: chip filters + lens cards */
+.chipbar { display: grid; gap: var(--s-3); margin-bottom: var(--s-5); }
+.chipbar__row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+.chipbar__label { min-width: 4rem; font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--accent-ink); }
+.chipbar__meta { display: flex; align-items: center; gap: var(--s-3); color: var(--text-muted); font-size: var(--fs-sm); }
+.lens-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+.lcard { display: grid; gap: var(--s-2); align-content: start; padding: var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.lcard__brand { color: var(--brass); }
+.lcard h3 { font-size: var(--fs-md); color: var(--heading); }
+.lcard__type { font-size: var(--fs-sm); color: var(--text-muted); }
+.lcard .pill-list li { font-size: var(--fs-xs); padding: 2px 10px; }
+.lcard__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); margin-top: var(--s-2); }
+.lcard__price { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-md); color: var(--heading); }
+.lcard__price--ask { font-family: var(--font-body); font-weight: 600; font-size: var(--fs-sm); color: var(--text-muted); }
+
+/* 11.4 Brand tiles */
+.brand-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s-3); }
+.brand-tile {
+  display: grid; place-items: center; gap: 2px; min-height: 96px; padding: var(--s-4); text-align: center;
+  border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line);
+  font-family: var(--font-display); font-weight: 800; font-size: var(--fs-md); color: var(--heading);
+  transition: border-color 160ms var(--ease-out);
+}
+.brand-tile:hover { border-color: var(--brass); }
+.brand-tile small { font-family: var(--font-body); font-weight: 500; font-size: var(--fs-xs); color: var(--text-muted); }
+
+/* 11.5 Breakpoints */
+@media (max-width: 1179px) {
+  .ltypes { grid-template-columns: repeat(3, 1fr); }
+  .lens-grid { grid-template-columns: repeat(2, 1fr); }
+  .brand-tiles { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 767px) {
+  .ltypes, .steps-row, .lens-grid { grid-template-columns: 1fr; }
+  .brand-tiles { grid-template-columns: repeat(2, 1fr); }
+  .chipbar__label { min-width: 0; flex-basis: 100%; }
+}

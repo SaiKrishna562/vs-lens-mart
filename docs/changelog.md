@@ -4,6 +4,42 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Lenses page
+
+- **Changed:** added `mockups/lenses.html` (`Requirements_Lenses.md`, approved), with these sections:
+  - page hero with Book an eye test and Ask on WhatsApp;
+  - five lens type cards, each with "See lenses (n)" (types without lenses are hidden);
+  - "How we choose your lens" in 3 steps;
+  - the lens catalogue:
+    - Type and Brand chip filters kept in the URL;
+    - cards with up to 3 feature tags, the price or "Ask for price", and Enquire on WhatsApp naming the lens;
+    - an empty state;
+  - brand tiles that filter the catalogue;
+  - an instant lens fitting band;
+  - a "Not sure which lens you need?" call to action.
+  - Data is DUMMY (C6, C16).
+  - **Shared files:** `site.js` routes `/lenses` here, and the mega-menu Kodak link now uses `brand=kodak-lens` to match. `styles.css` gets a "Lenses page" section.
+- **Checked:** in the browser:
+  - menu links land filtered (`?type=progressive` gives 2 lenses);
+  - chips combine (Progressive + ZEISS gives 1), the empty state shows, Clear works, a brand tile filters, and Enquire names the lens;
+  - 5 / 3 / 3 / 5 columns on desktop and 1 / 1 / 1 / 2 on phones; dark mode reads clearly;
+  - no horizontal scroll and no console errors.
+- **Files:** `mockups/lenses.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Lenses.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Lenses (draft)
+
+- **Changed:** added `docs/requirements/Requirements_Lenses.md`, with these sections:
+  - hero;
+  - five lens types in plain language (types with no active lenses are hidden);
+  - "How we choose your lens";
+  - a lens catalogue with Type and Brand chip filters kept in the URL, lens cards with an optional price ("Ask for price" otherwise) and Enquire on WhatsApp, and no detail page;
+  - brands;
+  - an instant lens fitting band (Q92);
+  - a call to action.
+  - Added `DUMMY` C16 (lens catalogue).
+- **Why:** this is the next page in the plan's mockup order. The scope stays at spectacle lenses and brands (decision 2026-10-09); descriptions carry no medical claims.
+- **Files:** `docs/requirements/Requirements_Lenses.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: About page
 
 - **Changed:** added `mockups/about.html` (`Requirements_About.md`, approved), with these sections:
