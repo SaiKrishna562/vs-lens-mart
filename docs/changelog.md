@@ -4,6 +4,87 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: About page
+
+- **Changed:** added `mockups/about.html` (`Requirements_About.md`, approved), with these sections:
+  - a shorter navy hero with the calculated year count;
+  - founder and family with a pull-quote;
+  - a vertical journey timeline (1999 → Today, with DUMMY milestones C15);
+  - Trust / Care / Innovation values;
+  - team roles;
+  - both branches;
+  - a gallery preview linking to `/gallery`;
+  - 6 DUMMY reviews at `#reviews`;
+  - an eye-camps band;
+  - a "Come and meet the family" call to action;
+  - `Organization` structured data.
+  - **Shared files:** `site.js` routes `/about` here (the home page's "Read more reviews" now lands on `#reviews`). `styles.css` gets an "About page" section, and section anchors now clear the sticky header (`scroll-margin-top`).
+- **Fixed:** the hero photo box now lines up with the content edge on wide screens; the timeline dot ring matches the section background.
+- **Checked:**
+  - In the browser at 1440 and 375 px, light and dark: about.html loads from the home page link, About is highlighted in the menu, there's one `h1`, all 10 sections are in order, both year counts read 27, there are 6 reviews, and the `#reviews` title sits below the header.
+  - On phones, single columns and a left-line timeline; no horizontal scroll and no console errors.
+- **Files:** `mockups/about.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_About.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: About (draft); Sunglasses approved
+
+- **Changed:**
+  - Added `docs/requirements/Requirements_About.md`, with these sections:
+    - hero with the calculated year count;
+    - founder and family;
+    - a vertical journey timeline;
+    - values (Trust / Care / Innovation);
+    - team;
+    - branches;
+    - gallery preview (the main way into `/gallery`);
+    - reviews (`#reviews`, the target of the home page's link);
+    - an eye-camps band and a call to action.
+  - Also: anchors, empty states and acceptance criteria. Added `DUMMY` C15 (timeline milestones).
+  - Marked `Requirements_Sunglasses.md` approved (developer, 2026-10-10).
+- **Why:** About is the next page in the plan's mockup order. Most About content is still pending from the client (WhatsApp Q10), so the structure is designed now with tagged dummy content.
+- **Files:** `docs/requirements/Requirements_About.md`, `docs/requirements/Requirements_Sunglasses.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · CLAUDE.md: mockups section (/init)
+
+- **Changed:**
+  - Added a "Mockups" section to `CLAUDE.md`: the preview command, and what `styles.css`, `site.js` (including the `MOCKS` route table), `frames-data.js` and `listing.js` each do.
+  - Page conventions: the theme script, `data-page`, script order, review notes, `DUMMY` tags, branch-picker attributes.
+  - The status line now says Phase 3 mockups.
+- **Why:** `/init` review. `CLAUDE.md` described rules and the future app but not the mockup code that exists, which needs several files read together to understand.
+- **Files:** `CLAUDE.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Sunglasses (draft)
+
+- **Changed:** added `docs/requirements/Requirements_Sunglasses.md`. It covers only what differs from Frames:
+  - lens type and lens colour fields;
+  - a Lens type filter in place of Category;
+  - mega-menu tier and lens links;
+  - a lens-type label on cards;
+  - the power-sunglasses prescription note;
+  - similar sunglasses;
+  - no lens-protection claims beyond admin data.
+  - Also added `DUMMY` C14 (sunglasses data).
+- **Why:** this is the next page in Phase 3. `CLAUDE.md` requires a requirements file before a page's mockup.
+- **Files:** `docs/requirements/Requirements_Sunglasses.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Mockups: light / dark mode
+
+- **Changed:**
+  - **Colour roles:** `mockups/styles.css` now has colour roles (`--bg`, `--bg-alt`, `--surface`, `--text`, `--text-muted`, `--line`, `--heading`, `--accent-ink`, `--btn-ink`, `--pressed-bg/-ink`, `--ph-stripe`, `--todo-ink`, `--focus`, `--navy-edge`).
+    - 119 light-surface declarations were switched to them, and the page styles in `nav.html` and `frame-detail.html` too.
+    - Light mode is unchanged (checked against the original computed colours).
+  - **Dark mode:** three new dark surfaces (`--night` `#0A1622`, `--night-2` `#0F1E2E`, `--night-3` `#162B42`). Cream is used for text, Brass for accents, Gold for selected chips and badges. Navy blocks and gold buttons stay the same.
+  - **Toggle:** a sun/moon button in the header tools on every page, desktop and mobile (`site.js`).
+    - It follows the device setting until chosen.
+    - The choice is saved (`vslm-theme`) and applied by a one-line script in each page's `<head>`, so there's no flash.
+  - **Docs:** `CLAUDE.md` design system, the navigation icons rule, `Requirements_Navigation.md` (toggle and acceptance criterion 15) and `ROADMAP.md` (MVP, sprint 5.1) are updated.
+- **Why:** developer request: every page should have a dark mode with a toggle.
+- **Checked:** in the browser:
+  - light mode matches the old colours exactly; the toggle switches and the choice persists across Home, Frames, Frame detail and Navigation;
+  - a saved "light" wins over a dark device, and with no choice the site follows the device;
+  - the mega menu, filters, cards, panels and the phone layout read clearly in dark;
+  - there are no console errors.
+- **Files:** `mockups/styles.css`, `mockups/site.js`, `mockups/nav.html`, `mockups/home.html`, `mockups/frames.html`, `mockups/frame-detail.html`, `CLAUDE.md`, `ROADMAP.md`, `docs/requirements/Requirements_Navigation.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: frame detail
 
 - **Changed:** added `mockups/frame-detail.html` (`Requirements_Frames.md` section 4):

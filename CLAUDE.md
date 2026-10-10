@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: planning/design phase. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
+Status: Phase 3, HTML mockups for client sign-off. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
 
 Don't invent client facts (prices, brands, founder story, email, hours, phone numbers). For anything the client hasn't confirmed, use the placeholder from `docs/dummy-data.md` and mark it `DUMMY`; if it isn't there, add it there first. Dummy values never go live. Check `docs/open-questions.md` for what's still pending.
 
@@ -59,6 +59,29 @@ Other docs:
 | Playwright tests | `tests/` |
 | HTML mockups for client sign-off | `mockups/` |
 | Requirements | `docs/requirements/Requirements_<Page>.md` |
+
+## Mockups (`mockups/`)
+
+Static HTML pages for client sign-off. No build step. They open straight from the file system, but use a server for browser checks:
+- **Preview:** the `mockups` config in `.claude/launch.json`, or `python -m http.server 8765` from the repo root. Then open `http://localhost:8765/mockups/home.html`.
+- **Verify:** check at 1440 and 375 px (plus 768 / 1180 when layout changes), in both light and dark mode.
+
+Every page is thin; the shared files do the work:
+
+| File | Role |
+|---|---|
+| `styles.css` | All styles. Section 1 holds the tokens and the colour roles; light and dark mode swap only the roles. Later sections: header, home sections (7), listings (8), product detail (9). Components use roles (`--surface`, `--heading`, …), never raw light colours. |
+| `site.js` | Injects the header (utility bar, nav, mega menus, search, theme toggle), mobile drawer, sticky bar, branch picker, footer (after `<main>`) and mockup controls, then wires them. Its `MOCKS` table maps live routes to mockup files: a link to a built page opens it, anything else shows a "not mocked up yet" toast. Add a line there when a page is built. |
+| `frames-data.js` | `window.VSLM`: DUMMY frames and sunglasses (same shape as the live `frames` table), `card()`, slugs and URLs, device-only favourites. |
+| `listing.js` | `VSLM_LISTING(cfg)`: filters, counts, chips, sort, Saved, load more, URL state and the phone filter panel. Frames and Sunglasses differ only in `cfg` (`items`, `groups`, `tiers`, wording). |
+
+Page conventions:
+- Each page has the one-line `vslm-theme` script before `styles.css` in `<head>` (applies dark mode before paint).
+- `<body data-page="…">` sets the current menu item; content goes in `<main id="main">`.
+- Load `site.js` first, then the data and listing scripts, then the page's own script.
+- `frame-detail.html` serves both `/frames/<slug>` and `/sunglasses/<slug>` via `?frame=<slug>`.
+- **Review notes:** `.todo` tags (dashed gold) and `.mock-only` blocks are notes for the client, hidden by the "Review notes" toggle and never part of the site. Tag every dummy value `DUMMY` with its `docs/dummy-data.md` id.
+- **Branch picker:** `data-picker="call|whatsapp"` on any button opens it, and `data-wa-text` prefills the message. `data-dummy` on a link stops a dummy number from dialling.
 
 ## Stack
 
@@ -114,6 +137,13 @@ From the client's form (Q20, Q27, Q34, Q37, Q39). It applies to sunglasses too (
 | Buttons | Pill shape, 48px tall | Gold filled = primary, white outline = secondary |
 | Animation: page / section | Fade and slide up on scroll, 300–500 ms | No 3D, respect reduced-motion |
 | Animation: menus | Open / close in 300 ms or less | No animation when reduced-motion is on |
+| Dark mode: page / sections / cards | `#0A1622` / `#0F1E2E` / `#162B42` | Dark mode only. Text and headings use Cream, accents use Brass and Gold |
+
+**Light and dark mode:**
+- Every page has a light and a dark mode. A sun/moon toggle in the header switches them.
+- It follows the device setting until the visitor chooses. The choice is saved on the device (`localStorage` `vslm-theme`) and applied in `<head>` before the page draws.
+- Components use colour roles (`--bg`, `--bg-alt`, `--surface`, `--text`, `--text-muted`, `--line`, `--heading`, `--accent-ink`, `--btn-ink`, `--pressed-bg` / `--pressed-ink`), never raw light colours, so both modes come from one stylesheet. See `mockups/styles.css` section 1.
+- Navy blocks (hero, nav, footer, quote band) and gold buttons look the same in both modes.
 
 **Hero pattern:**
 - "Trust / Care / Innovation" eyebrow.
@@ -139,7 +169,7 @@ The logo links to `/`; there's no "Home" item. The 7 top-level items, in order:
 6. **About:** plain link to `/about`
 7. **Contact:** plain link to `/contact`
 
-On the right are Search and WhatsApp icons. There are never cart or account icons. Favourites are a heart on frame cards and frame detail, not a nav icon. To add an item, remove one first.
+On the right are the light/dark toggle, Search and WhatsApp icons. There are never cart or account icons. Favourites are a heart on frame cards and frame detail, not a nav icon. To add an item, remove one first.
 
 **Routes:**
 - `/`, `/about`, `/frames`, `/frames/[slug]`, `/sunglasses` (frames table, category = sunglasses)

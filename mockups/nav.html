@@ -9,15 +9,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('vslm-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="styles.css">
 <style>
   /* Page-only styles for this mockup's review area (not part of the header component) */
   .review { padding-block: var(--s-8) var(--s-9); }
   .review__head { display: grid; gap: var(--s-4); max-width: 46rem; }
-  .review__head h1 { font-size: var(--fs-xl); color: var(--navy); }
-  .review__head p { color: var(--ink-72); font-size: var(--fs-md); }
+  .review__head h1 { font-size: var(--fs-xl); color: var(--heading); }
+  .review__head p { color: var(--text-muted); font-size: var(--fs-md); }
   .review__grid { display: grid; gap: var(--s-6); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); margin-top: var(--s-7); }
-  .review h2 { font-size: var(--fs-lg); color: var(--navy); margin-bottom: var(--s-4); }
+  .review h2 { font-size: var(--fs-lg); color: var(--heading); margin-bottom: var(--s-4); }
   .steps { display: grid; gap: var(--s-3); counter-reset: s; }
   .steps li { display: grid; grid-template-columns: 28px 1fr; gap: var(--s-3); align-items: start; }
   .steps li::before {
@@ -27,12 +28,12 @@
   }
   .steps kbd {
     font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 600;
-    padding: 1px 6px; border: 1px solid var(--ink-12); border-bottom-width: 2px; border-radius: 4px; background: var(--white);
+    padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--surface);
   }
   .open-items { display: grid; gap: var(--s-2); }
-  .open-items li { display: flex; gap: var(--s-3); padding-bottom: var(--s-2); border-bottom: 1px solid var(--ink-12); font-size: var(--fs-sm); }
+  .open-items li { display: flex; gap: var(--s-3); padding-bottom: var(--s-2); border-bottom: 1px solid var(--line); font-size: var(--fs-sm); }
   .open-items li span:first-child { flex: 1; }
-  .open-items li span:last-child { color: var(--ink-72); white-space: nowrap; }
+  .open-items li span:last-child { color: var(--text-muted); white-space: nowrap; }
   .filler { margin-top: var(--s-8); display: grid; gap: var(--s-4); }
   .filler .ph { min-height: 14rem; }
 

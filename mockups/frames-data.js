@@ -42,10 +42,35 @@ window.VSLM = (() => {
   ].map(([code, brand, model, category, gender, colour, shape, material, size, price, where, sold]) =>
     ({ code, brand, model, category, gender, colour, shape, material, size, price, where, sold: !!sold }));
 
+
+  // DUMMY sunglasses (C5 brands, C14). Same table on the live site, category = Sunglasses.
+  const SUNGLASSES = [
+    ['SG-2016', 'Ray-Ban', 'RB3025 Aviator', 'Unisex', 'Gold', 'Aviator', 'Metal', '58-14-135', 7990, B, ['Polarized', 'UV protection'], 'Green'],
+    ['SG-2015', 'Fastrack', 'Wayfarer Classic', 'Men', 'Black', 'Wayfarer', 'Acetate', '54-18-140', 1290, B, ['UV protection'], 'Grey'],
+    ['SG-2014', 'Carrera', 'CA 1007 Square', 'Men', 'Black', 'Square', 'Acetate', '55-17-145', 6490, I, ['Polarized'], 'Grey'],
+    ['SG-2013', 'Oakley', 'Holbrook', 'Men', 'Black', 'Square', 'O Matter', '55-18-137', 8990, P, ['Polarized', 'UV protection'], 'Grey'],
+    ['SG-2012', 'Ray-Ban', 'RB2132 New Wayfarer', 'Unisex', 'Tortoise', 'Wayfarer', 'Acetate', '55-18-145', 6990, B, ['UV protection'], 'Brown'],
+    ['SG-2011', 'Fastrack', 'Round Tint', 'Women', 'Gold', 'Round', 'Metal', '51-20-140', 999, B, ['Tinted'], 'Gradient blue'],
+    ['SG-2010', 'Carrera', 'CA 5544 Aviator', 'Men', 'Silver', 'Aviator', 'Metal', '60-12-140', 5990, B, ['UV protection'], 'Grey', true],
+    ['SG-2009', 'Fastrack', 'Kids Sporty Shades', 'Kids', 'Blue', 'Wayfarer', 'TR90', '46-15-120', 999, B, ['UV protection'], 'Grey'],
+    ['SG-2008', 'Ray-Ban', 'RB3447 Round', 'Unisex', 'Gold', 'Round', 'Metal', '50-21-145', 7490, I, ['UV protection'], 'Green'],
+    ['SG-2007', 'Oakley', 'Frogskins', 'Unisex', 'Blue', 'Wayfarer', 'O Matter', '55-17-139', 7290, P, ['Polarized'], 'Gradient blue'],
+    ['SG-2006', 'Fastrack', 'Power Aviator', 'Men', 'Gunmetal', 'Aviator', 'Metal', '57-15-140', 2490, B, ['Power sunglasses', 'UV protection'], 'Grey'],
+    ['SG-2005', 'Carrera', 'CA 3016 Square', 'Women', 'Tortoise', 'Square', 'Acetate', '53-19-140', 5490, B, ['Tinted', 'UV protection'], 'Brown'],
+    ['SG-2004', 'Ray-Ban', 'RB4171 Erika', 'Women', 'Black', 'Round', 'Acetate', '54-18-145', 6490, B, ['Polarized'], 'Brown'],
+    ['SG-2003', 'Fastrack', 'Kids Round Tint', 'Kids', 'Pink', 'Round', 'TR90', '44-16-120', 999, I, ['Tinted'], 'Gradient blue'],
+    ['SG-2002', 'Oakley', 'Sutro Lite', 'Men', 'White', 'Square', 'O Matter', '139-0-135', 8490, B, ['UV protection'], 'Grey', true],
+    ['SG-2001', 'Fastrack', 'Power Wayfarer', 'Unisex', 'Black', 'Wayfarer', 'Acetate', '52-18-140', 1990, P, ['Power sunglasses'], 'Grey'],
+  ].map(([code, brand, model, gender, colour, shape, material, size, price, where, lens, lensColour, sold]) =>
+    ({ code, brand, model, category: 'Sunglasses', gender, colour, shape, material, size, price, where, lens, lensColour, sold: !!sold }));
+  const ALL = [...FRAMES, ...SUNGLASSES];
+  const isSun = f => f.category === 'Sunglasses';
+
   const rupees = n => '₹' + n.toLocaleString('en-IN');
   const slug = f => `${f.brand} ${f.model} ${f.code}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const url = f => `/frames/${slug(f)}`;
-  const enquiryText = f => `Hi VS Lens Mart, I'm interested in frame ${f.code} (${f.brand} ${f.model}). Is it available?`;
+  const url = f => `/${isSun(f) ? 'sunglasses' : 'frames'}/${slug(f)}`;
+  const noun = f => isSun(f) ? 'sunglasses' : 'frame';
+  const enquiryText = f => `Hi VS Lens Mart, I'm interested in ${noun(f)} ${f.code} (${f.brand} ${f.model}). Is it available?`;
 
   /* Favourites: saved on this device only, no login (Requirements_Frames.md 3.5) */
   const KEY = 'vslm-favourites';
@@ -68,11 +93,11 @@ window.VSLM = (() => {
         ${f.sold ? '<span class="fcard__badge">Sold out</span>' : ''}
       </a>
       <button class="fcard__fav" type="button" data-fav="${f.code}" aria-pressed="${on}" aria-label="Save ${f.brand} ${f.model} to favourites"><svg class="icon"><use href="#i-heart"/></svg></button>
-      <span class="caps fcard__brand">${f.brand}</span>
+      <span class="caps fcard__brand">${f.brand}${f.lens ? `<span class="fcard__lens">${f.lens.join(' · ')}</span>` : ''}</span>
       <a class="fcard__name" href="${url(f)}">${f.model}</a>
       <div class="fcard__meta"><span class="fcard__price">${rupees(f.price)}</span><span class="fcard__where">${f.where}</span></div>
       <button class="btn btn--outline-dark fcard__enquire" type="button" data-picker="whatsapp" aria-haspopup="true" aria-expanded="false" aria-controls="picker"
-        data-wa-text="${f.sold ? `Hi VS Lens Mart, frame ${f.code} (${f.brand} ${f.model}) is sold out. Do you have something similar?` : enquiryText(f)}">Enquire</button>
+        data-wa-text="${f.sold ? `Hi VS Lens Mart, ${noun(f)} ${f.code} (${f.brand} ${f.model}) is sold out. Do you have something similar?` : enquiryText(f)}">Enquire</button>
     </article>`;
   }
 
@@ -86,5 +111,5 @@ window.VSLM = (() => {
     });
   }
 
-  return { FRAMES, rupees, slug, url, enquiryText, getFavs, setFavs, toggleFav, card, wireFavs };
+  return { FRAMES, SUNGLASSES, ALL, isSun, noun, rupees, slug, url, enquiryText, getFavs, setFavs, toggleFav, card, wireFavs };
 })();

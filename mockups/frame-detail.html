@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('vslm-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page="frames">
@@ -33,13 +34,14 @@
 <script src="site.js"></script>
 <script src="frames-data.js"></script>
 <script>
-/* Frame detail (mockup). Spec: docs/requirements/Requirements_Frames.md section 4.
-   Live route: /frames/[slug]; here the slug comes from ?frame=<slug>. Data is DUMMY (frames-data.js). */
+/* Frame and sunglasses detail (mockup). Spec: Requirements_Frames.md section 4 and
+   Requirements_Sunglasses.md section 4. Live routes: /frames/[slug] and /sunglasses/[slug];
+   here the slug comes from ?frame=<slug>. Data is DUMMY (frames-data.js). */
 (() => {
   const page = document.getElementById('page');
   const param = new URLSearchParams(location.search).get('frame');
   // Opening the file directly shows the newest frame; an unknown slug shows the not-found state
-  const f = param ? VSLM.FRAMES.find(x => VSLM.slug(x) === param) : VSLM.FRAMES[0];
+  const f = param ? VSLM.ALL.find(x => VSLM.slug(x) === param) : VSLM.FRAMES[0];
   const SITE = 'https://vslensmart.example';   // DUMMY domain (D4)
 
   if (!f) {
@@ -57,6 +59,20 @@
       </section>`;
     return;
   }
+
+  const sun = VSLM.isSun(f);
+  const K = sun
+    ? { list: 'Sunglasses', path: '/sunglasses', many: 'sunglasses', page: 'sunglasses' }
+    : { list: 'Frames', path: '/frames', many: 'frames', page: 'frames' };
+  // The menu highlights Frames or Sunglasses to match this item
+  if (sun) {
+    document.querySelector('.menu [aria-current="page"]')?.removeAttribute('aria-current');
+    document.querySelector('[aria-controls="mega-sun"]')?.setAttribute('aria-current', 'page');
+  }
+  document.getElementById('related-title').textContent = `Similar ${K.many}`;
+  const allLink = document.querySelector('#related .link-arrow');
+  allLink.href = K.path;
+  allLink.firstChild.textContent = `View all ${K.many} `;
 
   const name = `${f.brand} ${f.model}`;
   const price = VSLM.rupees(f.price);
@@ -78,14 +94,14 @@
   // Up to 5 photos (Q34). "Model wearing it" only with written consent; product-only until then.
   const SHOTS = ['Front', 'Side', 'Angle', 'Close-up', 'Folded'];
   const enquire = f.sold
-    ? `Hi VS Lens Mart, frame ${f.code} (${name}) is sold out. Do you have something similar?`
+    ? `Hi VS Lens Mart, ${VSLM.noun(f)} ${f.code} (${name}) is sold out. Do you have something similar?`
     : VSLM.enquiryText(f);
-  const share = `Look at this frame at VS Lens Mart: ${name}, ${price}. ${pageUrl}`;
+  const share = `Look at ${sun ? 'these sunglasses' : 'this frame'} at VS Lens Mart: ${name}, ${price}. ${pageUrl}`;
   const fav = VSLM.getFavs().includes(f.code);
 
   page.innerHTML = `
     <nav aria-label="Breadcrumb" style="padding-top:24px">
-      <ol class="crumbs"><li><a href="/">Home</a></li><li><a href="/frames">Frames</a></li><li aria-current="page">${name}</li></ol>
+      <ol class="crumbs"><li><a href="/">Home</a></li><li><a href="${K.path}">${K.list}</a></li><li aria-current="page">${name}</li></ol>
     </nav>
 
     <div class="pdp">
@@ -107,10 +123,11 @@
       <div class="pinfo">
         <p class="caps pinfo__brand">${f.brand}</p>
         <h1>${f.model}</h1>
-        <p class="pinfo__code">Frame code ${f.code}</p>
+        <p class="pinfo__code">${sun ? 'Code' : 'Frame code'} ${f.code}</p>
         <p class="pinfo__price">${price}<small>Exact in-store price</small></p>
         <div class="pstatus">
           ${f.sold ? '<span class="pill pill--sold">Sold out</span>' : '<span class="pill pill--stock">In stock</span>'}
+          ${sun ? f.lens.map(l => `<span class="pill">${l}</span>`).join('') : ''}
           <span class="pill"><svg class="icon"><use href="#i-pin"/></svg>Available at: ${f.where === 'Both branches' ? 'Indresham &amp; Patelguda' : f.where}</span>
         </div>
         <div class="pactions">
@@ -125,21 +142,26 @@
         <div class="specs">
           <h2>Frame details</h2>
           <dl>
-            <dt>Frame code</dt><dd>${f.code}</dd>
+            <dt>${sun ? 'Code' : 'Frame code'}</dt><dd>${f.code}</dd>
             <dt>Brand</dt><dd>${f.brand}</dd>
             <dt>Model</dt><dd>${f.model}</dd>
-            <dt>Category</dt><dd>${f.category}</dd>
+            ${sun ? '' : `<dt>Category</dt><dd>${f.category}</dd>`}
             <dt>Gender</dt><dd>${f.gender}</dd>
             <dt>Colour</dt><dd>${f.colour}</dd>
             <dt>Shape</dt><dd>${f.shape}</dd>
+            ${sun ? `<dt>Lens type</dt><dd>${f.lens.join(', ')}</dd><dt>Lens colour</dt><dd>${f.lensColour}</dd>` : ''}
             <dt>Material</dt><dd>${f.material}</dd>
-            <dt>Size</dt><dd>${f.size} <span style="color:var(--ink-72)">(lens–bridge–temple, mm)</span></dd>
+            <dt>Size</dt><dd>${f.size} <span style="color:var(--text-muted)">(lens–bridge–temple, mm)</span></dd>
           </dl>
         </div>
 
         <div class="note">
           <svg class="icon"><use href="#i-lens"/></svg>
-          <div><b>Need prescription lenses?</b><p>All branded lenses are available. We fit them in store. <a href="/lenses">See lenses</a></p></div>
+          ${!sun
+            ? '<div><b>Need prescription lenses?</b><p>All branded lenses are available. We fit them in store. <a href="/lenses">See lenses</a></p></div>'
+            : f.lens.includes('Power sunglasses')
+              ? '<div><b>Made to your prescription</b><p>Power sunglasses are made to your prescription in store. Book an eye test first if you don’t have a recent prescription. <a href="/book-eye-test">Book an eye test</a></p></div>'
+              : '<div><b>Want this pair with your power?</b><p>Ask us on WhatsApp and we’ll tell you if these can be made with your prescription.</p></div>'}
         </div>
         <div class="note">
           <svg class="icon"><use href="#i-store"/></svg>
@@ -182,9 +204,11 @@
   favBtn.addEventListener('click', () => favBtn.setAttribute('aria-pressed', String(VSLM.toggleFav(f.code))));
 
   /* ---------- Related: up to 4 approved frames with the same shape or brand ---------- */
-  const related = VSLM.FRAMES
-    .filter(x => x !== f && (x.shape === f.shape || x.brand === f.brand))
-    .sort((a, b) => (a.sold - b.sold) || ((b.shape === f.shape) - (a.shape === f.shape)))
+  const pool = sun ? VSLM.SUNGLASSES : VSLM.FRAMES;
+  const close = x => x.shape === f.shape || (sun && x.lens.some(l => f.lens.includes(l)));
+  const related = pool
+    .filter(x => x !== f && (close(x) || x.brand === f.brand))
+    .sort((a, b) => (a.sold - b.sold) || (close(b) - close(a)))
     .slice(0, 4);
   if (related.length) {
     const row = document.getElementById('related-row');

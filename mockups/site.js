@@ -37,6 +37,8 @@
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/></symbol>
   <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r="0.6"/></symbol>
   <symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 8.5h2.5V5H14a3.5 3.5 0 0 0-3.5 3.5V11H8v3.5h2.5V21H14v-6.5h2.5L17 11h-3V9a.5.5 0 0 1 .5-.5z"/></symbol>
@@ -165,9 +167,9 @@
                   <h3><a href="/sunglasses">Lens type</a></h3>
                   <ul class="mega__list">
                     <li><a href="/sunglasses?lens=polarized">Polarized</a></li>
-                    <li><a href="/sunglasses?lens=uv">UV protection</a></li>
+                    <li><a href="/sunglasses?lens=uv-protection">UV protection</a></li>
                     <li><a href="/sunglasses?lens=tinted">Tinted</a></li>
-                    <li><a href="/sunglasses?lens=power">Power sunglasses</a></li>
+                    <li><a href="/sunglasses?lens=power-sunglasses">Power sunglasses</a></li>
                   </ul>
                 </div>
                 <div class="mega__col">
@@ -293,6 +295,10 @@
       </ul>
 
       <div class="nav__tools">
+        <button class="icon-btn icon-btn--theme" type="button" id="theme-toggle" aria-pressed="false" aria-label="Dark mode">
+          <svg class="icon theme-icon--moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon theme-icon--sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
         <button class="icon-btn icon-btn--search" type="button" aria-label="Search" aria-expanded="false" aria-controls="search">
           <svg class="icon"><use href="#i-search"/></svg>
         </button>
@@ -357,7 +363,7 @@
           <h4>Shop for</h4>
           <a href="/sunglasses?for=men">Men</a><a href="/sunglasses?for=women">Women</a><a href="/sunglasses?for=kids">Kids</a>
           <h4>Lens type</h4>
-          <a href="/sunglasses?lens=polarized">Polarized</a><a href="/sunglasses?lens=uv">UV protection</a><a href="/sunglasses?lens=tinted">Tinted</a><a href="/sunglasses?lens=power">Power sunglasses</a>
+          <a href="/sunglasses?lens=polarized">Polarized</a><a href="/sunglasses?lens=uv-protection">UV protection</a><a href="/sunglasses?lens=tinted">Tinted</a><a href="/sunglasses?lens=power-sunglasses">Power sunglasses</a>
           <h4>Shape</h4>
           <a href="/sunglasses?shape=aviator">Aviator</a><a href="/sunglasses?shape=wayfarer">Wayfarer</a><a href="/sunglasses?shape=round">Round</a><a href="/sunglasses?shape=square">Square</a>
           <h4>Price range <span class="todo">DUMMY</span></h4>
@@ -547,6 +553,27 @@
     if (!nav.contains(e.target)) { closeAll(false); closeSearch(); }
   });
 
+  /* ---------- Light / dark mode ----------
+     Follows the device setting until the visitor chooses; the choice is saved on
+     this device (each page's <head> applies it before the page draws, so no flash). */
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('theme-toggle');
+  const systemDark = matchMedia('(prefers-color-scheme: dark)');
+  const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : systemDark.matches;
+  function paintTheme() {
+    const dark = isDark();
+    themeBtn.setAttribute('aria-pressed', String(dark));
+    themeBtn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+  }
+  themeBtn.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('vslm-theme', next); } catch (_) {}
+    paintTheme();
+  });
+  systemDark.addEventListener('change', paintTheme);
+  paintTheme();
+
   /* ---------- Search ---------- */
   const searchBtn = document.querySelector('.icon-btn--search');
   const search = document.getElementById('search');
@@ -684,6 +711,9 @@
     '/': 'home.html',
     '/frames': 'frames.html',
     '/frames/*': 'frame-detail.html',   // ?frame=<slug>
+    '/sunglasses': 'sunglasses.html',
+    '/sunglasses/*': 'frame-detail.html',
+    '/about': 'about.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;
@@ -707,9 +737,10 @@
     if (drawer.classList.contains('is-open')) setDrawer(false);
     // Routes that already have a mockup open it (keeping filters and anchors); the rest show where they'd go
     const u = new URL(a.getAttribute('href'), 'https://vslensmart.example');
-    const file = MOCKS[u.pathname] || (u.pathname.startsWith('/frames/') && MOCKS['/frames/*']);
+    const detail = u.pathname.match(/^\/(frames|sunglasses)\/(.+)$/);
+    const file = MOCKS[u.pathname] || (detail && MOCKS[`/${detail[1]}/*`]);
     if (file) {
-      const q = u.pathname.startsWith('/frames/') ? `?frame=${u.pathname.split('/').pop()}` : u.search;
+      const q = detail ? `?frame=${detail[2]}` : u.search;
       return void (location.href = file + q + u.hash);
     }
     toast(`Goes to <code>${a.getAttribute('href')}</code> (page not mocked up yet)`);

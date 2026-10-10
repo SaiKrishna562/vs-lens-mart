@@ -69,6 +69,7 @@ Always visible above the main navigation on desktop.
 
 | Icon | Behaviour |
 |---|---|
+| Light / dark toggle | A moon icon (in light mode) or sun icon (in dark mode). It switches the whole site between light and dark mode. Until the visitor chooses, it follows the device setting; the choice is saved on the device and applies on every page. It uses `aria-pressed` and the title "Switch to dark/light mode". Visible on desktop and mobile. Added 2026-10-10 (developer request) |
 | Search | Opens site search across frames, sunglasses and lenses. **TODO (dev):** decide the search behaviour, for example an overlay with results from the frames and lenses tables. |
 | WhatsApp | Opens a small branch chooser (Indresham / Patelguda). Each opens `https://wa.me/91<number>` for that branch in a new tab. It replaces the shopping bag. *Proposal for client review.* |
 
@@ -198,6 +199,11 @@ Done when:
 
     The tests pass with no console errors.
 14. **Reduced motion:** with reduced motion on, menus open without animation.
+15. **Light / dark mode:**
+    - The toggle switches every page.
+    - The choice survives reloads and page changes, with no flash of the other mode on load.
+    - With no choice made, the site follows the device setting.
+    - All text keeps readable contrast in both modes.
 
 ## 10. Open items summary
 

@@ -25,6 +25,7 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 - Favourites saved on the device, no login; WhatsApp share and enquiry on each frame (added)
 - Eye care services: eye testing, instant spherical lens fitting, frame adjustment, frame repair (added)
 - Social links in the footer (added)
+- Light / dark mode with a header toggle; follows the device setting until chosen (added 2026-10-10)
 - Basic search of frames and lenses by name or brand (added, see section 6)
 
 ## 2. Later modules
@@ -50,7 +51,7 @@ Sprints keep the plan's numbers, but they are **built in this order: 5.1 → 5.3
 
 | Sprint | Features | Done when | Effort |
 |---|---|---|---|
-| 5.1 Layout | Utility bar with both branch numbers; mega-menu navigation (brands and prices from the database); mobile accordion menu; sticky Call / WhatsApp / Book bar; footer with social links; design tokens; fonts | Every page shares the layout, the menus work by mouse, touch and keyboard, and it works at 360 px | 3–4 days |
+| 5.1 Layout | Utility bar with both branch numbers; mega-menu navigation (brands and prices from the database); mobile accordion menu; sticky Call / WhatsApp / Book bar; footer with social links; design tokens and colour roles for light / dark mode, with the toggle; fonts | Every page shares the layout, the menus work by mouse, touch and keyboard, and it works at 360 px | 3–4 days |
 | 5.2 Home | All 13 homepage sections, with the database sections (featured frames, eye camps, reviews, branches) wired to live data | It matches the signed-off mockup | 2–3 days |
 | 5.3 Admin + frames | Admin/staff login; staff add/edit frames and sunglasses as drafts with up to 5 photos (size and type checks); admin approval; availability and "Available at"; Frames page with the client's filters; Sunglasses page; Frame detail with WhatsApp enquiry and share; device-only favourites; nav brand and price hookup | Staff upload a frame on a phone, an admin approves it, and only then does it appear on the site; a sold-out frame shows "Sold out" | 5–6 days |
 | 5.4 Booking + contact | Book an eye test (confirmation says "Call or WhatsApp to reschedule"), enquiry form, both branches with maps and their own numbers, prefilled WhatsApp links, consent checkboxes, privacy policy (retention period `DUMMY`) | A booking is saved, a logged-out user can't read it, and the WhatsApp message opens to the right branch | 2–3 days |
