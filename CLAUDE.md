@@ -74,6 +74,7 @@ Every page is thin; the shared files do the work:
 | `site.js` | Injects the header (utility bar, nav, mega menus, search, theme toggle), mobile drawer, sticky bar, branch picker, footer (after `<main>`) and mockup controls, then wires them. Its `MOCKS` table maps live routes to mockup files: a link to a built page opens it, anything else shows a "not mocked up yet" toast. Add a line there when a page is built. |
 | `frames-data.js` | `window.VSLM`: DUMMY frames and sunglasses (same shape as the live `frames` table), `card()`, slugs and URLs, device-only favourites. |
 | `listing.js` | `VSLM_LISTING(cfg)`: filters, counts, chips, sort, Saved, load more, URL state and the phone filter panel. Frames and Sunglasses differ only in `cfg` (`items`, `groups`, `tiers`, wording). |
+| `admin.js` | The staff area shell for `admin*.html`, used **instead of** `site.js`: top bar, sidebar (a drawer on phones), DUMMY drafts, a mockup-only "View as Staff / Admin" switch (`[data-only="admin|staff"]`), and a `guard` hook for unsaved changes. |
 
 Page conventions:
 - Each page has the one-line `vslm-theme` script before `styles.css` in `<head>` (applies dark mode before paint).

@@ -4,6 +4,23 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Admin dashboard and add-frame form
+
+- **Changed:** added the staff area mockups (`Requirements_Admin.md`, approved):
+  - **`mockups/admin.js`:** its own shell instead of `site.js`: navy top bar (role, branch, theme toggle, View site, Sign out), sidebar with counts (a drawer on phones, inert when closed), "Add frame" button on phones, a mockup-only "View as Staff / Admin" switch, DUMMY drafts shared by both pages, and an unsaved-changes guard.
+  - **`mockups/admin.html` (dashboard):** greeting; to-do cards (waiting for approval or your drafts, bookings today, new enquiries); quick actions; today's bookings with a branch filter, Call / WhatsApp and a status menu; the admin's approval queue or the staff member's drafts with the admin's note; recent changes; "On the site now" counts.
+  - **`mockups/admin-frame.html` (add / edit / review):** up to 5 photos from the camera or gallery, resized in the browser to 1600 px WebP before upload, with type and size checks, progress, photo type, cover, reorder, remove with Undo, and a permission tick for "Model wearing it"; all frame fields (sunglasses lens fields when the category is Sunglasses); live duplicate-code check; actions by role and status (Save as draft / Send for approval; Send back with a note / Approve and publish; Save changes; Delete for admin, Hide from site for staff); autosave on the device with "Continue it"; "Add another frame" keeps brand, category, gender and branch.
+  - **Shared files:** `styles.css` gets a "Staff area" section; `CLAUDE.md` lists `admin.js` in the mockups table.
+  - **Dummy data:** C22 (accounts, session length, edit rule) and DUMMY customers with unusable numbers.
+- **Why:** the last two of the 14 plan mockups (sprints 5.3–5.5); staff upload from a phone (Q36) and an admin approves (Q37).
+- **Checked:** in the browser:
+  - Desktop: the queue opens a draft in review mode; Send back refuses an empty note and lands on the result; the status menu and branch filter work; dummy numbers never dial.
+  - As staff: an empty submit lists all 9 errors; a non-photo and an 11 MB file are refused; a 3000×2000 photo becomes 1600×1067 (333 KB → 39 KB); a duplicate code is caught; "Model wearing it" without permission is blocked; Send for approval works; the leave guard and "Continue it" work.
+  - Approved frames: reorder keeps focus, remove + Undo; staff Hide and admin Delete ask first.
+  - At 360 px in dark mode: no horizontal scroll, targets at least 44 px, the drawer opens and closes with Esc.
+  - No console errors apart from Chrome blocking the leave prompt during scripted reloads.
+- **Files:** `mockups/admin.js`, `mockups/admin.html`, `mockups/admin-frame.html`, `mockups/styles.css`, `CLAUDE.md`, `docs/requirements/Requirements_Admin.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Contact
 
 - **Changed:** added `mockups/contact.html` (`Requirements_Contact.md`, approved):
