@@ -4,6 +4,39 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Gallery
+
+- **Changed:** added `mockups/gallery.html` (`Requirements_Gallery.md`, approved):
+  - a hero with the Home › About › Gallery breadcrumb (About highlighted in the menu);
+  - tag chips with counts (only tags that have photos; kept in `?tag=`);
+  - a 3-column grid (2 on phones) with a large first photo, 24 per "Load more";
+  - the large view staying within the current tag;
+  - a consent note with an "ask to remove a photo" WhatsApp link;
+  - a call to action.
+  - **Data:** 28 DUMMY photos (C20); customer photos labelled "only with permission (Q146)".
+  - **New shared `mockups/lightbox.js`:** the `<dialog>` large view with caption, meta, "n of m", arrows, swipe, Esc and focus return. `camp-detail.html` now uses it instead of its own copy.
+  - **Shared files:** `site.js` routes `/gallery`; `styles.css` gets a "Gallery" section.
+- **Checked:** in the browser:
+  - About's "View the gallery" opens it; the tag filter and URL work;
+  - "Load more" brings 24 up to 28; the large view wraps within a tag and returns focus;
+  - camp detail still works on the shared view;
+  - on phones, 2 columns and a full-width large view; dark mode readable;
+  - no horizontal scroll and no console errors.
+- **Files:** `mockups/gallery.html`, `mockups/lightbox.js`, `mockups/camp-detail.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Gallery.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Gallery (draft)
+
+- **Changed:** added `docs/requirements/Requirements_Gallery.md`:
+  - **Photo data:** image, tag, caption (also used as alt text), branch, date, plus a people/consent check that blocks the upload without consent.
+  - **Tag chips:** with counts, kept in `?tag=`.
+  - **Grid:** a 3- or 2-column grid with a featured first photo and load more.
+  - **Large view:** a shared `<dialog>` view (the same as the camp gallery).
+  - **Consent note:** with a "ask to remove a photo" WhatsApp link.
+  - **Other:** empty states and a call to action.
+  - Added `DUMMY` C20 (gallery).
+- **Why:** this is the next page in the plan's mockup order. Customer photos depend on permission the client hasn't confirmed yet (Q146).
+- **Files:** `docs/requirements/Requirements_Gallery.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Eye camps (listing and detail)
 
 - **Changed:** added `mockups/eye-camps.html` and `mockups/camp-detail.html` (`Requirements_EyeCamps.md`, approved), plus `mockups/camps-data.js` (DUMMY C19 camps and helpers).

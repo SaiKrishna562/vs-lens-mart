@@ -721,6 +721,7 @@
     '/book-eye-test': 'book-eye-test.html',
     '/eye-camps': 'eye-camps.html',
     '/eye-camps/*': 'camp-detail.html',   // ?camp=<slug>
+    '/gallery': 'gallery.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;
