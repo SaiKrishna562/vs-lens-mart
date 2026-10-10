@@ -4,6 +4,39 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Eye care page
+
+- **Changed:** added `mockups/eye-care.html` (`Requirements_EyeCare.md`, approved), with these sections:
+  - hero;
+  - the 4 services with the mega-menu anchors (`#eye-testing`, `#lens-fitting`, `#frame-adjustment`, `#frame-repair`): eye test 5–20 minutes, "Free" tagged DUMMY, repair charges TODO;
+  - 4 eye-test steps;
+  - the "when to get your eyes checked" checklist with an always-visible urgent-help note;
+  - 6 tips with a "general information only" disclaimer;
+  - an 8-question FAQ accordion (native `details`/`summary`; unconfirmed answers tagged);
+  - quick links and a call to action;
+  - `FAQPage` structured data (confirmed answers only).
+  - **Shared files:** `site.js` routes `/eye-care` and has a new alert icon; `styles.css` gets an "Eye care page" section.
+- **Checked:** in the browser:
+  - the mega-menu link `/eye-care#lens-fitting` lands on the block below the header; Eye care is highlighted; there's one `h1`;
+  - all sections and counts are right, and several FAQ answers open together;
+  - single columns on phones, 56 px FAQ rows, dark mode readable;
+  - no horizontal scroll and no console errors.
+- **Files:** `mockups/eye-care.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_EyeCare.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Eye Care (draft)
+
+- **Changed:** added `docs/requirements/Requirements_EyeCare.md`, with these sections:
+  - hero;
+  - the 4 services from Q92, with the mega-menu anchors;
+  - what happens at an eye test;
+  - when to get your eyes checked, with an always-visible "see a doctor straight away" safety note;
+  - eye care tips;
+  - an FAQ accordion: confirmed answers from Q75 / Q92 / Q131 / WhatsApp Q11, the rest DUMMY or TODO;
+  - quick links and a call to action.
+  - Added `DUMMY` C17 (health copy that needs the optometrist's approval).
+- **Why:** this is the next page in the plan's mockup order. It is health information, so anything beyond the client's facts is tagged for professional review and makes no medical claims.
+- **Files:** `docs/requirements/Requirements_EyeCare.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Lenses page
 
 - **Changed:** added `mockups/lenses.html` (`Requirements_Lenses.md`, approved), with these sections:

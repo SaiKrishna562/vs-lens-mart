@@ -1259,3 +1259,71 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .brand-tiles { grid-template-columns: repeat(2, 1fr); }
   .chipbar__label { min-width: 0; flex-basis: 100%; }
 }
+
+/* ==========================================================================
+   12. Eye care page (services, checklist, safety note, tips, FAQ).
+       Spec: docs/requirements/Requirements_EyeCare.md
+   ========================================================================== */
+
+/* 12.1 Four service blocks */
+.services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-5); }
+.svc { display: grid; grid-template-columns: auto 1fr; gap: var(--s-4); padding: var(--s-6); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); align-content: start; }
+.svc__icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: var(--gold); }
+.svc__icon .icon { width: 28px; height: 28px; }
+.svc__body { display: grid; gap: var(--s-2); align-content: start; }
+.svc__body h3 { font-size: var(--fs-lg); color: var(--heading); }
+.svc__body p { color: var(--text-muted); }
+.svc__meta { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-1); }
+.svc__actions { margin-top: var(--s-2); display: flex; flex-wrap: wrap; gap: var(--s-3); align-items: center; }
+
+/* 12.2 "When to get your eyes checked": checklist + safety note */
+.when { display: grid; grid-template-columns: 1.2fr 1fr; gap: var(--s-6); align-items: start; }
+.checklist { display: grid; gap: var(--s-3); }
+.checklist li { display: grid; grid-template-columns: 24px 1fr; gap: var(--s-3); align-items: start; color: var(--text); }
+.checklist li::before {
+  content: ""; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%;
+  background: var(--gold-16); border: 2px solid var(--brass);
+}
+.alert {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--s-3); padding: var(--s-5);
+  border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold);
+}
+.alert .icon { width: 28px; height: 28px; color: var(--brass); }
+.alert b { display: block; color: var(--heading); margin-bottom: 2px; }
+.alert p { color: var(--text-muted); font-size: var(--fs-sm); }
+.disclaimer { margin-top: var(--s-4); font-size: var(--fs-sm); color: var(--text-muted); }
+
+/* 12.3 Tips */
+.tips { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); }
+.tip { padding: var(--s-5); }
+.tip h3 { font-size: var(--fs-md); }
+.tip p { font-size: var(--fs-sm); }
+
+/* 12.4 FAQ accordion (native details/summary) */
+.faq { display: grid; gap: var(--s-2); max-width: 52rem; }
+.faq details { border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.faq summary {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4);
+  min-height: 56px; padding: var(--s-3) var(--s-5); cursor: pointer; list-style: none;
+  font-weight: 600; color: var(--heading);
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font-size: 1.5rem; line-height: 1; color: var(--brass); transition: transform var(--dur-menu) var(--ease-out); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details[open] summary { border-bottom: 1px solid var(--line); }
+.faq__answer { padding: var(--s-4) var(--s-5) var(--s-5); color: var(--text-muted); display: grid; gap: var(--s-2); }
+.faq__answer a { color: var(--heading); font-weight: 600; }
+
+/* 12.5 Quick-link photo cards on a light section (the mega-menu .card) */
+.section .cards .card__title { color: var(--heading); }
+.section .cards .card__text { color: var(--text-muted); }
+
+/* 12.6 Breakpoints */
+@media (max-width: 1179px) {
+  .when { grid-template-columns: 1fr; }
+  .tips { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .services-grid, .tips, .section .cards { grid-template-columns: 1fr; }
+  .svc { grid-template-columns: 1fr; padding: var(--s-5); }
+}
