@@ -723,6 +723,7 @@
     '/eye-camps/*': 'camp-detail.html',   // ?camp=<slug>
     '/gallery': 'gallery.html',
     '/contact': 'contact.html',
+    '/privacy': 'privacy.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;

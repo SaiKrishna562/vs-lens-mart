@@ -4,6 +4,22 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Privacy policy
+
+- **Changed:** added `mockups/privacy.html` (`Requirements_Privacy.md`, approved):
+  - a hero with "Last updated", an "In short" box, a contents list (sticky on desktop with the current section highlighted; collapsible on phones, closing after a tap);
+  - plain-English sections: who we are, what we collect and why (a table that stacks on phones), how we use it, who can see it, how long we keep it, your rights under the DPDP Act 2023, children, keeping it safe, changes, contact;
+  - a contact card with WhatsApp / Call (branch picker) and the email; a print style.
+  - **Shared files:** `site.js` routes `/privacy`, so the footer link and the consent links on the booking and contact forms open it; `styles.css` gets a "Privacy" section; shared branch action buttons raised from 40 to 44 px (also on Home, Contact and Booking).
+  - **Dummy data:** new C23 (privacy contact person, 30-day reply); D9 retention and D1 email shown tagged.
+- **Why:** every form links to `/privacy` (DPDP consent); the page must list exactly what the site collects. The wording still needs a legal check before launch.
+- **Checked:** in the browser:
+  - The contact form's consent link and the footer link open it.
+  - Every contents link lands below the sticky header and highlights the right section.
+  - At 360 px in dark mode: contents collapsed, table stacked, no horizontal scroll, buttons 44 px.
+  - The listed browser storage keys (`vslm-theme`, `vslm-favourites`) match the public mockups' code.
+- **Files:** `mockups/privacy.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Privacy.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Admin dashboard and add-frame form
 
 - **Changed:** added the staff area mockups (`Requirements_Admin.md`, approved):
