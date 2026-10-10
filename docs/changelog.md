@@ -4,6 +4,41 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Book an eye test
+
+- **Changed:** added `mockups/book-eye-test.html` (`Requirements_Booking.md`, approved). It's a working mockup in which nothing is saved:
+  - **Steps:** 3 steps on one page (branch and day → time → details). Prefill from `?branch=&date=`.
+  - **Slots:** 20-minute slots grouped Morning / Afternoon / Evening, with 2 hours' notice, a 30-day window, a Diwali-day closure, and DUMMY counts-only availability (about 1 in 8 slots full). DUMMY C18 and D3.
+  - **Fields:** name, +91 mobile, optional for-whom and a note with a counter, a required consent checkbox with the privacy link, and a honeypot.
+  - **Errors:** field errors plus a focused error summary.
+  - **Confirmation:** a random reference, the last 4 digits of the mobile only, "Send to the branch on WhatsApp" (prefilled), an `.ics` calendar file, "Call or WhatsApp to change", and "Book another test".
+  - **Review-only buttons:** preview the "slot just filled" and "server error" states.
+  - **Layout:** the sticky bar is hidden on this page; on phones the summary card becomes a one-line summary above the submit button.
+  - **Home page:** its booking band now opens this page with branch and date filled in.
+  - **Shared files:** `site.js` routes `/book-eye-test`; `styles.css` gets a "Booking form" section.
+- **Fixed:** the dummy availability hash marked about 40% of slots full, so it was replaced with FNV-1a (about 12%).
+- **Checked:** in the browser:
+  - the home band prefill works;
+  - validation lists 3 errors with focus on the summary;
+  - "slot just filled" makes that time Full and keeps the day;
+  - "server error" keeps the entered details and offers Call / WhatsApp (dummy number blocked);
+  - success shows the reference, a masked number, the WhatsApp text and the calendar file;
+  - on phones, 44 px targets and no horizontal scroll; dark mode readable; no console errors.
+- **Files:** `mockups/book-eye-test.html`, `mockups/home.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Booking.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Requirements: Book an eye test (draft)
+
+- **Changed:** added `docs/requirements/Requirements_Booking.md`:
+  - **Form:** 3 steps on one page (branch and day → time → details), prefilled from the home band.
+  - **Slots:** 20-minute slots with notice, window and capacity rules; availability fetched as counts only.
+  - **Minimal data:** name, mobile, optional for-whom and note, required consent.
+  - **Checks:** server-side validation, with the capacity check and insert in one transaction.
+  - **Confirmation:** a random reference, "Send to the branch on WhatsApp" (prefilled), an `.ics` calendar file, and "call or WhatsApp to change".
+  - **Database and tests:** an insert-only `appointments` table with row-level security, and acceptance tests for the read-block and the race condition.
+  - Added `DUMMY` C18 (booking rules).
+- **Why:** this is the next page in the plan's mockup order and the first form with personal data, so it follows the `CLAUDE.md` data-security rules and the DPDP consent requirement.
+- **Files:** `docs/requirements/Requirements_Booking.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Eye care page
 
 - **Changed:** added `mockups/eye-care.html` (`Requirements_EyeCare.md`, approved), with these sections:

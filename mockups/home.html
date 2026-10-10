@@ -351,7 +351,7 @@
   form.addEventListener('submit', e => {
     e.preventDefault();
     const q = new URLSearchParams(new FormData(form)).toString();
-    window.mockToast?.(`Goes to <code>/book-eye-test?${q}</code> (page not mocked up yet)`);
+    location.href = `book-eye-test.html?${q}`;   // live: /book-eye-test?branch=…&date=…
   });
 
   /* ---------- Fade and slide up on scroll ---------- */

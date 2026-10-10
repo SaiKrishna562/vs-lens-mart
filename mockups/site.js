@@ -717,6 +717,7 @@
     '/about': 'about.html',
     '/lenses': 'lenses.html',
     '/eye-care': 'eye-care.html',
+    '/book-eye-test': 'book-eye-test.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;
