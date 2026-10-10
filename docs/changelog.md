@@ -4,6 +4,25 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: Contact
+
+- **Changed:** added `mockups/contact.html` (`Requirements_Contact.md`, approved):
+  - a hero, three quick cards (WhatsApp, Call, Book an eye test);
+  - two branch cards (`#branches`, `#indresham`, `#patelguda`): address, hours, holiday note, services, "Open now / Closed now" in India time, and Directions, Call and WhatsApp for each branch's own number; maps load only when scrolled into view or tapped;
+  - an enquiry form (name, mobile, branch, topic, message, reply by, consent, spam trap) with an error summary, a server-error preview and a thank-you state that shows only what was just sent;
+  - prefill from a frame (`?topic=frames&frame=VSF-1024`), invalid values ignored;
+  - a small FAQ, a CTA band and `OpticianStore` structured data (Patelguda phone left out while DUMMY).
+  - **Shared files:** `site.js` routes `/contact`; `styles.css` gets a "Contact" section (3-column quick cards, open/closed status, select field, form side notes).
+  - **Dummy data:** new C21 (enquiry reply time).
+- **Why:** sprint 5.4 contact page; WhatsApp stays the primary contact (Q154), the form is the fallback.
+- **Checked:** in the browser:
+  - Home's "Visit a store" lands on `#branches` with Contact highlighted in the menu;
+  - an empty submit lists all 5 errors and focuses the summary; a valid send shows the thank-you state; "Either" opens the branch picker, a dummy branch never dials;
+  - the server-error preview keeps the entered details; a prefilled message alone is rejected;
+  - at 360 px in dark mode: one column, no horizontal scroll, sticky bar shown, readable;
+  - no console errors.
+- **Files:** `mockups/contact.html`, `mockups/site.js`, `mockups/styles.css`, `docs/requirements/Requirements_Contact.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Gallery
 
 - **Changed:** added `mockups/gallery.html` (`Requirements_Gallery.md`, approved):

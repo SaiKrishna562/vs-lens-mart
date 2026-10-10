@@ -1534,3 +1534,40 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
 @media (max-width: 767px) {
   .gallery-wall { grid-template-columns: repeat(2, 1fr); gap: var(--s-2); }
 }
+
+/* ==========================================================================
+   16. Contact. Spec: docs/requirements/Requirements_Contact.md
+   Reuses the quick cards (7), branch cards (7), booking form fields (13) and FAQ (12).
+   ========================================================================== */
+.quick__grid--3 { grid-template-columns: repeat(3, 1fr); max-width: none; }
+.branch__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.status--open { background: var(--gold); color: var(--navy); }
+.status--closed { background: var(--surface); color: var(--text-muted); border: 1px solid var(--line); }
+.branch .pill-list li { font-size: var(--fs-xs); padding: 2px 10px; }
+.branch__map { position: relative; }
+.branch__map .ph { gap: var(--s-2); }
+.branch__map button { min-height: var(--tap); padding: 0 var(--s-4); border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--surface); color: var(--heading); font-weight: 600; font-size: var(--fs-sm); }
+
+/* 16.1 Enquiry form + side note */
+.cform { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--s-7); align-items: start; }
+.ffield select {
+  width: 100%; min-height: var(--btn-h); padding: 10px var(--s-4); border-radius: var(--r-sm);
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit;
+}
+.ffield select:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent; }
+.ffield.has-error select { border-color: var(--gold); box-shadow: inset 4px 0 0 var(--gold); }
+.cform fieldset { border: 0; margin: 0 0 var(--s-4); padding: 0; min-width: 0; }
+.cform legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: var(--fs-sm); color: var(--heading); }
+.cnote { display: grid; gap: var(--s-4); padding: var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.cnote h3 { font-size: var(--fs-md); color: var(--heading); }
+.cnote p { font-size: var(--fs-sm); color: var(--text-muted); }
+.cnote a:not(.btn) { color: var(--heading); font-weight: 600; }
+.cnote + .cnote { margin-top: var(--s-4); }
+
+@media (max-width: 1023px) {
+  .cform { grid-template-columns: 1fr; gap: var(--s-5); }
+  .quick__grid--3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .cform .bsubmit .btn { width: 100%; }
+}

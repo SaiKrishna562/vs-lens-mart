@@ -722,6 +722,7 @@
     '/eye-camps': 'eye-camps.html',
     '/eye-camps/*': 'camp-detail.html',   // ?camp=<slug>
     '/gallery': 'gallery.html',
+    '/contact': 'contact.html',
   };
   const t = document.getElementById('toast');
   let toastTimer;
