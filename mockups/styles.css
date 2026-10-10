@@ -1842,3 +1842,29 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .prose { gap: var(--s-5); }
   .prose section { break-inside: avoid; }
 }
+
+/* ==========================================================================
+   19. Page not found (404) and error page. Spec: docs/requirements/Requirements_NotFound.md
+   Builds on .notfound (section 9) and the quick cards (section 7).
+   ========================================================================== */
+.notfound--page { padding-block: var(--s-8) var(--s-6); grid-template-columns: minmax(0, 1fr); }
+.notfound--page h1 { font-size: clamp(1.625rem, 4vw + 0.75rem, 2.5rem); }
+.notfound--page .icon { height: 50px; }   /* glasses: 120 × 50 */
+.notfound--page .icon--square { width: 72px; height: 72px; }   /* alert and camp icons are square */
+.notfound--page .notfound__code { color: var(--accent-ink); }
+.notfound--page p { max-width: 46ch; }
+.nf-search { display: flex; gap: var(--s-2); width: 100%; max-width: 32rem; margin-top: var(--s-2); }
+.nf-search input { flex: 1; min-width: 0; min-height: var(--btn-h); padding: 0 var(--s-5); border-radius: var(--r-pill); border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; }
+.nf-search input:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent; }
+.nf-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4); }
+.nf-cards .quick__card { box-shadow: none; }
+.nf-help { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--s-3); padding-block: var(--s-6) var(--s-8); color: var(--text-muted); }
+
+@media (max-width: 1179px) { .nf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 767px) {
+  .notfound--page { padding-block: var(--s-6) var(--s-5); }
+  .nf-cards { grid-template-columns: 1fr; gap: var(--s-2); }
+  .nf-cards .quick__card { padding: var(--s-3) var(--s-4); }
+  .nf-search .btn { padding-inline: var(--s-4); }
+  .nf-help .btn { width: 100%; }
+}

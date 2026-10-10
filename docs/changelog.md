@@ -4,6 +4,22 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-10 · Phase 3 · Mockups: 404 and error page
+
+- **Changed:** added `mockups/404.html` (`Requirements_NotFound.md`, approved):
+  - **404:** "This page is a little out of focus." with a search field, four "where to next" cards (Frames, Sunglasses, Book an eye test, Visit a branch), WhatsApp help prefilled with the missing address, and "Back to home".
+  - **Smart hints:** removed frames and sunglasses ("isn't available", "See all frames / sunglasses" first) and missing camps.
+  - **Error page:** "Something went wrong on our side." with Try again, Call and WhatsApp, and no technical details.
+  - **Mockup:** `?path=` stands in for the missing address and `?state=error` shows the error page; a review panel links to each state.
+  - **Shared files:** `styles.css` gets a "Page not found" section (reuses `.notfound` and the quick cards).
+- **Why:** dead links and failed loads should lead back to frames, a booking or the shop, not a dead end; this matches the existing frame and camp "not available" rules.
+- **Checked:** in the browser:
+  - all five states (titles, headings, card order, WhatsApp text); search text escaped;
+  - 1440 px light, 360 px dark;
+  - no console errors.
+  - A real 7 px overflow at 360 px was found and fixed (headline column). The overflow check was corrected to use `clientWidth` and re-run on the 404, Privacy, Contact, Gallery and admin pages; all fit (see `docs/ai-fluency-log.md`).
+- **Files:** `mockups/404.html`, `mockups/styles.css`, `docs/requirements/Requirements_NotFound.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: Privacy policy
 
 - **Changed:** added `mockups/privacy.html` (`Requirements_Privacy.md`, approved):

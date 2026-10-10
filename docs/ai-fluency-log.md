@@ -372,6 +372,21 @@ I also made decisions where Claude only had a recommendation:
 
 ---
 
+## Mockup Verification Gap — Phase 3, 2026-10-10
+
+### Discernment
+
+While checking `mockups/404.html` at 360 px, a screenshot looked clipped although Claude's automated check reported "no horizontal scroll". Claude had measured overflow as `scrollWidth - innerWidth`. On a phone-sized viewport, content that is too wide **widens the layout viewport itself**, so `innerWidth` grew to 367 px and the check passed while the page was really 7 px too wide. The cause was the 404 headline's longest word at a large font forcing the centred column wider than the screen.
+
+### Diligence
+
+- **Fix:** the 404 column is constrained and the headline scales on phones.
+- **Better check:** overflow is now measured against `document.documentElement.clientWidth` inside a fixed 360 px frame.
+- **Re-run:** the stricter check was re-run on the 404 states, Privacy, Contact, Gallery and both admin pages; all fit.
+- **Lesson:** a passing automated check is only as good as what it measures. When a screenshot and a number disagree, trust neither until the measurement is understood.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.
