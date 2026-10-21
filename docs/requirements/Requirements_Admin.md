@@ -1,6 +1,6 @@
 # Requirements: Admin (staff area)
 
-Status: Approved by developer 2026-10-10; updated 2026-10-21 with the client's changes (branch management, eye camps). Next, client review with the mockups (`mockups/admin.html`, `mockups/admin-frame.html`, `mockups/admin-branches.html`, `mockups/admin-camps.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/admin` (staff only; not linked from the public site)
 Plan version: v1.2 (pages table: "Admin and staff logins: staff add frames as drafts, admin approves; manage lenses, camps, gallery, reviews, bookings"; sprints 5.3 and 5.5)
 Sources:

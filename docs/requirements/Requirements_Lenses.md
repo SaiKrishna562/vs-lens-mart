@@ -1,6 +1,6 @@
 # Requirements: Lenses
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/lenses.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/lenses`
 Plan version: v1.2 (pages table, sprint 5.5; the Lenses menu was trimmed on 2026-10-09)
 Sources:

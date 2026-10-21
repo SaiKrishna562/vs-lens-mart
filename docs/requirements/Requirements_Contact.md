@@ -1,6 +1,6 @@
 # Requirements: Contact
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/contact.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/contact` (anchor `#branches` for the branch section)
 Plan version: v1.2 (pages table: "Both branches with maps, hours, phone, WhatsApp, enquiry form | branches, enquiries"; sprint 5.4)
 Sources:

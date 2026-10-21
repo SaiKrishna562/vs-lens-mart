@@ -1,6 +1,6 @@
 # Requirements: Sunglasses (listing and detail)
 
-Status: Approved by developer 2026-10-10; next, client review with the mockups (`mockups/sunglasses.html`, detail via `frame-detail.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Routes: `/sunglasses` (listing) and `/sunglasses/[slug]` (detail)
 Plan version: v1.2 (pages table, sprint 5.3)
 Sources: `docs/requirements/Requirements_Frames.md` (the base for this page), `docs/requirements/Requirements_Navigation.md` (Sunglasses mega menu), `docs/client-answers.md` (Q20–39), `CLAUDE.md`, `docs/dummy-data.md`

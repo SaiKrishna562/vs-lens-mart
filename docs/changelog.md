@@ -4,6 +4,14 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-21 · Phase 3 → 4 · Mockups signed off
+
+- **Changed:** Phase 3 is complete and Phase 4 (Foundation) begins.
+  - All 14 requirement files are now "Approved by the client 2026-10-21". Privacy still needs a legal review of its wording before launch.
+  - `CLAUDE.md` status now says Phase 4, and the mockups are described as the approved design.
+- **Why:** the client reviewed every mockup live with the developer on Google Meet (screen share). The changes they asked for were applied (previous entry) and they approved the result. `review.html` wasn't sent, since the review happened live. Missing client details stay `DUMMY` (see `docs/dummy-data.md`, `docs/open-questions.md`) and must be replaced before launch. They don't block Foundation.
+- **Files:** `CLAUDE.md`, `docs/requirements/*.md` (status lines), `docs/changelog.md`
+
 ## 2026-10-21 · Phase 3 · Mockups: client changes (menu, logo, branches, eye camps)
 
 - **Changed:** the client's change list ("changes to the mockups.txt"), clarified with the developer:

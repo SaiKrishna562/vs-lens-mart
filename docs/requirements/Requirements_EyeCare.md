@@ -1,6 +1,6 @@
 # Requirements: Eye Care
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/eye-care.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/eye-care`
 Plan version: v1.2 (pages table: "The client's 4 services, eye care tips, FAQ, links to booking, branches and eye camps"; sprint 5.5)
 Sources: `docs/client-answers.md` (form Q75 eye-test length, Q92 services, Q131 payment methods; WhatsApp Q11 lenses), `docs/requirements/Requirements_Navigation.md` (Eye care menu: services column + three cards), `docs/dummy-data.md`, `CLAUDE.md`, `CLAUDE.local.md` ("no medical claims")

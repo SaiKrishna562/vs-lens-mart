@@ -1,6 +1,6 @@
 # Requirements: Gallery
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/gallery.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/gallery`
 Plan version: v1.2 (pages table: "Shop, eye camp and customer photos with tag filters; linked from About | gallery_photos"; sprint 5.5)
 Sources: `docs/client-answers.md` (feature list; form Q144 who provides photos, Q146 permission for customer photos), `docs/requirements/Requirements_About.md` 3.7 (the gallery preview links here), `docs/requirements/Requirements_Navigation.md` (Gallery is linked from About and the footer, not the top menu), `CLAUDE.md` (photos of people only with written consent), `docs/dummy-data.md`

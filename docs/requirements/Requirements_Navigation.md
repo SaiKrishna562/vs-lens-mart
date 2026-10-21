@@ -1,6 +1,6 @@
 # Requirements: Navigation
 
-Status: Draft for client review. Updated 2026-10-21 with the client's changes (Home item, new order, new logo)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Plan version: v1.1 (navigation update), updated 2026-10-09 with the client's form and prescription card
 Sources: project plan v1.1 section 3 "Navigation bar (mega menu)", `docs/client-answers.md` (incl. the 160-question form), `docs/prescription_card.jpg`, `docs/dummy-data.md`, homepage design image (`docs/Premium Eyewear Visionary Hero.png`), navigation mockup (`docs/vs_lens_mart_navbar_mega_menu.html`), `CLAUDE.md`
 

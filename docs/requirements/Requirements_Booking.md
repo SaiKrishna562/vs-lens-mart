@@ -1,6 +1,6 @@
 # Requirements: Book an eye test
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/book-eye-test.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/book-eye-test`
 Plan version: v1.2 (pages table: "Branch, date, time slot, name, phone, consent | appointments table"; sprint 5.4)
 Sources:

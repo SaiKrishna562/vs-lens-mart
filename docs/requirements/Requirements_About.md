@@ -1,6 +1,6 @@
 # Requirements: About / Our Journey
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/about.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/about`
 Plan version: v1.2 (pages table: "Timeline 1999 → today, founder, family, team, second branch, reviews"; sprint 5.5)
 Sources: `docs/client-answers.md` (WhatsApp Q10; form Q143–146), `docs/requirements/Requirements_Navigation.md` (About: Our journey, family, team, Gallery, Reviews), `docs/requirements/Requirements_HomePage.md` (links to `/about` and `/about#reviews`), `docs/dummy-data.md`, `CLAUDE.md`

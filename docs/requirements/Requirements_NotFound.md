@@ -1,6 +1,6 @@
 # Requirements: Page not found (404) and error page
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/404.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: any unknown URL (Next.js `src/app/not-found.tsx`); errors while a page loads (`src/app/error.tsx`)
 Plan version: v1.2 (not in the 14 planned mockups; a suggested extra, like `/privacy`)
 Sources:

@@ -1,6 +1,6 @@
 # Requirements: Privacy policy
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/privacy.html`), then legal review
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied). Next: legal review of the wording before launch.
 Route: `/privacy` (linked from the footer and from the consent box on every form)
 Plan version: v1.2 (routes list; `CLAUDE.md` "Data security": "The site needs a `/privacy` page"; sprint 5.4)
 Sources:

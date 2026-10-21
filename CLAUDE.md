@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: Phase 3, HTML mockups for client sign-off. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
+Status: Phase 4, Foundation (`ROADMAP.md` section 3). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
 
 Don't invent client facts (prices, brands, founder story, email, hours, phone numbers). For anything the client hasn't confirmed, use the placeholder from `docs/dummy-data.md` and mark it `DUMMY`; if it isn't there, add it there first. Dummy values never go live. Check `docs/open-questions.md` for what's still pending.
 
@@ -62,7 +62,7 @@ Other docs:
 
 ## Mockups (`mockups/`)
 
-Static HTML pages for client sign-off. No build step. They open straight from the file system, but use a server for browser checks:
+Static HTML pages, signed off by the client on 2026-10-21. They are the reference design for the build. No build step. They open straight from the file system, but use a server for browser checks:
 - **Preview:** the `mockups` config in `.claude/launch.json`, or `python -m http.server 8765` from the repo root. Then open `http://localhost:8765/mockups/home.html`.
 - **Verify:** check at 1440 and 375 px (plus 768 / 1180 when layout changes), in both light and dark mode.
 
@@ -81,7 +81,7 @@ Page conventions:
 - `<body data-page="…">` sets the current menu item; content goes in `<main id="main">`.
 - Load `site.js` first, then the data and listing scripts, then the page's own script.
 - `frame-detail.html` serves both `/frames/<slug>` and `/sunglasses/<slug>` via `?frame=<slug>`.
-- `review.html` is the client review pack (not a site page): links every mockup with questions, the decisions to confirm and the missing information. Keep it in step when a mockup or `docs/dummy-data.md` changes.
+- `review.html` is the client review pack (not a site page). The client reviewed the mockups live on Google Meet instead, so it wasn't sent; it still lists the missing information.
 - **Review notes:** `.todo` tags (dashed gold) and `.mock-only` blocks are notes for the client, hidden by the "Review notes" toggle and never part of the site. Tag every dummy value `DUMMY` with its `docs/dummy-data.md` id.
 - **Branch picker:** `data-picker="call|whatsapp"` on any button opens it, and `data-wa-text` prefills the message. `data-dummy` on a link stops a dummy number from dialling.
 

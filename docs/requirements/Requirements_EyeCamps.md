@@ -1,6 +1,6 @@
 # Requirements: Eye Camps (listing and camp detail)
 
-Status: Approved by developer 2026-10-10; next, client review with the mockups (`mockups/eye-camps.html`, `mockups/camp-detail.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Routes: `/eye-camps` (listing) and `/eye-camps/[slug]` (one camp)
 Plan version: v1.2 (pages table: "Upcoming and past camps, camp detail pages with photos | eye_camps + camp_photos"; sprint 5.5)
 Sources:

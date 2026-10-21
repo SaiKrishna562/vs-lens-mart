@@ -1,6 +1,6 @@
 # Requirements: Home page
 
-Status: Approved by developer 2026-10-10; next, client review with the mockup (`mockups/home.html`)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Route: `/`
 Plan version: v1.2 (Figure 1, "Homepage section structure")
 Sources:

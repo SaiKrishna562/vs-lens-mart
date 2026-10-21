@@ -1,6 +1,6 @@
 # Requirements: Frames (listing and frame detail)
 
-Status: Approved by developer 2026-10-10; next, client review with the mockups (`mockups/frames.html`; frame detail to follow)
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
 Routes: `/frames` (listing) and `/frames/[slug]` (frame detail)
 Plan version: v1.2 (pages table, sprint 5.3)
 Sources:
