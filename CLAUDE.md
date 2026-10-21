@@ -6,7 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: Phase 4, Foundation (`ROADMAP.md` section 3). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. No app code or `package.json` yet, so there are no build/lint/test commands. Add them here once the Next.js app is scaffolded.
+Status: Phase 4, Foundation (`ROADMAP.md` section 3). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
+
+Commands:
+- `npm run dev`: the app at http://localhost:3000 (or the `app` config in `.claude/launch.json`)
+- `npm run build`, `npm run lint`
+- Database and test commands are added as Phase 4 steps land.
+
+Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
 
 Don't invent client facts (prices, brands, founder story, email, hours, phone numbers). For anything the client hasn't confirmed, use the placeholder from `docs/dummy-data.md` and mark it `DUMMY`; if it isn't there, add it there first. Dummy values never go live. Check `docs/open-questions.md` for what's still pending.
 

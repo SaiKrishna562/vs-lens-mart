@@ -9,6 +9,8 @@ CLAUDE.local.md
 
 # Next.js / Node
 node_modules/
+coverage/
+*.pem
 .next/
 out/
 build/
@@ -27,3 +29,6 @@ Thumbs.db
 desktop.ini
 .vscode/*
 !.vscode/extensions.json
+
+# Local photo uploads (dev data, never committed)
+uploads/

@@ -4,6 +4,19 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-21 · Phase 4 · Step 2: Next.js app scaffold
+
+- **Changed:**
+  - Scaffolded the app at the repo root with Next.js 16.4 (App Router, TypeScript, Tailwind v4, ESLint, Cache Components).
+  - Ported the design tokens and light/dark colour roles from `mockups/styles.css` into `src/app/globals.css`. Tailwind's default palette is removed, so only token colours exist as utilities (`bg-navy`, `bg-surface`, `text-heading`, …). Base styles sit in `@layer base`, so utilities win.
+  - Fonts via `next/font`: Inter and Plus Jakarta Sans 800. A no-flash `vslm-theme` script runs in `<head>`.
+  - Added `src/lib/site-config.ts` (seed shop facts; Patelguda number `DUMMY` D2) and a temporary foundation-check home page.
+  - Installed the planned packages (drizzle-orm, pg, better-auth, zod, server-only; dev: drizzle-kit, @types/pg, @playwright/test).
+  - Added the `app` preview config. `.gitignore` gains `uploads/`; `mockups/` is excluded from TypeScript and ESLint.
+- **Why:** Phase 4 Foundation, step 2 of the approved plan.
+- **Checked:** `npm run lint`, `tsc` and `npm run build` are clean. In the browser: fonts and token colours correct in light and dark mode, no overflow at 375 px, no console errors. Found and fixed a base heading colour overriding `text-white`.
+- **Files:** `package.json`, `package-lock.json`, `tsconfig.json`, `eslint.config.mjs`, `next.config.ts`, `AGENTS.md`, `src/app/*`, `src/lib/site-config.ts`, `.gitignore`, `.claude/launch.json`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-21 · Phase 4 · Stack: local PostgreSQL instead of Supabase
 
 - **Changed:**
