@@ -4,6 +4,19 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-21 · Phase 4 · Stack: local PostgreSQL instead of Supabase
+
+- **Changed:**
+  - The stack no longer uses Supabase:
+    - Database: PostgreSQL 17 on the developer's laptop (`vslm_dev`), with Drizzle for the schema and migrations.
+    - Staff login: Better Auth, with `admin` / `staff` roles and no sign-up.
+    - Photos: local `uploads/` folders behind `src/lib/storage.ts`.
+    - Hosting: local for now.
+  - Security model: the browser never talks to the database; server code uses `withRole()`. Separate database users (`vslm_owner`, `vslm_app`, `vslm_auth`) and forced row-level security on every table, keyed on the request role.
+  - Updated `CLAUDE.md` (stack, data security, folder rules), `ROADMAP.md` Foundation, and the Admin, Booking and Privacy requirements (no reset emails in the MVP; the hosting provider is named once deployment is decided). Mockup comments now say "the database".
+- **Why:** developer decision: everything on DigitalOcean eventually, and run the whole project on the laptop first. Deployment is out of scope for now.
+- **Files:** `CLAUDE.md`, `ROADMAP.md`, `docs/requirements/Requirements_Admin.md`, `Requirements_Booking.md`, `Requirements_Privacy.md`, `mockups/privacy.html`, `mockups/about.html`, `mockups/admin.html`, `mockups/home.html`, `mockups/lenses.html`, `mockups/camps-data.js`, `mockups/frames-data.js`, `mockups/listing.js`, `docs/changelog.md`
+
 ## 2026-10-21 · Phase 4 · Hosting: Netlify → DigitalOcean
 
 - **Changed:**

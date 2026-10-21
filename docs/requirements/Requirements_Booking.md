@@ -109,7 +109,7 @@ Steps sit on one page, not separate pages, so nothing is lost on a slow phone co
 - **Row-level security:** anonymous users can **insert only**. No select, update or delete. Staff (admin and staff roles) can read and update.
 - **Availability:** a server function returns counts per slot for one branch and day, with no personal data.
 - **Retention:** deleted after the period on `/privacy` (`DUMMY` D9: 1 year).
-- **No secrets:** the anon key only in the browser; the service-role key is never used here.
+- **No secrets:** the browser never connects to the database; the booking is saved by a server action running with the public role (insert only).
 
 ## 7. Behaviour and accessibility
 

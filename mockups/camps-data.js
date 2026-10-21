@@ -1,7 +1,7 @@
 /* ==========================================================================
    VS Lens Mart mockups: DUMMY eye camps + helpers
    Used by eye-camps.html and camp-detail.html. On the live site this comes
-   from the Supabase `eye_camps` and `camp_photos` tables (visible rows only).
+   from the database `eye_camps` and `camp_photos` tables (visible rows only).
    Everything here is DUMMY (docs/dummy-data.md C19).
    ========================================================================== */
 window.VSLM_CAMPS = (() => {

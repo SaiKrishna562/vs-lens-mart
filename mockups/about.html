@@ -226,7 +226,7 @@
 
 <script src="site.js"></script>
 <script>
-/* About page (mockup). On the live site reviews, branches, gallery and the next camp come from Supabase. */
+/* About page (mockup). On the live site reviews, branches, gallery and the next camp come from the database. */
 (() => {
   // "{years}": calculated from 1999, never hard-coded
   document.querySelectorAll('[data-years]').forEach(el => { el.textContent = new Date().getFullYear() - 1999; });

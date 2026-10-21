@@ -2,7 +2,7 @@
    VS Lens Mart mockups: shared listing (filters, sort, saved, load more)
    Used by frames.html and sunglasses.html. Spec: Requirements_Frames.md
    section 3 and Requirements_Sunglasses.md section 3. Live: the same filters
-   run as a Supabase query on approved, active rows.
+   run as a database query on approved, active rows.
 
    VSLM_LISTING({
      items,        // the rows this page lists

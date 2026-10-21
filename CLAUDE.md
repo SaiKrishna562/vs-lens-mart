@@ -53,9 +53,9 @@ Other docs:
 | Pages and routes | `src/app/<route>/` (e.g. `src/app/frames/[slug]/page.tsx`) |
 | Staff admin pages | `src/app/admin/` |
 | Shared UI | `src/components/` |
-| Supabase client, helpers | `src/lib/` |
+| Database client (`db.ts`), auth (`auth.ts`), uploads (`storage.ts`), helpers | `src/lib/` (server-only where they touch the database) |
 | Shop facts (hours, phone, WhatsApp, addresses) | The `branches` table (the admin edits it at `/admin/branches`), with `src/lib/site-config.ts` as the seed and fallback. Never hard-code them in components. |
-| Database schema and row-level security | `supabase/schema.sql` |
+| Database schema, migrations, row-level security, seed | `src/db/schema.ts` (Drizzle), `db/migrations/`, `db/security.sql`, `db/seed.ts`, `db/setup-local.sql` |
 | Playwright tests | `tests/` |
 | HTML mockups for client sign-off | `mockups/` |
 | Requirements | `docs/requirements/Requirements_<Page>.md` |
@@ -90,25 +90,28 @@ Page conventions:
 | Layer | Choice |
 |---|---|
 | Framework | Next.js (App Router) + TypeScript |
-| Styling | Tailwind CSS, with the design tokens below in the Tailwind config |
+| Styling | Tailwind CSS v4, with the design tokens below in `src/app/globals.css` (`@theme`) |
 | Animation | Framer Motion, fades and slides only |
-| Database | Supabase PostgreSQL |
-| Files / auth | Supabase Storage (buckets: frames, lenses, camps, gallery); Supabase Auth for the `/admin` area, with two roles: `admin` and `staff` |
+| Database | PostgreSQL 17, running locally on the developer's laptop (database `vslm_dev`); Drizzle ORM and migrations |
+| Auth | Better Auth (email + password) for the `/admin` area, with two roles: `admin` and `staff`. No public sign-up |
+| Files | Local `uploads/` folder (frames, lenses, camps, gallery), only through `src/lib/storage.ts`, so it can move to cloud storage later |
 | Forms | Server actions + Zod validation |
 | Messaging | WhatsApp `wa.me` links. They work with a normal WhatsApp number, so no WhatsApp Business account is needed for launch. No WhatsApp API in the MVP. |
 | Favourites | Saved on the device only (`localStorage`), no login |
 | Maps | Google Maps embed |
 | Testing | Playwright, run at 360 / 768 / 1440 px |
-| Hosting | GitHub + DigitalOcean App Platform, auto-deploy from `main` |
+| Hosting | Local laptop for now (developer decision 2026-10-21). DigitalOcean later; deployment isn't planned yet |
 
-### Data security (Supabase)
+### Data security (PostgreSQL)
 
-- Row-level security is on for every table.
+- **The browser never talks to the database.** Only server code (server components, server actions, route handlers) does, through `withRole()` in `src/lib/db.ts`, which sets the request's role (`public`, `staff`, `admin`).
+- **Database users:** `vslm_owner` owns tables and runs migrations; `vslm_app` is the website's runtime user (no ownership, no BYPASSRLS); `vslm_auth` is used only by Better Auth for its own tables.
+- Row-level security is enabled **and forced** on every table (`db/security.sql`), keyed on the request role.
 - **Roles:** `staff` add and edit content; a frame they add is a `draft`. Only `admin` approves frames, manages staff accounts and deletes content.
 - **Public tables** (frames, frame_images, lenses, eye_camps, camp_photos, gallery_photos, testimonials, branches): anyone can read rows where `is_active` / `is_visible` is true (frames: also `status = 'approved'`), and only staff can write.
 - **Private tables** (customers, prescriptions, appointments, enquiries, orders): staff-only for both read and write. The public booking form may **insert** into appointments but never select.
 - Every form that collects a name and phone needs a consent checkbox (DPDP Act 2023). The site needs a `/privacy` page. Its data-retention period is a `DUMMY` value from `docs/dummy-data.md` until the client confirms it.
-- Supabase keys live only in `.env.local` and the DigitalOcean app's environment variables. The service-role key never reaches the browser.
+- Database URLs, passwords and the auth secret live only in `.env.local` (gitignored); `.env.example` lists the names only. None of them reach the browser.
 
 ### Frames data
 

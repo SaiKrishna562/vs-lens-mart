@@ -43,7 +43,7 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 
 | Scope | Done when | Effort |
 |---|---|---|
-| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); login with `admin` and `staff` roles; frames `status` / `availability` / `available_at` columns; `.env.example`; Playwright config. The DigitalOcean App Platform preview deploy is deferred to before sprint 5.1 ends (developer decision 2026-10-21) | A logged-out user can't read any private table | 2–3 days |
+| Next.js + TypeScript + Tailwind v4; design tokens and fonts in `globals.css`; PostgreSQL 17 on the laptop with separate database users; Drizzle schema and migrations; `db/security.sql` with forced row-level security on every table; local `uploads/` folders (frames, lenses, camps, gallery) behind `src/lib/storage.ts`; Better Auth login with `admin` and `staff` roles; frames `status` / `availability` / `available_at` columns; DUMMY seed data; `.env.example`; Playwright config. Runs locally only; deployment (DigitalOcean) is decided later (developer decisions 2026-10-21) | A request with the public role can't read any private table, and the admin can sign in | 3–4 days |
 
 ## 4. Sprints (Phase 5)
 
@@ -63,7 +63,7 @@ The total, including Foundation, is about 20–27 working days, roughly 4–5 we
 ## 5. Dependencies
 
 ```
-Foundation (schema + row-level security, auth, buckets, tokens)
+Foundation (schema + row-level security, auth, uploads, tokens)
  ├─> 5.1 Layout/nav ─────────> every page
  │     (mega-menu brands and prices: hidden until products exist)
  ├─> Staff login ─> Admin shell ─> 5.3 Frames admin + upload

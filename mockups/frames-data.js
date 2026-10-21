@@ -1,7 +1,7 @@
 /* ==========================================================================
    VS Lens Mart mockups: DUMMY frame data + the shared frame card
    Used by home.html (featured frames), frames.html (listing) and the frame
-   detail mockup. On the live site this comes from the Supabase `frames`
+   detail mockup. On the live site this comes from the database `frames`
    table (approved, active frames only). Everything here is DUMMY
    (docs/dummy-data.md C4 brands, C7 prices, C13 categories and codes).
    ========================================================================== */

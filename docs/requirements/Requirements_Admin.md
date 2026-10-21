@@ -13,9 +13,9 @@ Sources:
 **Dummy values:** where the client hasn't answered, mockups and development use the `DUMMY` values from `docs/dummy-data.md`, visibly tagged. They never go live. "TODO (client)" means the real value is still needed before launch.
 
 **Security first:** this is the only part of the site that can change content or read customer data. Build it in Plan Mode with high effort.
-- Supabase Auth login; no public sign-up.
+- Better Auth login (email + password); no public sign-up.
 - Every rule is enforced by row-level security in the database, not only by hiding buttons.
-- The service-role key is never sent to the browser.
+- The browser never talks to the database; database passwords and the auth secret stay on the server.
 
 ## 1. Purpose and scope
 
@@ -52,12 +52,12 @@ Two roles from the start (`CLAUDE.md`). Approval needs one person to upload and 
 
 ## 3. Sign-in and accounts
 
-- **Sign in:** `/admin/login` with email and password (Supabase Auth). The page has no link from the public site, and `/admin` is `noindex` and blocked in `robots.txt`.
+- **Sign in:** `/admin/login` with email and password (Better Auth). The page has no link from the public site, and `/admin` is `noindex` and blocked in `robots.txt`.
 - **Accounts:** only an admin creates them (name, email, role, home branch). There's no public sign-up. New staff set their password from an invite link.
 - **Leaving staff** (Q142 blank): an admin **disables** the account; it can't sign in, and the content it added stays.
-- **Forgotten password:** the "reset password" email from Supabase Auth, or an admin sends a new invite.
+- **Forgotten password:** an admin sets a new temporary password (no email sending in the MVP).
 - **Sessions:** signed out after 12 hours without use (`DUMMY` C22). "Sign out" is always in the menu.
-- **Too many failed sign-ins:** Supabase Auth rate limits apply; the page says "Too many attempts. Wait a few minutes and try again."
+- **Too many failed sign-ins:** Better Auth rate limits apply; the page says "Too many attempts. Wait a few minutes and try again."
 
 ## 4. Admin layout (shared by every admin page)
 
@@ -121,7 +121,7 @@ Sunglasses use the same form with `category = sunglasses` (and the lens type and
 - **On the phone:** "Take photo" opens the camera (`accept="image/*"`, `capture="environment"`); "Choose from gallery" opens the photo picker.
 - **Before upload:** the browser resizes each photo to at most 1600 px on the long side and converts it to WebP (or JPEG), so uploads are fast on mobile data. A preview with a progress bar shows for each.
 - **Checks:** JPEG, PNG, WebP or HEIC only; at most 10 MB before resizing. The server checks the real file type (not just the extension) and the size again. Errors: "This file isn't a photo. Use JPG, PNG or WebP." and "This photo is too large (max 10 MB)."
-- **Storage:** Supabase Storage bucket `frames`, path `frames/<frame id>/<random>.webp`. Uploads only for signed-in staff; files are public only once the frame is approved and visible.
+- **Storage:** the `frames` uploads folder via `src/lib/storage.ts`, path `frames/<frame id>/<random>.webp`. Uploads only for signed-in staff; files are public only once the frame is approved and visible.
 - **Guidance on screen:** "Plain light background, whole frame in view, no reflections. Product-only photos unless the person gave written permission."
 - **Removing** a photo asks "Remove this photo?" and can be undone until saving.
 
@@ -175,7 +175,7 @@ Sunglasses use the same form with `category = sunglasses` (and the lens type and
   - A disabled account loses access at once (its profile is inactive), even if a session is still open.
 - **Who did what:** content tables have `created_by`, `updated_by`, `updated_at`; frames also `approved_by`, `approved_at`. This feeds "Recent changes". The full audit log is a later module.
 - **Storage:** uploads only by signed-in staff; file type and size checked on the server; public read only for approved, visible content.
-- **No secrets in the browser:** the anon key only; any admin-only server task (creating accounts) runs in a server action with the service-role key on the server.
+- **No secrets in the browser:** the browser never connects to the database; admin-only tasks (creating accounts) run in server actions, checked against the signed-in role.
 
 ## 9. Behaviour and accessibility
 

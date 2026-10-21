@@ -22,7 +22,7 @@
     <h1 id="greeting"></h1>
     <p id="who"></p>
   </header>
-  <p class="mock-only" style="margin-bottom:16px"><span class="todo">DUMMY accounts, drafts, bookings and enquiries (C22). Use "View as" (bottom left) to compare the Staff and Admin dashboards. Live: counts and lists from Supabase, visible only to signed-in staff</span></p>
+  <p class="mock-only" style="margin-bottom:16px"><span class="todo">DUMMY accounts, drafts, bookings and enquiries (C22). Use "View as" (bottom left) to compare the Staff and Admin dashboards. Live: counts and lists from the database, visible only to signed-in staff</span></p>
 
   <!-- ========== 2. To-do cards ========== -->
   <div class="adm-todo" id="todo"></div>
@@ -106,7 +106,7 @@
 <script src="camps-data.js"></script>
 <script>
 /* Staff area dashboard (mockup). Spec: Requirements_Admin.md section 5.
-   Live: counts and lists from Supabase under row-level security; customer names and
+   Live: counts and lists from the database under row-level security; customer names and
    numbers appear only here, for signed-in staff. Everything below is DUMMY (C22). */
 (() => {
   const A = VSLM_ADMIN, $ = s => document.querySelector(s);
