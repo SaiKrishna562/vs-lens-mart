@@ -4,6 +4,29 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-22 · Phase 4 · Steps 1 and 3: local PostgreSQL, schema and security
+
+- **Changed:**
+  - **Step 1 (developer):** installed PostgreSQL 17. `npm run db:setup` created `vslm_dev` and the users `vslm_owner`, `vslm_app` and `vslm_auth`. They have generated passwords, `NOBYPASSRLS`, and live in a gitignored `.env.local`.
+  - **Schema:** `src/db/schema.ts` defines 13 app tables from the requirement files, with checks built in: price range, 5 frame photos, 12 camp photos, consent for photos of people, valid times, field lengths. Migration: `db/migrations/0000_init.sql`.
+  - **Login tables:** created by Better Auth's own migration; settings in `src/lib/auth-options.ts` (no sign-up, 12-hour sessions DUMMY C22, 5 sign-in attempts a minute).
+  - **Security (`db/security.sql`):**
+    - Row-level security is enabled and forced on all 17 tables, keyed on `app.role`, with public / staff / admin policies.
+    - Only an admin edits branches and closed days; a trigger refuses approval by anyone but an admin.
+    - Login tables are reachable only by `vslm_auth`.
+    - `slot_counts()` returns booking counts only.
+  - **Access:** `src/lib/db.ts` `withRole()` is the website's only way into the database (server-only).
+  - **Data:** `npm run db:seed` loads the mockups' DUMMY data: 2 branches, 46 approved frames and sunglasses plus 4 drafts, 7 camps, 3 testimonials.
+  - `package.json` is now `"type": "module"`, which silences a Node warning.
+- **Why:** Phase 4 Foundation, steps 1 and 3 of the approved plan.
+- **Checked:** connected as the website's user (`vslm_app`), 24 checks all pass. Examples:
+  - **Public:** sees 46 approved frames and 0 drafts; reads 0 bookings and 0 enquiries; can add a booking but can't read it back (even with `RETURNING`) or change it; is refused on login tables.
+  - **Staff:** can't approve or delete; can edit an approved frame's price.
+  - **Admin:** can approve, delete and edit branches, but still can't read login tables.
+  - **Other:** a request with no role is treated as public; slot counts return only "10:00 → 1".
+  - The migration re-runs cleanly; lint and types are clean.
+- **Files:** `src/db/schema.ts`, `db/migrations/*`, `db/security.sql`, `src/lib/db.ts`, `src/lib/auth-options.ts`, `scripts/env.ts`, `scripts/db-setup.ts`, `scripts/db-migrate.ts`, `scripts/db-seed.ts`, `drizzle.config.ts`, `package.json`, `tsconfig.json`, `CLAUDE.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-21 · Phase 4 · Step 2: Next.js app scaffold
 
 - **Changed:**

@@ -387,6 +387,25 @@ While checking `mockups/404.html` at 360 px, a screenshot looked clipped althoug
 
 ---
 
+## Database Security Check — Phase 4, 2026-10-22
+
+### Delegation
+
+Claude wrote the PostgreSQL schema, the row-level security rules (`db/security.sql`) and the setup, migrate and seed scripts, replacing Supabase after the developer chose plain PostgreSQL on the laptop. The developer installed PostgreSQL and typed the superuser password themselves; Claude never saw it.
+
+### Discernment
+
+- **Error found:** the first `db:migrate` failed with "permission denied to set parameter app.role". Claude had written the booking-count function to switch its own role with a `SET app.role` clause, which PostgreSQL refuses for custom settings. Claude replaced it with a narrow policy that lets only the table owner count bookings. The website's user still can't.
+- **Weak test caught:** the first run of the security checks reported "slot counts: rows 0". That passed, but proved nothing, because every test booking had been rolled back. Claude re-tested with a booking in the same transaction, and got "10:00 → 1 booked" with no names or numbers.
+
+### Diligence
+
+- 24 checks ran as the real website user (`vslm_app`), covering public, staff, admin and "no role set". All pass.
+- The migration was re-run to prove it's safe to repeat.
+- **Lesson:** a security test that can't fail isn't a test. Each check needs data that would expose a leak if the rule were wrong.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

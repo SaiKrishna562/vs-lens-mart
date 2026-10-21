@@ -11,7 +11,11 @@ Status: Phase 4, Foundation (`ROADMAP.md` section 3). Phase 3 (HTML mockups) was
 Commands:
 - `npm run dev`: the app at http://localhost:3000 (or the `app` config in `.claude/launch.json`)
 - `npm run build`, `npm run lint`
-- Database and test commands are added as Phase 4 steps land.
+- `npm run db:setup`: one-time; asks for the local `postgres` password, creates `vslm_dev` and the three database users, writes `.env.local`
+- `npm run db:generate`: after editing `src/db/schema.ts`, creates a migration in `db/migrations/`
+- `npm run db:migrate`: app tables, then Better Auth's login tables, then `db/security.sql` (safe to re-run)
+- `npm run db:seed`: resets the app tables to the DUMMY development data (login accounts are kept)
+- Test commands are added in Phase 4 step 6. The scripts run on plain Node 24 (TypeScript type stripping), so they use relative `.ts` imports, not `@/` aliases.
 
 Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
 
@@ -62,7 +66,7 @@ Other docs:
 | Shared UI | `src/components/` |
 | Database client (`db.ts`), auth (`auth.ts`), uploads (`storage.ts`), helpers | `src/lib/` (server-only where they touch the database) |
 | Shop facts (hours, phone, WhatsApp, addresses) | The `branches` table (the admin edits it at `/admin/branches`), with `src/lib/site-config.ts` as the seed and fallback. Never hard-code them in components. |
-| Database schema, migrations, row-level security, seed | `src/db/schema.ts` (Drizzle), `db/migrations/`, `db/security.sql`, `db/seed.ts`, `db/setup-local.sql` |
+| Database schema, migrations, row-level security, seed | `src/db/schema.ts` (Drizzle), `db/migrations/` (generated), `db/security.sql`; scripts in `scripts/` (`db-setup.ts`, `db-migrate.ts`, `db-seed.ts`) |
 | Playwright tests | `tests/` |
 | HTML mockups for client sign-off | `mockups/` |
 | Requirements | `docs/requirements/Requirements_<Page>.md` |

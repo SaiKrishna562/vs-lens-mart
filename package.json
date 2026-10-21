@@ -2,11 +2,17 @@
   "name": "vs-lens-mart",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:setup": "node scripts/db-setup.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/db-migrate.ts",
+    "db:seed": "node scripts/db-seed.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "better-auth": "^1.7.12",
