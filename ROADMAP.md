@@ -43,7 +43,7 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 
 | Scope | Done when | Effort |
 |---|---|---|
-| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); login with `admin` and `staff` roles; frames `status` / `availability` / `available_at` columns; `.env.example`; Netlify preview deploy; Playwright config | A logged-out user can't read any private table, and the preview deploys | 2–3 days |
+| Next.js + TypeScript + Tailwind; design tokens and fonts in the Tailwind config; Supabase project; `supabase/schema.sql` with row-level security on every table; storage buckets (frames, lenses, camps, gallery); login with `admin` and `staff` roles; frames `status` / `availability` / `available_at` columns; `.env.example`; Playwright config. The DigitalOcean App Platform preview deploy is deferred to before sprint 5.1 ends (developer decision 2026-10-21) | A logged-out user can't read any private table | 2–3 days |
 
 ## 4. Sprints (Phase 5)
 

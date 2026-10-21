@@ -20,8 +20,6 @@ test-results/
 playwright-report/
 playwright/.cache/
 
-# Netlify
-.netlify/
 
 # OS / editor
 .DS_Store

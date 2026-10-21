@@ -24,7 +24,7 @@ When someone follows an old link, mistypes an address or opens a frame that's be
 
 - **Smart hint:** when the missing address starts with `/frames/` or `/sunglasses/`, the message becomes "This frame isn't available. It may have been sold or removed." and the first card is "See all frames" (or sunglasses). The same for `/eye-camps/` ("This camp isn't available"). This matches the existing frame and camp detail requirements.
 - **No guessing redirects:** we don't send people to a "closest match" automatically; the hint and search do that job.
-- **Old URLs:** if the shop had an earlier website, its main addresses go in `netlify.toml` as 301 redirects. **TODO (client):** is there an old site or printed QR codes with links?
+- **Old URLs:** if the shop had an earlier website, its main addresses go in the Next.js config (`next.config` redirects) as 301 redirects, which works on any host. **TODO (client):** is there an old site or printed QR codes with links?
 
 ## 3. The error page ("Something went wrong")
 

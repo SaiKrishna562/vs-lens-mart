@@ -4,6 +4,15 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-21 · Phase 4 · Hosting: Netlify → DigitalOcean
+
+- **Changed:**
+  - Hosting is now DigitalOcean App Platform (auto-deploy from `main`) instead of Netlify, in `CLAUDE.md`, `ROADMAP.md`, the privacy requirements and mockup ("service providers"), and the 404 requirements. Old-URL redirects now go in the Next.js config, not `netlify.toml`.
+  - Removed the `.netlify/` ignore rule.
+  - The preview deploy moves out of Foundation; it now happens before sprint 5.1 ends.
+- **Why:** the developer learned the site will be deployed on DigitalOcean, and decided to skip the deploy for now. App Platform is assumed, as the closest match to the old setup; change the wording if it's a Droplet.
+- **Files:** `CLAUDE.md`, `ROADMAP.md`, `docs/requirements/Requirements_Privacy.md`, `docs/requirements/Requirements_NotFound.md`, `mockups/privacy.html`, `.gitignore`, `docs/changelog.md`
+
 ## 2026-10-21 · Phase 3 → 4 · Mockups signed off
 
 - **Changed:** Phase 3 is complete and Phase 4 (Foundation) begins.

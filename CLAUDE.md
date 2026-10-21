@@ -99,7 +99,7 @@ Page conventions:
 | Favourites | Saved on the device only (`localStorage`), no login |
 | Maps | Google Maps embed |
 | Testing | Playwright, run at 360 / 768 / 1440 px |
-| Hosting | GitHub + Netlify, auto-deploy from `main` |
+| Hosting | GitHub + DigitalOcean App Platform, auto-deploy from `main` |
 
 ### Data security (Supabase)
 
@@ -108,7 +108,7 @@ Page conventions:
 - **Public tables** (frames, frame_images, lenses, eye_camps, camp_photos, gallery_photos, testimonials, branches): anyone can read rows where `is_active` / `is_visible` is true (frames: also `status = 'approved'`), and only staff can write.
 - **Private tables** (customers, prescriptions, appointments, enquiries, orders): staff-only for both read and write. The public booking form may **insert** into appointments but never select.
 - Every form that collects a name and phone needs a consent checkbox (DPDP Act 2023). The site needs a `/privacy` page. Its data-retention period is a `DUMMY` value from `docs/dummy-data.md` until the client confirms it.
-- Supabase keys live only in `.env.local` and Netlify env vars. The service-role key never reaches the browser.
+- Supabase keys live only in `.env.local` and the DigitalOcean app's environment variables. The service-role key never reaches the browser.
 
 ### Frames data
 

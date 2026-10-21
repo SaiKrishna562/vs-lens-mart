@@ -60,7 +60,7 @@ Only for the reason it was given: to manage your booking or answer your message.
 
 ### 4.4 Who can see it, and who helps us (`#share`)
 - **Our staff:** only signed-in VS Lens Mart staff can see bookings and messages, in our staff area.
-- **Service providers** that run the website for us and store the data on our behalf: Supabase (database), Netlify (website hosting). **TODO (developer):** confirm the Supabase region before launch and state where the data is stored.
+- **Service providers** that run the website for us and store the data on our behalf: Supabase (database), DigitalOcean (website hosting). **TODO (developer):** confirm the Supabase region before launch and state where the data is stored.
 - **Google Maps:** the maps on our contact page are provided by Google and load only when you scroll to them or tap "Show map". Google may then set its own cookies.
 - We share details with anyone else only if the law requires it.
 
