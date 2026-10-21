@@ -554,7 +554,11 @@
   }
   $('#confirm-ok').addEventListener('click', () => { dlgConfirm.close(); onConfirm?.(); });
   document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
-  A.guard = go => isDirty ? ask('Leave without saving?', 'Your changes on this page will be lost.', 'Leave', () => { isDirty = false; go(); }) : go();
+  A.guard = (go, stay) => {
+    if (!isDirty) return go();
+    ask('Leave without saving?', 'Your changes on this page will be lost.', 'Leave', () => { isDirty = false; go(); });
+    dlgConfirm.addEventListener('close', () => { if (isDirty) stay(); }, { once: true });
+  };
 
   /* ---------- Actions ---------- */
   const DONE = {

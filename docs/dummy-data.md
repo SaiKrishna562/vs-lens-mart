@@ -33,7 +33,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | D5 | Instagram / Facebook / YouTube links | `https://example.com/instagram`, `https://example.com/facebook`, `https://example.com/youtube` | [ ] |
 | D6 | Google rating shown on site | "4.8 ★ from 120 reviews" (only until Google Business Profiles exist) | [ ] |
 | D7 | Eye test price | Free eye test | [ ] |
-| D8 | Logo | Use `docs/logo.png` in mockups; redraw as SVG once the spelling is fixed | [ ] |
+| D8 | Logo | The client asked for a new logo (2026-10-21). Until the file arrives, mockups use the placeholder `mockups/assets/logo-placeholder.svg` (a "VS" badge marked "LOGO"). The old `docs/logo.png` is no longer used | [ ] |
 | D9 | Retention period shown on `/privacy` (website MVP) | Booking and enquiry details are kept for 1 year, then deleted. Customer and prescription records (store system, later) follow X7 | [ ] |
 
 ## 3. Dummy content

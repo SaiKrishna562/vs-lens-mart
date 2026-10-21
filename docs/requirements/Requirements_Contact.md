@@ -22,7 +22,7 @@ Sources:
 
 Help a customer reach the right branch quickly: see where each shop is, when it's open and how to get there, then call, WhatsApp or send a short enquiry. WhatsApp is the main way to get in touch (Q154); the form is for people who prefer to write and wait for a reply. Many pages link here (`/contact#branches`): the home quick cards, Frames, Frame detail, Eye care and the utility bar.
 
-## 2. Branch data (`branches`, from `site-config.ts`)
+## 2. Branch data (`branches` table, edited by the admin at `/admin/branches`; seeded from `site-config.ts`)
 
 | Field | Indresham | Patelguda |
 |---|---|---|
@@ -63,15 +63,16 @@ Help a customer reach the right branch quickly: see where each shop is, when it'
 |---|---|---|
 | Name | Text | Required, 2–60 characters |
 | Mobile number | Tel, `+91` prefix shown | Required. 10-digit Indian mobile (starts 6–9) |
+| Area or address | Text | Optional, max 150 characters (client change 2026-10-21). Shown to staff on the enquiry in `/admin` |
 | Branch | Radio: Indresham / Patelguda / Either | Required, default Either |
 | Topic | Select: Frames · Sunglasses · Lenses · Eye test · Repair or adjustment · Something else | Required |
 | Message | Textarea | Required, 10–500 characters, with a live character count |
 | How should we reply? | Radio: WhatsApp / Phone call | Optional, default WhatsApp |
-| Consent | Checkbox, unticked | **Required:** "I agree that VS Lens Mart may use my name and number to reply to this message. [Privacy policy]" |
+| Consent | Checkbox, unticked | **Required:** "I agree that VS Lens Mart may use my name, number and address (if given) to reply to this message. [Privacy policy]" |
 | (Hidden) | Honeypot field + submit-time check | Spam protection; no CAPTCHA |
 
 - **Prefill:** `?topic=frames&frame=VSF-1024` (for example from a frame page) pre-selects the topic and starts the message with "About frame VSF-1024: ". Invalid values are ignored. Frame detail's main button stays "Enquire on WhatsApp"; this is the fallback for people without WhatsApp.
-- **No email field:** the shop replies by WhatsApp or phone. This keeps the data to name and number only.
+- **No email field:** the shop replies by WhatsApp or phone. This keeps the data to name, number and an optional area.
 - **Submit button:** "Send message". It shows a spinner and is disabled while sending.
 
 ### 4.1 Validation and errors

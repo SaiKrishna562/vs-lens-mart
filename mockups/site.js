@@ -7,7 +7,7 @@
 
    Page hooks:
      <body data-page="frames">  marks that top-level item as the current page
-       (frames | sunglasses | lenses | eye-care | eye-camps | about | contact)
+       (home | about | frames | sunglasses | lenses | eye-care | eye-camps | contact)
      [data-picker="call" | "whatsapp"]  on any button opens the branch picker
    ========================================================================== */
 (() => {
@@ -83,7 +83,7 @@
     <div class="container nav__inner">
 
       <a class="brand" href="/" aria-label="VS Lens Mart, home">
-        <img class="brand__mark" src="../docs/logo.png" alt="" width="52" height="52">
+        <img class="brand__mark" src="assets/logo-placeholder.svg" alt="" width="52" height="52">
         <span class="brand__rule" aria-hidden="true"></span>
         <span class="brand__text">
           <span class="brand__name"><b>VS</b> LENS MART</span>
@@ -92,7 +92,11 @@
       </a>
 
       <ul class="menu" id="menu">
-        <!-- 1. Frames -->
+        <!-- 1–2. Plain links (client change 2026-10-21: Home and About first) -->
+        <li><a class="menu__link" href="/">Home</a></li>
+        <li><a class="menu__link" href="/about">About</a></li>
+
+        <!-- 3. Frames -->
         <li>
           <button class="menu__link" type="button" aria-expanded="false" aria-controls="mega-frames">
             Frames <svg class="icon chev"><use href="#i-chev"/></svg>
@@ -289,9 +293,8 @@
           </div>
         </li>
 
-        <!-- 5–7. Plain links -->
+        <!-- 7–8. Plain links -->
         <li><a class="menu__link" href="/eye-camps">Eye camps</a></li>
-        <li><a class="menu__link" href="/about">About</a></li>
         <li><a class="menu__link" href="/contact">Contact</a></li>
       </ul>
 
@@ -331,7 +334,7 @@
 <div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Menu">
   <div class="drawer__head">
     <a class="brand" href="/" aria-label="VS Lens Mart, home">
-      <img class="brand__mark" src="../docs/logo.png" alt="" width="40" height="40">
+      <img class="brand__mark" src="assets/logo-placeholder.svg" alt="" width="40" height="40">
       <span class="brand__text">
         <span class="brand__name"><b>VS</b> LENS MART</span>
         <span class="brand__est">EST. 1999</span>
@@ -344,6 +347,8 @@
 
   <div class="drawer__body">
     <ul class="acc">
+      <li><a class="acc__link" href="/">Home <svg class="icon"><use href="#i-arrow"/></svg></a></li>
+      <li><a class="acc__link" href="/about">About <svg class="icon"><use href="#i-arrow"/></svg></a></li>
       <li>
         <button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-frames">Frames <span class="acc__sign" aria-hidden="true"></span></button>
         <div class="acc__panel" id="acc-frames"><div><div class="acc__group">
@@ -399,7 +404,6 @@
         </div></div></div>
       </li>
       <li><a class="acc__link" href="/eye-camps">Eye camps <svg class="icon"><use href="#i-arrow"/></svg></a></li>
-      <li><a class="acc__link" href="/about">About <svg class="icon"><use href="#i-arrow"/></svg></a></li>
       <li><a class="acc__link" href="/contact">Contact <svg class="icon"><use href="#i-arrow"/></svg></a></li>
     </ul>
     <div class="drawer__foot">
@@ -440,7 +444,7 @@
     <div class="footer__grid">
       <div class="footer__brand">
         <a class="brand" href="/" aria-label="VS Lens Mart, home">
-          <img class="brand__mark" src="../docs/logo.png" alt="" width="52" height="52">
+          <img class="brand__mark" src="assets/logo-placeholder.svg" alt="" width="52" height="52">
           <span class="brand__text"><span class="brand__name"><b>VS</b> LENS MART</span><span class="brand__est">EST. 1999</span></span>
         </a>
         <p>A family optical shop since 1999. Welcome to the Optical Family.</p>
@@ -449,7 +453,7 @@
           <a href="https://example.com/facebook" aria-label="Facebook" data-dummy><svg class="icon"><use href="#i-fb"/></svg></a>
           <a href="https://example.com/instagram" aria-label="Instagram" data-dummy><svg class="icon"><use href="#i-ig"/></svg></a>
         </div>
-        <p class="mock-only"><span class="todo">DUMMY social links (D5)</span></p>
+        <p class="mock-only"><span class="todo">DUMMY social links (D5)</span> <span class="todo">Logo is a placeholder (D8): the client is sending a new logo</span></p>
       </div>
       <div>
         <h3>Indresham</h3>
@@ -464,13 +468,14 @@
       <div>
         <h3>Quick links</h3>
         <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About us</a></li>
           <li><a href="/frames">Frames</a></li>
           <li><a href="/sunglasses">Sunglasses</a></li>
           <li><a href="/lenses">Lenses</a></li>
           <li><a href="/book-eye-test">Book an eye test</a></li>
           <li><a href="/eye-camps">Eye camps</a></li>
           <li><a href="/gallery">Gallery</a></li>
-          <li><a href="/about">About us</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
       </div>
@@ -492,7 +497,7 @@
     'frames': '[aria-controls="mega-frames"]', 'sunglasses': '[aria-controls="mega-sun"]',
     'lenses': '[aria-controls="mega-lens"]', 'eye-care': '[aria-controls="mega-care"]',
     // Top-level items only: mega-menu cards also link to these pages
-    'eye-camps': '.menu > li > a[href="/eye-camps"]', 'about': '.menu > li > a[href="/about"]', 'contact': '.menu > li > a[href="/contact"]',
+    'home': '.menu > li > a[href="/"]', 'eye-camps': '.menu > li > a[href="/eye-camps"]', 'about': '.menu > li > a[href="/about"]', 'contact': '.menu > li > a[href="/contact"]',
   }[document.body.dataset.page];
   if (current) document.querySelector(current)?.setAttribute('aria-current', 'page');
 })();

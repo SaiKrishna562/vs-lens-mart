@@ -57,7 +57,8 @@ Steps sit on one page, not separate pages, so nothing is lost on a slow phone co
 | Consent | Checkbox, unticked | **Required:** "I agree that VS Lens Mart may use my name and number to manage this booking and contact me about it. [Privacy policy]" |
 | (Hidden) | Honeypot field + submit-time check | Spam protection; no CAPTCHA |
 
-- **Data minimisation:** no age, address, email or prescription on this form, even though Q52 lists them for customer records. Those belong to the store management system (later phase), collected in store.
+- **Data minimisation:** no age, email or prescription on this form, even though Q52 lists them for customer records. Those belong to the store management system (later phase), collected in store.
+- **Area or address (optional, client change 2026-10-21):** one optional text field, max 150 characters, shown to staff on the booking in `/admin`. It's never required, the consent text names it ("name, number and address (if given)"), and it's deleted with the booking after the retention period (`DUMMY` D9).
 - **Submit button:** "Confirm booking". It shows a spinner and is disabled while sending.
 
 ## 3. Validation and errors

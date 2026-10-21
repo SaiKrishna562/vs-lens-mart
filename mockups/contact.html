@@ -97,6 +97,11 @@
             <span class="ffield__hint" id="phone-hint">10-digit mobile. We use it only to reply to you.</span>
             <span class="ferr" id="phone-err" hidden></span>
           </div>
+          <div class="ffield">
+            <label for="address">Your area or address <span class="ffield__hint">(optional)</span></label>
+            <input type="text" id="address" name="address" autocomplete="street-address" maxlength="150" placeholder="For example: Citizens Colony, Indresham" aria-describedby="address-hint">
+            <span class="ffield__hint" id="address-hint">Helps us point you to the nearest branch. <span class="todo">Client change 2026-10-21: shown to staff in the admin</span></span>
+          </div>
           <fieldset>
             <legend>Branch</legend>
             <div class="chips-pick">
@@ -133,7 +138,7 @@
           </fieldset>
           <div class="ffield" id="f-consent">
             <label class="consent"><input type="checkbox" id="consent" name="consent" aria-describedby="consent-err">
-              <span>I agree that VS Lens Mart may use my name and number to reply to this message. <a href="/privacy">Privacy policy</a></span></label>
+              <span>I agree that VS Lens Mart may use my name, number and address (if given) to reply to this message. <a href="/privacy">Privacy policy</a></span></label>
             <span class="ferr" id="consent-err" hidden></span>
           </div>
           <!-- Spam trap: people never see or fill this -->

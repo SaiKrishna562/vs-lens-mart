@@ -4,6 +4,38 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-21 · Phase 3 · Mockups: client changes (menu, logo, branches, eye camps)
+
+- **Changed:** the client's change list ("changes to the mockups.txt"), clarified with the developer:
+  - **Menu:** a "Home" item was added and the order is now Home · About · Frames · Sunglasses · Lenses · Eye care · Eye camps · Contact (desktop, phone menu and footer quick links). Menu labels no longer wrap at 1180 px.
+  - **Logo:** the client is sending a new logo. Until it arrives, every page uses `mockups/assets/logo-placeholder.svg` (`DUMMY` D8) instead of `docs/logo.png`.
+  - **Branches in admin:** a sidebar branch switcher (the admin picks Indresham or Patelguda; staff see their own branch) shows the address. The dashboard has a branch-details card, and bookings are filtered to that branch by default. There's a new `admin-branches.html` (`/admin/branches`, admin only) for editing each branch's address, phone, WhatsApp, hours, open days and visibility, with validation.
+  - **Customer address:** an optional "Your area or address" field on the booking and contact forms (consent text updated). The admin booking rows show it.
+  - **Eye camps in admin:** a new `admin-camps.html` (`/admin/eye-camps`) with the upcoming/past list and the add/edit form, including the after-camp people count and photos.
+  - `admin.js`: branch data, routes for the new pages, and `guard(go, stay)`, so a cancelled branch switch puts the select back.
+- **Why:** client feedback on the mockups. Branch details now come from the `branches` table, which the admin edits, instead of only `site-config.ts`. The optional address field goes against the earlier data-minimisation rule in `Requirements_Booking.md`, so it's optional, named in the consent text and listed as an open item.
+- **Checked:**
+  - Menu order and the current item at 1440, 1180 and 375 px.
+  - Branch switching updates the sidebar, the dashboard and the booking filter. The branch and camp forms show errors with a summary. The staff view is read only.
+  - No page-level overflow at 375 and 768 px on the dashboard, Branches, Eye camps (list, new, past), Booking, Contact, Home and About. Light and dark mode. No console errors.
+- **Files:** `mockups/site.js`, `mockups/admin.js`, `mockups/admin.html`, `mockups/admin-frame.html`, `mockups/admin-branches.html` (new), `mockups/admin-camps.html` (new), `mockups/assets/logo-placeholder.svg` (new), `mockups/book-eye-test.html`, `mockups/contact.html`, `mockups/review.html`, `mockups/styles.css`, `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/requirements/Requirements_Admin.md`, `docs/requirements/Requirements_Booking.md`, `docs/requirements/Requirements_Contact.md`, `docs/dummy-data.md`, `docs/changelog.md`
+
+## 2026-10-10 · Phase 3 · Client review pack
+
+- **Changed:** added `mockups/review.html`, a page for the client (not part of the website):
+  - **How to review:** phone and computer, review notes, what "DUMMY" means, light / dark mode.
+  - **15 page cards:** the 13 customer and other pages (Menu counted as one), plus the staff dashboard and the add-frame form. Each has links, 1–3 numbered questions, a "Looks good / Needs changes" choice and notes. Saved only in the reviewer's browser (`vslm-review`).
+  - **Decisions we made:** 13 items, marked Website or Later phase.
+  - **Information still needed:** 19 items before launch and 8 for the later shop system, from `docs/dummy-data.md` and `docs/open-questions.md`.
+  - **Feedback:** a sticky bar with a count, "Copy feedback" and "Send feedback on WhatsApp", which opens WhatsApp with the reviewer's answers so they choose who to send it to.
+  - **Shared files:** `styles.css` gets a "Client review pack" section, including a print style. `CLAUDE.md` mentions the pack.
+- **Why:** Phase 3 ends with client sign-off. One page lets the shop owner try every mockup and answer the open questions in one go.
+- **Checked:**
+  - All 18 links resolve. Feedback saves, survives a reload and builds the WhatsApp text.
+  - At 360 px in dark mode: no overflow (strict `clientWidth` check), targets at least 36 px, the feedback bar made compact.
+  - The home section order in the questions was checked against `home.html`.
+- **Files:** `mockups/review.html`, `mockups/styles.css`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-10 · Phase 3 · Mockups: full-width check on every page
 
 - **Changed:**

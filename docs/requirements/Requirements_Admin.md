@@ -1,6 +1,6 @@
 # Requirements: Admin (staff area)
 
-Status: Approved by developer 2026-10-10; next, client review with the mockups (`mockups/admin.html`, `mockups/admin-frame.html`)
+Status: Approved by developer 2026-10-10; updated 2026-10-21 with the client's changes (branch management, eye camps). Next, client review with the mockups (`mockups/admin.html`, `mockups/admin-frame.html`, `mockups/admin-branches.html`, `mockups/admin-camps.html`)
 Route: `/admin` (staff only; not linked from the public site)
 Plan version: v1.2 (pages table: "Admin and staff logins: staff add frames as drafts, admin approves; manage lenses, camps, gallery, reviews, bookings"; sprints 5.3 and 5.5)
 Sources:
@@ -42,6 +42,8 @@ Two roles from the start (`CLAUDE.md`). Approval needs one person to upload and 
 | See and update bookings and enquiries | ✓ | ✓ |
 | Delete a booking or enquiry | | ✓ |
 | Set branch holidays (closed days) | | ✓ |
+| Edit branch address, phone, WhatsApp, hours (`/admin/branches`) | (read only) | ✓ |
+| Switch the branch they're working on | (fixed to home branch) | ✓ |
 | Add, disable and reset staff accounts | | ✓ |
 
 - **Q38 says staff can delete frame information.** `CLAUDE.md` says only admin deletes. Staff can **hide** a frame instead, which removes it from the site straight away; admin deletes. **TODO (client):** confirm this is acceptable.
@@ -60,7 +62,8 @@ Two roles from the start (`CLAUDE.md`). Approval needs one person to upload and 
 ## 4. Admin layout (shared by every admin page)
 
 - **Separate shell:** the admin has its own simple layout, not the public header, footer or sticky bar. It uses the same design tokens and supports light and dark mode.
-- **Desktop:** a left sidebar with Dashboard · Frames · Sunglasses · Lenses · Eye camps · Gallery · Testimonials · Bookings · Enquiries · Settings (admin only: Staff, Branch holidays). The top bar shows the signed-in name, role and branch, the theme toggle, "View site" and "Sign out".
+- **Desktop:** a left sidebar with Dashboard · Frames · Sunglasses · Lenses · Eye camps · Gallery · Testimonials · Bookings · Enquiries · Settings (admin only: Branches, Staff, Branch holidays). The top bar shows the signed-in name, role and branch, the theme toggle, "View site" and "Sign out".
+- **Branch switcher (client change 2026-10-21):** at the top of the sidebar. An admin picks "Working on branch" (Indresham / Patelguda); the choice is remembered on the device and sets the dashboard's branch card and the default booking filter. Staff see their home branch instead. Both show the branch address underneath.
 - **Phone** (staff upload from a phone, Q36): the sidebar becomes a "Menu" drawer. The **Add frame** button stays reachable from every page.
 - **Counts on menu items:** frames waiting for approval (admin), new bookings today, new enquiries.
 
@@ -77,6 +80,9 @@ The first screen after sign-in. It answers "What needs doing today?"
 | 5 | Approval queue (admin) | Up to 5 drafts: photo, brand + model, price, added by, when. "Review" opens the frame form in review mode. "See all" link |
 | 6 | Recent changes | The last 10 content changes ("Staff 1 marked VSF-1024 sold out, 10:42 AM"), from `updated_by` / `updated_at` columns. Not a full audit log (later phase, Q111–112) |
 | 7 | Site at a glance | Frames live / drafts / sold out; upcoming camps; gallery photos. No sales figures (store system, later) |
+| 8 | Branch details | The selected branch's address, phone and hours; "Edit branches" link for the admin |
+
+- **Bookings** show the customer's optional area or address under the name, when given.
 
 - Staff see the same dashboard without the approval queue, settings or delete actions.
 - **Customer data on the dashboard:** names and numbers of today's bookings only, never shown on public pages, never cached publicly.
@@ -139,12 +145,25 @@ Sunglasses use the same form with `category = sunglasses` (and the lens type and
 |---|---|---|
 | Frames / Sunglasses list | Search by code, brand or model; filter by status, availability, branch; one-tap Sold out / In stock; open to edit | Drafts and "Sent back" at the top for their owner |
 | Lenses | Add / edit / hide lenses (`Requirements_Lenses.md` section 2) | No approval step |
-| Eye camps | Add / edit camps; after the camp, add the number of people and up to 12 photos (`Requirements_EyeCamps.md` section 2) | Photo upload as 6.2, bucket `camps` |
+| Eye camps | See 7.2 | Mocked up (`admin-camps.html`) |
 | Gallery | Upload photos with tag, caption, branch, month (`Requirements_Gallery.md` section 2) | "Shows people" requires the consent tick; Customers tag blocked until Q146 is confirmed |
 | Testimonials | Add a customer's first name, branch, quote and the date they agreed | Only with the customer's permission; no invented reviews |
 | Bookings | List by day and branch; status `booked` → `attended` / `no_show` / `cancelled`; Call / WhatsApp the customer | Staff read and update; admin deletes. Deleted automatically after the retention period (`DUMMY` D9) |
 | Enquiries | List of new / replied / closed; reply on WhatsApp or call from the row | As bookings |
-| Settings (admin) | Staff accounts; branch holidays (closed days, which the booking form uses) | Hours and numbers stay in `site-config.ts` |
+| Settings (admin) | Branches (see 7.1); staff accounts; branch holidays (closed days, which the booking form uses) | |
+
+### 7.1 Branches (`/admin/branches`, client change 2026-10-21; mocked up)
+
+- One card per branch: address (required), Google Maps link (optional), phone and WhatsApp number (10 digits; "Same as phone"), opening and closing time, open days, "Show this branch on the site".
+- Only an admin saves; staff see the page read only. Validation: full address, 10-digit numbers, closing after opening, at least one day.
+- Changes update the public site straight away (footer, Contact, branch picker, booking form). Branch data moves from `site-config.ts` to the `branches` table, with `site-config.ts` as the seed.
+
+### 7.2 Eye camps (`/admin/eye-camps`, client change 2026-10-21; mocked up)
+
+- **List:** Upcoming / Past, each row with date, name, time, place and status; past camps missing a people count or photos are flagged "Add people count and photos". "Add eye camp" button.
+- **Form** (`/new`, `/[slug]`): camp name, date, start/end time, nearest branch, location and address, organised with (optional), description, what's offered (chips), visible on site. Fields from `Requirements_EyeCamps.md` section 2.
+- **After the camp:** people checked and up to 12 photos open once the date has passed. New photos need the permission tick. Photo upload as 6.2, bucket `camps`.
+- No approval step: camps show on the site as soon as they're saved. Staff hide; admin deletes.
 
 ## 8. Data and security
 
@@ -195,3 +214,4 @@ Done when:
 | Audit log (Q111, Q112, Q141 blank or "Not sure") | Client | Only "Recent changes" in the MVP |
 | What happens when staff leave (Q142 blank) | Client | Admin disables the account |
 | Session length | Client | `DUMMY` C22: 12 hours |
+| Customer address on bookings and enquiries: wanted on both forms? | Client | Optional field on both |

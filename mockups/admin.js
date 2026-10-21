@@ -6,9 +6,9 @@
    wires them. Spec: docs/requirements/Requirements_Admin.md
 
    Page hooks:
-     <body class="adm-body" data-admin="dashboard | frames">  marks the current menu item
+     <body class="adm-body" data-admin="dashboard | frames | camps | branches">  marks the current menu item
      [data-only="admin" | "staff"]  shown only for that role (mockup "View as" switch)
-   Pages read window.VSLM_ADMIN (role, user, DRAFTS, toast, guard).
+   Pages read window.VSLM_ADMIN (role, user, branch, BRANCHES, DRAFTS, toast, guard).
    Everything here is DUMMY (docs/dummy-data.md C22).
    ========================================================================== */
 window.VSLM_ADMIN = (() => {
@@ -22,6 +22,23 @@ window.VSLM_ADMIN = (() => {
   };
   const user = USERS[role];
   document.body.dataset.role = role;
+
+  /* ---------- Branches (client change 2026-10-21: admin manages both branches) ----------
+     Live: the `branches` table, edited on /admin/branches (admin only). Addresses and the
+     Indresham number are real (prescription card); the Patelguda number is DUMMY (D2). */
+  const BRANCHES = {
+    Indresham: { name: 'Indresham', address: 'Plot No 30/Part Block-B, Citizens Colony, Indresham, Patancheruvu, Sangareddy',
+      phone: '9550685417', whatsapp: '9550685417', open: '09:00', close: '21:30', days: 'Monday–Sunday', visible: true },
+    Patelguda: { name: 'Patelguda', address: 'Falcon One Shopping Plaza, beside Apollo Pharmacy, Ellenki College, Patelguda',
+      phone: '+91 00000 00000', whatsapp: '+91 00000 00000', open: '09:00', close: '21:30', days: 'Monday–Sunday', visible: true, dummy: 'D2' },
+  };
+  // Admin picks which branch they're working on (saved on this device); staff are fixed to their home branch
+  const BRANCH_KEY = 'vslm-admin-branch';
+  let branch = user.branch;
+  if (role === 'admin') try { const b = localStorage.getItem(BRANCH_KEY); if (BRANCHES[b]) branch = b; } catch (_) {}
+  user.branch = branch;
+  const time12 = t => { const [h, m] = t.split(':').map(Number); return `${((h + 11) % 12) + 1}${m ? ':' + String(m).padStart(2, '0') : ''} ${h < 12 ? 'AM' : 'PM'}`; };
+  const hours = b => `${b.days}, ${time12(b.open)}–${time12(b.close)}`;
 
   /* ---------- DUMMY drafts (C22). Live: frames with status draft / waiting / sent_back ---------- */
   const DRAFTS = [
@@ -44,6 +61,7 @@ window.VSLM_ADMIN = (() => {
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-wa" viewBox="0 0 24 24"><path d="M3.6 20.4l1.2-3.9A8.6 8.6 0 1 1 8 19.3z"/><path d="M9.2 8.3c.2-.5.6-.5.9-.5h.5l1 2.2-.8 1c.5 1.1 1.4 2 2.5 2.5l1-.8 2.2 1v.5c0 .3 0 .7-.5.9-.7.4-1.6.5-2.7 0a8 8 0 0 1-4.3-4.3c-.4-1-.3-1.9.2-2.5z"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h3.2l1.6 4-2 1.3a10.5 10.5 0 0 0 4.9 4.9l1.3-2 4 1.6V17a2 2 0 0 1-2.2 2A15 15 0 0 1 3 6.2 2 2 0 0 1 5 4z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
@@ -79,7 +97,7 @@ window.VSLM_ADMIN = (() => {
 <header class="adm-top on-dark">
   <button class="icon-btn adm-top__menu" type="button" id="adm-menu" aria-expanded="false" aria-controls="adm-side" aria-label="Menu"><svg class="icon icon--lg"><use href="#i-menu"/></svg></button>
   <a class="brand" href="/admin" aria-label="VS Lens Mart staff area, dashboard">
-    <img class="brand__mark" src="../docs/logo.png" alt="" width="40" height="40">
+    <img class="brand__mark" src="assets/logo-placeholder.svg" alt="" width="40" height="40">
     <span class="brand__text">
       <span class="brand__name"><b>VS</b> LENS MART</span>
       <span class="brand__est">STAFF AREA</span>
@@ -101,6 +119,13 @@ window.VSLM_ADMIN = (() => {
   const SIDE = String.raw`
 <nav class="adm-side" id="adm-side" aria-label="Staff area">
   <a class="btn btn--primary adm-side__add" href="/admin/frames/new"><svg class="icon icon--sm"><use href="#i-plus"/></svg>Add frame</a>
+  <div class="adm-branch">
+    ${role === 'admin'
+      ? `<label class="caps adm-side__label" for="adm-branch">Working on branch</label>
+    <select class="adm-select" id="adm-branch">${Object.keys(BRANCHES).map(b => `<option ${b === branch ? 'selected' : ''}>${b}</option>`).join('')}</select>`
+      : `<p class="caps adm-side__label">Your branch</p><b>${branch}</b>`}
+    <address class="adm-branch__addr"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-pin"/></svg>${BRANCHES[branch].address}</address>
+  </div>
   <ul class="adm-nav">
     <li><a href="/admin" data-nav="dashboard"><svg class="icon"><use href="#i-grid"/></svg>Dashboard</a></li>
     <li><a href="/admin/frames" data-nav="frames"><svg class="icon"><use href="#i-glasses"/></svg>Frames${count('frames', role === 'admin' ? 'waiting for approval' : 'drafts to finish')}</a></li>
@@ -115,6 +140,7 @@ window.VSLM_ADMIN = (() => {
   <div data-only="admin">
     <p class="caps adm-side__label">Settings</p>
     <ul class="adm-nav">
+      <li><a href="/admin/branches" data-nav="branches"><svg class="icon"><use href="#i-pin"/></svg>Branches</a></li>
       <li><a href="/admin/staff" data-nav="staff"><svg class="icon"><use href="#i-gear"/></svg>Staff accounts</a></li>
       <li><a href="/admin/holidays" data-nav="holidays"><svg class="icon"><use href="#i-cal"/></svg>Branch holidays</a></li>
     </ul>
@@ -204,6 +230,10 @@ window.VSLM_ADMIN = (() => {
     try { localStorage.setItem(ROLE_KEY, b.dataset.viewAs); } catch (_) {}
     api.leave(() => location.reload());
   }));
+  document.getElementById('adm-branch')?.addEventListener('change', e => {
+    try { localStorage.setItem(BRANCH_KEY, e.target.value); } catch (_) {}
+    api.leave(() => location.reload(), () => { e.target.value = branch; });
+  });
   document.getElementById('sign-out').addEventListener('click', () =>
     toast('Signs out and goes to <code>/admin/login</code> (not mocked up)'));
 
@@ -213,6 +243,11 @@ window.VSLM_ADMIN = (() => {
     if (path === '/admin') return 'admin.html';
     if (path === '/admin/frames/new') return 'admin-frame.html';
     if (path === '/admin/sunglasses/new') return 'admin-frame.html?category=sunglasses';
+    if (path === '/admin/branches') return 'admin-branches.html';
+    if (path === '/admin/eye-camps') return 'admin-camps.html';
+    if (path === '/admin/eye-camps/new') return 'admin-camps.html?camp=new';
+    const camp = path.match(/^\/admin\/eye-camps\/([a-z0-9-]+)$/);
+    if (camp) return `admin-camps.html?camp=${camp[1]}`;
     const m = path.match(/^\/admin\/(?:frames|sunglasses)\/([A-Z]{2,3}-\d{4})$/);
     if (m) return `admin-frame.html?id=${m[1]}`;
     if (path === '/') return 'home.html';
@@ -234,11 +269,11 @@ window.VSLM_ADMIN = (() => {
   });
 
   const api = {
-    role, user, DRAFTS, STATUS, toast,
+    role, user, branch, BRANCHES, hours, time12, DRAFTS, STATUS, toast,
     badge: s => `<span class="adm-badge ${STATUS[s][1]}">${STATUS[s][0]}</span>`,
-    // A page with unsaved changes sets guard(go): it may ask first, then call go()
+    // A page with unsaved changes sets guard(go, stay): it may ask first, then call go() or stay()
     guard: null,
-    leave(go) { if (api.guard) api.guard(go); else go(); },
+    leave(go, stay = () => {}) { if (api.guard) api.guard(go, stay); else go(); },
   };
   return api;
 })();

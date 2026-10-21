@@ -46,7 +46,7 @@
         </div>
         <div class="apanel__body">
           <div class="chips-pick bk-filter" role="radiogroup" aria-label="Show bookings for">
-            <label class="rchoice"><input type="radio" name="bk-branch" value="" checked><span>Both branches</span></label>
+            <label class="rchoice"><input type="radio" name="bk-branch" value=""><span>Both branches</span></label>
             <label class="rchoice"><input type="radio" name="bk-branch" value="Indresham"><span>Indresham</span></label>
             <label class="rchoice"><input type="radio" name="bk-branch" value="Patelguda"><span>Patelguda</span></label>
           </div>
@@ -74,6 +74,15 @@
     </div>
 
     <div class="adm-col">
+      <!-- ========== 6a. Branch details (client change 2026-10-21) ========== -->
+      <section class="apanel" aria-labelledby="br-title">
+        <div class="apanel__head">
+          <h2 id="br-title"><svg class="icon"><use href="#i-pin"/></svg><span id="br-name"></span></h2>
+          <a href="/admin/branches" data-only="admin">Edit branches</a>
+        </div>
+        <div class="apanel__body"><div class="br-info" id="br-info"></div></div>
+      </section>
+
       <!-- ========== 6. Recent changes ========== -->
       <section class="apanel" aria-labelledby="rc-title">
         <div class="apanel__head"><h2 id="rc-title"><svg class="icon"><use href="#i-clock"/></svg>Recent changes</h2></div>
@@ -108,17 +117,27 @@
   const now = new Date(), h = now.getHours();
   $('#today').textContent = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   $('#greeting').textContent = `Good ${h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'}, ${A.user.name}.`;
-  $('#who').textContent = `${A.user.role} · ${A.user.branch} branch`;
+  $('#who').textContent = `${A.user.role} · ${A.user.branch} branch · ${A.BRANCHES[A.branch].address}`;
+
+  /* ---------- 6a. Branch details (the branch picked in the sidebar) ---------- */
+  const B = A.BRANCHES[A.branch];
+  $('#br-name').textContent = `${B.name} branch`;
+  $('#br-info').innerHTML = `
+    <div><svg class="icon icon--sm"><use href="#i-pin"/></svg><address>${B.address}</address></div>
+    <div><svg class="icon icon--sm"><use href="#i-phone"/></svg><span>${B.phone}${B.dummy ? ` <span class="todo">DUMMY (${B.dummy})</span>` : ''}</span></div>
+    <div><svg class="icon icon--sm"><use href="#i-clock"/></svg><span>${A.hours(B)}</span></div>`;
 
   /* ---------- 4. Today's bookings (DUMMY customers, unusable numbers) ---------- */
   const BOOKINGS = [
-    ['10:20 AM', 'Customer A', 'Indresham', 'attended', 1],
-    ['11:40 AM', 'Customer B', 'Patelguda', 'attended', 2],
+    ['10:20 AM', 'Customer A', 'Indresham', 'attended', 1, '', 'Citizens Colony, Indresham'],
+    ['11:40 AM', 'Customer B', 'Patelguda', 'attended', 2, '', 'Near Ellenki College, Patelguda'],
     ['1:00 PM', 'Customer C', 'Indresham', 'booked', 3, 'For their child'],
-    ['4:20 PM', 'Customer D', 'Indresham', 'booked', 4],
+    ['4:20 PM', 'Customer D', 'Indresham', 'booked', 4, '', 'Patancheru'],
     ['5:40 PM', 'Customer E', 'Patelguda', 'booked', 5, 'Wears reading glasses'],
-    ['7:00 PM', 'Customer F', 'Indresham', 'booked', 6],
-  ].map(([time, name, branch, status, n, note]) => ({ time, name, branch, status, phone: `+91 00000 0000${n}`, note }));
+    ['7:00 PM', 'Customer F', 'Indresham', 'booked', 6, '', 'Ameenpur'],
+  ].map(([time, name, branch, status, n, note, address]) => ({ time, name, branch, status, phone: `+91 00000 0000${n}`, note, address }));
+  // Show the branch picked in the sidebar first; "Both branches" is one tap away
+  document.querySelector(`input[name="bk-branch"][value="${A.branch}"]`).checked = true;
   const STATUSES = [['booked', 'Booked'], ['attended', 'Attended'], ['no_show', 'No-show'], ['cancelled', 'Cancelled']];
   function renderBookings() {
     const f = document.querySelector('input[name="bk-branch"]:checked').value;
@@ -128,7 +147,7 @@
       return `
       <div class="bk-row">
         <span class="bk-row__time">${b.time}</span>
-        <span class="bk-row__who"><b>${esc(b.name)} <span class="todo">DUMMY</span></b><span>${b.branch} · ${b.phone}${b.note ? ` · ${esc(b.note)}` : ''}</span></span>
+        <span class="bk-row__who"><b>${esc(b.name)} <span class="todo">DUMMY</span></b><span>${b.branch} · ${b.phone}${b.note ? ` · ${esc(b.note)}` : ''}</span>${b.address ? `<span>Address: ${esc(b.address)}</span>` : ''}</span>
         <span class="bk-row__act">
           <a href="tel:${b.phone.replace(/\s/g, '')}" data-dummy aria-label="Call ${esc(b.name)}"><svg class="icon icon--sm"><use href="#i-phone"/></svg></a>
           <a href="https://wa.me/${b.phone.replace(/\D/g, '')}" data-dummy aria-label="WhatsApp ${esc(b.name)}"><svg class="icon icon--sm"><use href="#i-wa"/></svg></a>

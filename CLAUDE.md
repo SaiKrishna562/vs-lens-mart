@@ -54,7 +54,7 @@ Other docs:
 | Staff admin pages | `src/app/admin/` |
 | Shared UI | `src/components/` |
 | Supabase client, helpers | `src/lib/` |
-| Shop facts (hours, phone, WhatsApp, addresses) | `src/lib/site-config.ts` only. Never hard-code them in components. |
+| Shop facts (hours, phone, WhatsApp, addresses) | The `branches` table (the admin edits it at `/admin/branches`), with `src/lib/site-config.ts` as the seed and fallback. Never hard-code them in components. |
 | Database schema and row-level security | `supabase/schema.sql` |
 | Playwright tests | `tests/` |
 | HTML mockups for client sign-off | `mockups/` |
@@ -74,13 +74,14 @@ Every page is thin; the shared files do the work:
 | `site.js` | Injects the header (utility bar, nav, mega menus, search, theme toggle), mobile drawer, sticky bar, branch picker, footer (after `<main>`) and mockup controls, then wires them. Its `MOCKS` table maps live routes to mockup files: a link to a built page opens it, anything else shows a "not mocked up yet" toast. Add a line there when a page is built. |
 | `frames-data.js` | `window.VSLM`: DUMMY frames and sunglasses (same shape as the live `frames` table), `card()`, slugs and URLs, device-only favourites. |
 | `listing.js` | `VSLM_LISTING(cfg)`: filters, counts, chips, sort, Saved, load more, URL state and the phone filter panel. Frames and Sunglasses differ only in `cfg` (`items`, `groups`, `tiers`, wording). |
-| `admin.js` | The staff area shell for `admin*.html`, used **instead of** `site.js`: top bar, sidebar (a drawer on phones), DUMMY drafts, a mockup-only "View as Staff / Admin" switch (`[data-only="admin|staff"]`), and a `guard` hook for unsaved changes. |
+| `admin.js` | The staff area shell for `admin*.html`, used **instead of** `site.js`: top bar, sidebar (a drawer on phones) with the branch switcher (admin picks a branch; staff see their own), branch details, DUMMY drafts, a mockup-only "View as Staff / Admin" switch (`[data-only="admin|staff"]`), and a `guard` hook for unsaved changes. Its `mockFile()` maps admin routes to mockup files. |
 
 Page conventions:
 - Each page has the one-line `vslm-theme` script before `styles.css` in `<head>` (applies dark mode before paint).
 - `<body data-page="…">` sets the current menu item; content goes in `<main id="main">`.
 - Load `site.js` first, then the data and listing scripts, then the page's own script.
 - `frame-detail.html` serves both `/frames/<slug>` and `/sunglasses/<slug>` via `?frame=<slug>`.
+- `review.html` is the client review pack (not a site page): links every mockup with questions, the decisions to confirm and the missing information. Keep it in step when a mockup or `docs/dummy-data.md` changes.
 - **Review notes:** `.todo` tags (dashed gold) and `.mock-only` blocks are notes for the client, hidden by the "Review notes" toggle and never part of the site. Tag every dummy value `DUMMY` with its `docs/dummy-data.md` id.
 - **Branch picker:** `data-picker="call|whatsapp"` on any button opens it, and `data-wa-text` prefills the message. `data-dummy` on a link stops a dummy number from dialling.
 
@@ -160,15 +161,16 @@ Use "Since 1999" and compute the years in code. Never hard-code "25 years".
 
 Full spec (mega-menu contents, mobile accordion, sticky bar, behaviour, acceptance criteria): `docs/requirements/Requirements_Navigation.md`.
 
-The logo links to `/`; there's no "Home" item. The 7 top-level items, in order:
+The logo and a "Home" item both link to `/`. The 8 top-level items, in order (client change 2026-10-21):
 
-1. **Frames:** mega menu
-2. **Sunglasses:** mega menu
-3. **Lenses:** mega menu
-4. **Eye care:** photo cards
-5. **Eye camps:** plain link to `/eye-camps`
-6. **About:** plain link to `/about`
-7. **Contact:** plain link to `/contact`
+1. **Home:** plain link to `/`
+2. **About:** plain link to `/about`
+3. **Frames:** mega menu
+4. **Sunglasses:** mega menu
+5. **Lenses:** mega menu
+6. **Eye care:** photo cards
+7. **Eye camps:** plain link to `/eye-camps`
+8. **Contact:** plain link to `/contact`
 
 On the right are the light/dark toggle, Search and WhatsApp icons. There are never cart or account icons. Favourites are a heart on frame cards and frame detail, not a nav icon. To add an item, remove one first.
 
@@ -184,7 +186,7 @@ Every page shares the utility bar, the nav, and a footer with:
 - social links (YouTube, Facebook, Instagram; `DUMMY` URLs until the client sends them);
 - the privacy link.
 
-Shop facts, all read from `src/lib/site-config.ts`:
+Shop facts, read from the `branches` table (edited by the admin at `/admin/branches`; `src/lib/site-config.ts` holds the seed values):
 - **Hours:** 9:00 AM–9:30 PM, Monday–Sunday, both branches.
 - **Indresham:** 9550685417 (phone and WhatsApp).
 - **Patelguda:** its own number, still `DUMMY` (`docs/dummy-data.md` D2).

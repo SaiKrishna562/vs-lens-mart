@@ -1,6 +1,6 @@
 # Requirements: Navigation
 
-Status: Draft for client review
+Status: Draft for client review. Updated 2026-10-21 with the client's changes (Home item, new order, new logo)
 Plan version: v1.1 (navigation update), updated 2026-10-09 with the client's form and prescription card
 Sources: project plan v1.1 section 3 "Navigation bar (mega menu)", `docs/client-answers.md` (incl. the 160-question form), `docs/prescription_card.jpg`, `docs/dummy-data.md`, homepage design image (`docs/Premium Eyewear Visionary Hero.png`), navigation mockup (`docs/vs_lens_mart_navbar_mega_menu.html`), `CLAUDE.md`
 
@@ -19,7 +19,7 @@ It has to look like the approved homepage design: a dark navy bar, gold accents 
 From top to bottom:
 
 1. **Utility bar:** a thin strip with shop facts and the main call to action.
-2. **Main navigation bar:** the logo, 7 top-level menu items, and Search and WhatsApp icons.
+2. **Main navigation bar:** the logo, 8 top-level menu items, and Search and WhatsApp icons.
 3. **Mega menu panel** (desktop): opens under the bar for Frames, Sunglasses, Lenses and Eye care.
 4. **Mobile only:** a hamburger that opens a full-screen accordion, plus a sticky bottom action bar.
 
@@ -43,22 +43,26 @@ Always visible above the main navigation on desktop.
 
 ### 4.1 Left: logo
 
-- The VS logo plus "LENS MART" and "EST. 1999" link to `/`. The logo replaces a "Home" menu item.
-- **TODO (client):** final logo file. The client has no high-res PNG/SVG (Q2). `docs/logo.png` spells "FAMLY" in its ring text; the prescription card's version reads "CARE · LOVE · QUALITY · FAMILY". The design shows the tagline "THE VISION OF TOMORROW". The logo needs redrawing as SVG, and the artwork and tagline need confirming before launch. Mockups use `docs/logo.png` (D8).
+- The VS logo plus "LENS MART" and "EST. 1999" link to `/`. There's also a "Home" menu item (client change 2026-10-21).
+- **TODO (client):** the new logo file. On 2026-10-21 the client asked for a new logo; the file hasn't arrived. Until it does, mockups use a placeholder, `mockups/assets/logo-placeholder.svg` (`DUMMY` D8). The old `docs/logo.png` (which spells "FAMLY") is no longer used.
 
-### 4.2 Centre: 7 top-level items
+### 4.2 Centre: 8 top-level items
+
+Order changed by the client on 2026-10-21: Home and About first.
 
 | # | Item | Type | Destination |
 |---|---|---|---|
-| 1 | Frames | Mega menu | `/frames` |
-| 2 | Sunglasses | Mega menu | `/sunglasses` |
-| 3 | Lenses | Mega menu | `/lenses` |
-| 4 | Eye care | Photo-card menu | `/eye-care` |
-| 5 | Eye camps | Plain link | `/eye-camps` |
-| 6 | About | Plain link | `/about` (Our journey, family, team, Gallery, Reviews) |
-| 7 | Contact | Plain link | `/contact` (both branches, maps, enquiry form) |
+| 1 | Home | Plain link | `/` |
+| 2 | About | Plain link | `/about` (Our journey, family, team, Gallery, Reviews) |
+| 3 | Frames | Mega menu | `/frames` |
+| 4 | Sunglasses | Mega menu | `/sunglasses` |
+| 5 | Lenses | Mega menu | `/lenses` |
+| 6 | Eye care | Photo-card menu | `/eye-care` |
+| 7 | Eye camps | Plain link | `/eye-camps` |
+| 8 | Contact | Plain link | `/contact` (both branches, maps, enquiry form) |
 
-- No more than 7 top-level items. Adding an item means removing one.
+- No more than 8 top-level items. Adding an item means removing one. Labels never wrap; at 1180–1279 px the items use tighter spacing.
+- The footer's quick links follow the same order (Home, About us, then the product pages).
 - Gallery is not a top-level item. It's reached from the About page, and `/gallery` stays a valid page.
 
 **Differences from the homepage design image:**
@@ -136,10 +140,10 @@ Three cards:
 
 ## 6. Mobile accordion menu
 
-- The bar shows the logo, the hamburger and the WhatsApp icon. The 7 items are hidden behind the hamburger.
+- The bar shows the logo, the hamburger and the WhatsApp icon. The 8 items are hidden behind the hamburger, in the same order.
 - The hamburger opens a **full-screen** menu with a navy background and the design-system typography.
 - The four mega-menu items (Frames, Sunglasses, Lenses, Eye care) show their column links stacked, opening with **+** and closing with **−**. Only one section is open at a time.
-- The plain links (Eye camps, About, Contact) go straight to the page.
+- The plain links (Home, About, Eye camps, Contact) go straight to the page.
 - The menu closes when a link is followed, when the close button is pressed, or when Esc is pressed on a connected keyboard.
 - Page scroll is locked while the menu is open.
 - Brand and price rows follow the same database rules as on desktop (section 5).
@@ -172,14 +176,14 @@ Always visible at the bottom of the screen on mobile, below the tablet breakpoin
 
 Done when:
 
-1. Every page shows the utility bar, the main bar with exactly 7 top-level items in the order in section 4.2, and the footer.
-2. The logo links to `/`, and there's no "Home" menu item.
+1. Every page shows the utility bar, the main bar with exactly 8 top-level items in the order in section 4.2, and the footer.
+2. The logo and the "Home" item both link to `/`; "Home" is marked as the current page on the home page.
 3. There are no cart or account icons anywhere, and no favourites icon in the navigation. The WhatsApp icon lets the customer choose a branch and opens a chat with that branch's number (Indresham 9550685417).
 4. "Book an eye test" in the utility bar goes to `/book-eye-test`.
 5. **Desktop (1440 px):**
    - Frames, Sunglasses, Lenses and Eye care each open a panel on hover and on click.
    - Each panel closes on Esc and when the mouse leaves.
-   - Eye camps, About and Contact navigate directly.
+   - Home, About, Eye camps and Contact navigate directly.
 6. **Keyboard only:** every menu item and panel link can be reached and used with Tab, Enter and Esc, with visible focus styles.
 7. **Mobile (360 px):**
    - The hamburger opens a full-screen accordion. Product sections expand and collapse with + / −. Plain links navigate.
@@ -211,7 +215,7 @@ Done when:
 |---|---|
 | Patelguda phone/WhatsApp number | Client |
 | Year count next to "Since 1999"? | Client |
-| High-res logo (fix "FAMLY") and tagline | Client |
+| New logo file (asked for 2026-10-21) and tagline | Client |
 | Frame brands and lens brand names | Client, then entered by staff in admin |
 | Price tiers and "from ₹" boundaries | Client |
 | Shapes stocked; blue-cut and photochromic lenses; whether contact lenses, reading glasses or care products are sold | Client |
