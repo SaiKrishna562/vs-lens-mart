@@ -4,6 +4,13 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-23 · Phase 4 · Logo concepts for the client
+
+- **Changed:** five logo concepts drawn as SVG, each as a mark and a full logo with the name: 1 Lens monogram, 2 Spectacles, 3 Family eye, 4 Heritage badge (the current badge cleaned up, "FAMILY" spelled correctly), 5 Clear vision. A new page, `mockups/logo-concepts.html`, shows each one on cream, on navy, and at header, phone-icon and browser-tab sizes, for the client to pick one on WhatsApp. The SVGs use the design tokens only; their colours switch on navy through `--lg-ink`, `--lg-accent` and `--lg-iris`, with light-background fallbacks.
+- **Why:** the developer asked for options to show the client, who asked for a new logo on 2026-10-21 but hasn't sent one. None of them is approved. The site keeps the placeholder (`DUMMY` D8) until the client chooses. The text in the SVGs is live text, so it must be converted to outlines before final use. Concept 4's ring text can't be read at 32 px, so it would need concept 1's monogram as its browser-tab icon.
+- **Checked:** all 25 inlined SVGs render at 1440 and 375 px, in light and dark mode. No page overflow at 375 px. No console errors.
+- **Files:** `mockups/assets/logo-concepts/concept-1.svg` … `concept-5.svg` and `concept-1-mark.svg` … `concept-5-mark.svg` (new), `mockups/logo-concepts.html` (new), `mockups/styles.css`, `docs/open-questions.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Step 4: staff login
 
 - **Changed:**

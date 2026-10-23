@@ -17,7 +17,7 @@ Everything still open here has a placeholder in `docs/dummy-data.md`, so work ca
 | Lens brands to list | Pending | Still only "All branded". |
 | Sample prescription card | **Answered** | `docs/prescription_card.jpg`; fields in `docs/dummy-data.md` section 1. It has no PD field (see section 2). |
 | Is the eye test free? | Pending | Not covered by the form. Eye test takes 5–20 min (Q75). |
-| Logo: final version and spelling | **Worse than expected** | No high-res PNG/SVG exists (Q2). `docs/logo.png` spells "FAMLY". The logo needs redrawing as SVG; who does it and who approves? |
+| Logo: final version and spelling | Pending | On 2026-10-21 the client asked for a new logo; mockups use the placeholder (`DUMMY` D8). No high-res PNG/SVG of the old one exists (Q2), and `docs/logo.png` spells "FAMLY". On 2026-10-23 five SVG concepts were drawn for the client to choose from (`mockups/logo-concepts.html`). Open: which one (or the client's own file), and who gives the final approval. |
 | Domain name | **Answered: none** | No domain yet (Q156). Who buys it and pays for hosting/APIs is blank (Q158, Q159). |
 
 ## 2. Contradictions in the form answers

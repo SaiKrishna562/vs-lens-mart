@@ -1970,3 +1970,29 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .rv-top h1, .rv-top p { color: var(--ink); }
   .rv-card, .rv-list li { break-inside: avoid; }
 }
+
+/* ==========================================================================
+   Logo concepts (logo-concepts.html, for the client to choose; not a site page)
+   The SVGs read --lg-ink, --lg-accent and --lg-iris, with light-background fallbacks.
+   ========================================================================== */
+.lc-list { display: grid; gap: var(--s-6); }
+.lc-card { display: grid; gap: var(--s-3); padding: var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.lc-card h2 { font-size: var(--fs-lg); color: var(--heading); display: flex; align-items: center; gap: var(--s-3); }
+.lc-card > p { color: var(--text-muted); max-width: 60ch; }
+.lc-num { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--gold); color: var(--navy); font-size: var(--fs-md); flex: none; }
+.lc-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--s-3); margin-top: var(--s-2); }
+.lc-panel { margin: 0; display: grid; grid-template-rows: 1fr auto; gap: var(--s-3); padding: var(--s-5); border-radius: var(--r-md); min-height: 12rem; }
+.lc-panel figcaption { font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; }
+.lc-panel svg, .lc-panel img { display: block; width: 100%; height: 100%; }
+.lc-full { display: grid; place-items: center; }
+.lc-full svg, .lc-full img { max-height: 7.5rem; }
+/* Always cream and always navy, whatever the page theme: they show the logo on each kind of background. */
+.lc-panel--light { background: var(--cream); color: var(--ink-72); --lg-ink: var(--navy); --lg-accent: var(--brass); --lg-iris: var(--navy); }
+.lc-panel--navy, .lc-panel--small { background: var(--navy); color: var(--white-64); --lg-ink: var(--cream); --lg-accent: var(--gold); --lg-iris: var(--navy-2); border: 1px solid var(--navy-edge); }
+.lc-bar { display: flex; align-items: center; height: var(--nav-h); padding-inline: var(--s-4); border-radius: var(--r-sm); background: var(--white-08); }
+.lc-head { display: block; height: 44px; }
+.lc-head svg, .lc-head img { width: auto; }
+.lc-sizes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-5); }
+.lc-app { display: block; width: 56px; height: 56px; padding: 6px; border-radius: 14px; background: var(--cream); --lg-ink: var(--navy); --lg-accent: var(--brass); --lg-iris: var(--navy); }
+.lc-tab { display: inline-flex; align-items: center; gap: var(--s-2); padding: 6px 12px; border-radius: var(--r-sm) var(--r-sm) 0 0; background: var(--cream); color: var(--ink); font-size: var(--fs-xs); --lg-ink: var(--navy); --lg-accent: var(--brass); --lg-iris: var(--navy); }
+.lc-fav { display: block; width: 16px; height: 16px; }
