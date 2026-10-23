@@ -8,7 +8,7 @@ import { accounts, signIn } from "./helpers";
 const text = (html: string) => html.replace(/<!-- -->/g, "");
 
 test("signed out, every staff page sends you to the login page", async ({ request }) => {
-  for (const path of ["/admin", "/admin/frames", "/admin/upload-test"]) {
+  for (const path of ["/admin", "/admin/frames", "/admin/sunglasses", "/admin/lenses"]) {
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(307);
     expect(res.headers().location, path).toContain("/admin/login?next=");
@@ -38,9 +38,11 @@ for (const role of ["staff", "admin"] as const) {
     const page = await request.get("/admin", { headers: { cookie } });
     const html = text(await page.text());
     expect(page.status()).toBe(200);
-    expect(html).toContain(`Hello, ${a.name}.`);
-    expect(html).toContain(`<b class="text-heading">${role === "admin" ? "Admin" : "Staff"}</b>`);
+    expect(html).toMatch(new RegExp(`Good (morning|afternoon|evening), ${a.name}[.]`));
+    expect(html).toContain(`<span class="adm-badge adm-badge--gold">${role === "admin" ? "Admin" : "Staff"}</span>`);
     expect(html).toContain("Indresham branch");
+    // The approval queue is the admin's; staff see their own frames instead
+    expect(html).toContain(role === "admin" ? "Waiting for your approval" : "Your frames in progress");
 
     // A request from another website, carrying the session cookie, is refused (CSRF protection)
     const forged = await request.post("/api/auth/sign-out", { headers: { cookie, origin: "https://evil.example" }, data: {} });
@@ -48,16 +50,16 @@ for (const role of ["staff", "admin"] as const) {
     const out = await request.post("/api/auth/sign-out", { headers: { cookie, origin: "http://localhost:3100" }, data: {} });
     expect(out.status()).toBe(200);
     const after = text(await (await request.get("/admin", { headers: { cookie } })).text());
-    expect(after).not.toContain(`Hello, ${a.name}.`);
-    expect(after).not.toContain("Frames not yet approved");
+    expect(after).not.toContain(`, ${a.name}\.`);
+    expect(after).not.toContain("On the site now");
   });
 }
 
 test("a forged session cookie gets past the gate but sees nothing", async ({ request }) => {
   const res = await request.get("/admin", { headers: { cookie: "better-auth.session_token=forged.value" } });
   const html = text(await res.text());
-  expect(html).not.toContain("Frames not yet approved");
-  expect(html).not.toContain("Signed in as");
+  expect(html).not.toContain("On the site now");
+  expect(html).not.toContain("Working on branch");
 });
 
 test("a switched-off account can't sign in", async ({ request }) => {

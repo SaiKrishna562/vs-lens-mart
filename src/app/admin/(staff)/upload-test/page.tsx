@@ -18,7 +18,7 @@ export const metadata: Metadata = { title: "Upload test" };
 export default function UploadTestPage() {
   if (process.env.NODE_ENV === "production") notFound();
   return (
-    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-10">
+    <div className="max-w-3xl">
       <Link href="/admin" className="text-sm font-semibold text-heading underline">← Dashboard</Link>
       <h1 className="mt-3 text-3xl">Upload test</h1>
       <p className="mt-2 mb-6 text-muted">
@@ -28,7 +28,7 @@ export default function UploadTestPage() {
       <Suspense fallback={<p className="text-muted">Loading…</p>}>
         <Uploads />
       </Suspense>
-    </main>
+    </div>
   );
 }
 

@@ -496,4 +496,11 @@
 .footer__bottom a { display: inline-flex; align-items: center; min-height: var(--tap); }
 @media (max-width: 1179px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 767px) { .footer__grid { grid-template-columns: 1fr; } }
+
+/* Breadcrumbs and section labels (mockup sections 7–8), shared by public and staff pages */
+.crumbs { display: flex; flex-wrap: wrap; gap: var(--s-2); font-size: var(--fs-sm); color: var(--text-muted); }
+.crumbs a { color: var(--text-muted); text-decoration: none; }
+.crumbs a:hover { color: var(--heading); text-decoration: underline; }
+.crumbs li + li::before { content: "›"; margin-right: var(--s-2); color: var(--brass); }
+.section__eyebrow { color: var(--brass); margin-bottom: var(--s-2); }
 }

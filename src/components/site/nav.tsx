@@ -15,6 +15,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { logo } from "@/lib/site-config";
+import { ThemeToggle } from "../theme-toggle";
 import { PickerButton } from "./branch-picker";
 import { Icon } from "./icons";
 import { currentNavId, NAV } from "./menu-links";
@@ -46,7 +47,6 @@ export function Nav({ panels, accordion, footNote }: {
   const [search, setSearch] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [acc, setAcc] = useState<string | null>(null);
-  const [dark, setDark] = useState(false);
   const nav = useRef<HTMLElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const burger = useRef<HTMLButtonElement>(null);
@@ -68,22 +68,6 @@ export function Nav({ panels, accordion, footNote }: {
     setSeenPath(pathname);
     setMega(null); setSearch(false); setDrawer(false);
   }
-
-  /* ---------- Light / dark mode ---------- */
-  useEffect(() => {
-    const root = document.documentElement;
-    const system = matchMedia("(prefers-color-scheme: dark)");
-    const paint = () => setDark(root.dataset.theme ? root.dataset.theme === "dark" : system.matches);
-    paint();
-    system.addEventListener("change", paint);
-    return () => system.removeEventListener("change", paint);
-  }, []);
-  const toggleTheme = () => {
-    const next = dark ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("vslm-theme", next); } catch { /* private mode: still switches */ }
-    setDark(!dark);
-  };
 
   /* ---------- Phone drawer: lock scroll, focus the close button, return focus ---------- */
   const wasOpen = useRef(false);
@@ -188,18 +172,7 @@ export function Nav({ panels, accordion, footNote }: {
           </ul>
 
           <div className="nav__tools">
-            <button
-              className="icon-btn icon-btn--theme"
-              type="button"
-              id="theme-toggle"
-              aria-pressed={dark}
-              aria-label="Dark mode"
-              title={dark ? "Switch to light mode" : "Switch to dark mode"}
-              onClick={toggleTheme}
-            >
-              <Icon name="moon" className="icon theme-icon--moon" />
-              <Icon name="sun" className="icon theme-icon--sun" />
-            </button>
+            <ThemeToggle />
             <button
               ref={searchBtn}
               className="icon-btn icon-btn--search"

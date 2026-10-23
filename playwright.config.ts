@@ -15,7 +15,7 @@ try {
 
 const PORT = 3100;
 const BASE = `http://localhost:${PORT}`;
-export const E2E_SIGNIN_LIMIT = 30;
+export const E2E_SIGNIN_LIMIT = 60; // the whole run signs in ~35 times within a minute
 
 export default defineConfig({
   testDir: "./tests",
@@ -29,9 +29,9 @@ export default defineConfig({
   projects: [
     { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data)\.spec\.ts/ },
     // Layout checks at the CLAUDE.md test widths
-    { name: "phone-360", testMatch: /(ui|layout)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
-    { name: "tablet-768", testMatch: /(ui|layout)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
-    { name: "desktop-1440", testMatch: /(ui|layout)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
+    { name: "phone-360", testMatch: /(ui|layout|admin-shell)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
+    { name: "tablet-768", testMatch: /(ui|layout|admin-shell)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
+    { name: "desktop-1440", testMatch: /(ui|layout|admin-shell)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
     // Last, because it uses up the sign-in limit for a minute
     { name: "rate-limit", testMatch: /rate-limit\.spec\.ts/, dependencies: ["security", "phone-360", "tablet-768", "desktop-1440"] },
   ],

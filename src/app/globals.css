@@ -9,6 +9,8 @@
    ========================================================================== */
 @import "tailwindcss";
 @import "../styles/site-chrome.css"; /* header, menus, sticky bar, footer (sprint 5.1) */
+@import "../styles/forms.css"; /* form fields (mockup section 13) */
+@import "../styles/admin.css"; /* staff area (mockup section 17) */
 
 /* Dark mode follows data-theme on <html> (set before paint in layout.tsx),
    or the device setting when the visitor hasn't chosen. */

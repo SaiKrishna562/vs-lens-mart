@@ -7,6 +7,11 @@ import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   if (pathname === "/admin/login") return NextResponse.next();
+  // The temporary upload test page (removed in sprint 5.3 part B) never exists on a live site.
+  // Blocked here, before any page code: inside the streamed staff shell a 404 can't set the status.
+  if (process.env.NODE_ENV === "production" && pathname.startsWith("/admin/upload-test")) {
+    return new NextResponse("Not found", { status: 404 });
+  }
   if (!getSessionCookie(request)) {
     const login = new URL("/admin/login", request.url);
     login.searchParams.set("next", pathname + search);

@@ -9,12 +9,13 @@ import { authOptions } from "./auth-options";
    "Sign out" set and clear the session cookie. */
 
 const globalForAuth = globalThis as unknown as { vslmAuthPool?: Pool };
-const pool =
+/** The login tables' connection (vslm_auth). Also used by staff-directory.ts for names. */
+export const authPool =
   globalForAuth.vslmAuthPool ??
   new Pool({ connectionString: process.env.DATABASE_URL_AUTH, max: 5 });
-if (process.env.NODE_ENV !== "production") globalForAuth.vslmAuthPool = pool;
+if (process.env.NODE_ENV !== "production") globalForAuth.vslmAuthPool = authPool;
 
-const options = authOptions(pool);
+const options = authOptions(authPool);
 
 export const auth = betterAuth({
   ...options,

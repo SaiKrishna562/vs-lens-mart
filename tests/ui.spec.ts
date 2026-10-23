@@ -30,18 +30,18 @@ test("wrong password shows a plain message; right password opens the dashboard; 
 
   await page.getByLabel("Password").fill(a.password);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page.getByRole("heading", { name: `Hello, ${a.name}.` })).toBeVisible();
+  await expect(page.getByRole("heading", { name: new RegExp(`Good (morning|afternoon|evening), ${a.name}[.]`) })).toBeVisible();
   await expect(page).toHaveURL(/\/admin$/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
 
   // A second visit, so Back after signing out really lands on a dashboard history entry
   await page.goto("/admin?second-visit=1");
-  await expect(page.getByRole("heading", { name: `Hello, ${a.name}.` })).toBeVisible();
+  await expect(page.getByRole("heading", { name: new RegExp(`Good (morning|afternoon|evening), ${a.name}[.]`) })).toBeVisible();
   await page.getByRole("button", { name: "Sign out" }).click();
   await expect(page).toHaveURL(/\/admin\/login/);
   await page.goBack();
   await expect(page).toHaveURL(/\/admin\/login/);
-  await expect(page.getByText("Frames not yet approved")).toHaveCount(0);
+  await expect(page.getByText("On the site now")).toHaveCount(0);
   await expect(page.getByText(a.name)).toHaveCount(0);
 });
 

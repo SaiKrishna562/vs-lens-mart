@@ -24,6 +24,26 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-23 · Sprint 5.3 (part A) · Staff area shell, dashboard, frames list
+
+- **Changed:**
+  - Staff pages are now in `src/app/admin/(staff)/` with the shell from the mockup (`admin-shell.tsx`):
+    - top bar and sidebar (a drawer on phones);
+    - the admin's branch switcher, saved in a cookie; staff see their own branch;
+    - menu counts and the phone "Add frame" button.
+  - Real dashboard (Requirements_Admin 5): to-do cards, quick actions, today's bookings with status, approval queue (admin) or own frames (staff), branch card, recent changes, "On the site now".
+  - `/admin/frames` and `/admin/sunglasses`: search, filters and a one-tap Sold out toggle that updates the public site (`updateTag("catalogue")`).
+  - Sections from later sprints show "arrives in sprint …".
+  - The staff CSS (mockup sections 13 and 17) is ported into `src/styles/forms.css` and `admin.css`.
+  - Shared `ThemeToggle`; staff names are read through the login connection (`staff-directory.ts`).
+- **Found and fixed:**
+  - My CSS cleaner deleted a grouped phone rule, causing 105 px of overflow at 360 px. It now removes only the mockup selector.
+  - A stale dev-server cache served old CSS; clearing `.next/dev` fixed it.
+  - Streamed staff pages can't send a 404 status, so the upload test page is now blocked in `src/proxy.ts` in production.
+  - Note: in a hidden browser pane React's reveal waits for a repaint, which only affects manual checks.
+- **Checked:** `npm test` passes 84 tests, including the new `tests/admin-shell.spec.ts` at 360, 768 and 1440 px. In the browser: the toggle saves to the database, and the branch switch persists.
+- **Files:** `src/app/admin/(staff)/*`, `src/components/admin/*`, `src/components/theme-toggle.tsx`, `src/lib/queries/admin.ts`, `src/lib/admin-branch.ts`, `src/lib/staff-directory.ts`, `src/lib/auth.ts`, `src/proxy.ts`, `src/styles/{admin,forms,site-chrome}.css`, `src/app/globals.css`, `tests/*`, `playwright.config.ts`, `docs/changelog.md`
+
 ## 2026-10-23 · Sprint 5.1 · White menu bar in light mode (proposal)
 
 - **Changed:**
