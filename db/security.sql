@@ -87,6 +87,10 @@ begin
   end loop;
 end $$;
 
+-- Frame photos: staff remove and reorder photos while editing a frame (Requirements_Admin.md 6.2).
+-- Deleting the whole frame stays admin-only (frames' admin_delete policy).
+create policy staff_delete on frame_images for delete using (app_is_staff());
+
 -- Branch details and closed days: only the admin changes them (Requirements_Admin.md 7.1).
 drop policy staff_insert on branches;
 drop policy staff_update on branches;

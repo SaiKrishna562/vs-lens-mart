@@ -24,6 +24,36 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-24 · Sprint 5.3 (part B) · Add, edit and approve frames with photos
+
+- **Changed:**
+  - `/admin/frames/new`, `/admin/frames/[code]`, and the same for sunglasses. Built from the approved mockup (`frame-form.tsx`, loaded by `frame-form-page.tsx`):
+    - **Photos:** up to 5, Take photo or Choose; resized in the browser to 1600 px WebP; type per photo, with a consent tick for "Model wearing it"; reorder; the first is the cover.
+    - **Fields and messages:** every field from Requirements_Admin 6.1, with "Add a new brand / colour"; a live "Code already used by …" check; errors under each field plus a summary.
+    - **Buttons by role and status:**
+      - staff: Save as draft, Send for approval;
+      - admin: Save and publish, or for a waiting frame Approve and publish / Send back with a note;
+      - an approved frame: Save changes.
+    - **Danger zone:** staff can Hide from site; an admin can Delete, which removes the photo files too.
+    - **Safety:** "Leave without saving?" guard; the fields autosave on the device, with "Continue it / Start fresh".
+    - **Done screen:** "Add another", which keeps brand, category, gender and branch and suggests the next code.
+  - **Server actions** (`frames/actions.ts`):
+    - use the same Zod rules (`src/lib/frame-schema.ts`) and check role and status before saving;
+    - remove new uploads again if a save fails;
+    - every change calls `updateTag("catalogue")`, so the public menu updates at once.
+  - **Security:** `staff_delete` on `frame_images`, so staff can remove and reorder photos.
+  - **Removed:** the temporary `/admin/upload-test` page, its proxy block and its test.
+- **Why:** sprint 5.3 part B. This is the "done when" of the sprint: staff upload on a phone, an admin approves, and only then is it public.
+- **Checked:**
+  - `tests/frame-form.spec.ts` (5): staff add a frame with 2 photos at 360 px (stored as WebP, the photo is 404 to the public), an admin approves it (photo 200), send back shows the note, plain errors (not a photo, a used code, missing fields), staff see Hide but not Delete, and an admin's delete removes the row and files.
+  - Full suite: 88 passed.
+  - **Found and fixed:**
+    - a test picked a file before React had attached to the input, so it now waits until the form is ready;
+    - a bad photo's message showed twice;
+    - a lint error in the draft-restore check.
+  - **Noted:** one slow full run (8.8 min) gave two timeouts; both passed on a rerun and in the next full run.
+- **Files:** `src/app/admin/(staff)/frames/{actions.ts,new,[code]}`, `src/app/admin/(staff)/sunglasses/{new,[code]}`, `src/components/admin/{frame-form,frame-form-page,admin-shell}.tsx`, `src/lib/frame-schema.ts`, `db/security.sql`, `src/proxy.ts`, `tests/frame-form.spec.ts`, `tests/uploads.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_Admin.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Sprint 5.3 (part A) · Staff area shell, dashboard, frames list
 
 - **Changed:**

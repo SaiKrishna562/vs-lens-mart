@@ -134,9 +134,4 @@ test.describe("/media serves only what the visitor may see", () => {
       expect(res.headers()["cache-control"], p).toBe("private, no-store");
     }
   });
-
-  test("the temporary upload test page doesn't exist on a live (production) site", async ({ request }) => {
-    const cookie = await signIn(request, accounts().admin);
-    expect((await request.get("/admin/upload-test", { headers: { cookie } })).status()).toBe(404);
-  });
 });

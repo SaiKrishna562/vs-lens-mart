@@ -85,7 +85,9 @@ export function AdminShell({ user, branch, branches, counts, children }: ShellPr
   );
 
   return (
-    <div className="adm-body flex min-h-full flex-1 flex-col" data-role={user.role}>
+    // The frame form has its own sticky action bar, so no floating "Add frame" button there
+    <div className="adm-body flex min-h-full flex-1 flex-col" data-role={user.role}
+      data-admin={/^\/admin\/(frames|sunglasses)\/.+/.test(pathname) ? "frames" : undefined}>
       <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-pill focus:bg-gold focus:px-4 focus:py-2 focus:font-semibold focus:text-navy" href="#main">Skip to content</a>
       <header className="adm-top on-dark">
         <button ref={menuBtn} className="icon-btn adm-top__menu" type="button" aria-expanded={open} aria-controls="adm-side" aria-label="Menu" onClick={() => setOpen(!open)}>
