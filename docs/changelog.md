@@ -4,12 +4,47 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-23 · Phase 4 · Logo concepts: presentation boards
+
+- **Changed:** `mockups/logo-concepts.html` is now a presentation deck on navy. It has a cover with the five marks, one board per concept, and a side-by-side board. Each concept board has six panels: primary logo, construction lines, the logo on the website (browser tab, header, hero), a brand line, a shop sign and business card, and icons with the colour swatches. Concepts 1 and 4 have a metallic brass-to-gold rim. A new `concept-4-icon.svg` (the badge without its ring text) is used at icon sizes. Printing the page (Save as PDF, landscape) puts one board on each page.
+- **Why:** the developer wanted the concepts designed visually to show the client, not just listed. The brand lines use only the existing wording ("Welcome to the Optical Family", "Care · Love · Quality · Family", "Since 1999"). There's no phone number, domain or price on any board. Still a draft: the site keeps the placeholder (`DUMMY` D8).
+- **Checked:** all boards at 1440 and 375 px, with no page overflow and no console errors. Panel padding uses `%`, because `cqw` on the panel itself measures the page rather than the panel.
+- **Files:** `mockups/logo-concepts.html`, `mockups/styles.css`, `mockups/assets/logo-concepts/concept-1.svg`, `concept-1-mark.svg`, `concept-4.svg`, `concept-4-mark.svg`, `concept-4-icon.svg` (new), `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Logo concepts for the client
 
 - **Changed:** five logo concepts drawn as SVG, each as a mark and a full logo with the name: 1 Lens monogram, 2 Spectacles, 3 Family eye, 4 Heritage badge (the current badge cleaned up, "FAMILY" spelled correctly), 5 Clear vision. A new page, `mockups/logo-concepts.html`, shows each one on cream, on navy, and at header, phone-icon and browser-tab sizes, for the client to pick one on WhatsApp. The SVGs use the design tokens only; their colours switch on navy through `--lg-ink`, `--lg-accent` and `--lg-iris`, with light-background fallbacks.
 - **Why:** the developer asked for options to show the client, who asked for a new logo on 2026-10-21 but hasn't sent one. None of them is approved. The site keeps the placeholder (`DUMMY` D8) until the client chooses. The text in the SVGs is live text, so it must be converted to outlines before final use. Concept 4's ring text can't be read at 32 px, so it would need concept 1's monogram as its browser-tab icon.
 - **Checked:** all 25 inlined SVGs render at 1440 and 375 px, in light and dark mode. No page overflow at 375 px. No console errors.
 - **Files:** `mockups/assets/logo-concepts/concept-1.svg` … `concept-5.svg` and `concept-1-mark.svg` … `concept-5-mark.svg` (new), `mockups/logo-concepts.html` (new), `mockups/styles.css`, `docs/open-questions.md`, `docs/changelog.md`
+
+## 2026-10-23 · Phase 4 · Hydration warning from browser extensions
+
+- **Changed:** added `suppressHydrationWarning` to `<body>` in `src/app/layout.tsx`, as `<html>` already has.
+- **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
+- **Files:** `src/app/layout.tsx`, `docs/changelog.md`
+
+## 2026-10-23 · Phase 4 · Step 5: photo uploads
+
+- **Changed:**
+  - **`src/lib/upload-rules.ts`:**
+    - reads the real file type from the first bytes (JPEG, PNG, WebP only);
+    - enforces the 10 MB limit, with the plain error messages from the requirements;
+    - allows only stored paths shaped `bucket/<uuid>/<uuid>.ext`, so no request can reach a file outside `uploads/`.
+  - **`src/lib/storage.ts` (server-only):** `saveUpload()` needs the signed-in staff member, re-checks type and size, saves under a random name and never overwrites. Also `readUpload()` and `deleteUpload()`.
+  - **`/media/[...path]`:** serves a photo only if its row is visible to the person asking, using row-level security with their role. Public photos are cached for an hour; staff previews of drafts are `no-store`. Sent with `nosniff`.
+  - **Also:** `suppressHydrationWarning` on `<body>`, because Grammarly adds attributes there before React loads, which showed a dev-only hydration warning.
+  - **Requirements_Admin 6.2:** the server refuses HEIC; the browser converts it.
+- **Why:** Phase 4 Foundation, step 5 of the approved plan.
+- **Checked:**
+  - **Rules (21 checks, all pass):** real JPEG/PNG/WebP accepted; a text file renamed `.jpg`, an SVG with a script, an HTML page, GIF, HEIC and empty files refused; 10 MB accepted, 10 MB + 1 byte refused; 8 path-traversal and wrong-format paths refused.
+  - **`/media` over HTTP:** 13 of 14 checks passed as written:
+    - the public gets an approved frame's photo (correct type, cacheable, nosniff), but 404 for a draft's photo, a hidden gallery photo, a file with no row and a row with no file;
+    - a throwaway staff account sees the draft and hidden photos, uncached.
+  - The 14th failed only because the test expected 404 and Next.js answered 400 for an encoded `..%2F`. Re-checked by hand: four encoded traversal attempts were all refused (400/404) with no secrets in the body.
+  - The test account and test files were removed. Lint and types are clean.
+  - **Not yet tested:** `saveUpload()` itself. It runs end to end once the frame form exists (sprint 5.3).
+- **Files:** `src/lib/upload-rules.ts`, `src/lib/storage.ts`, `src/app/media/[...path]/route.ts`, `src/app/layout.tsx`, `docs/requirements/Requirements_Admin.md`, `CLAUDE.md`, `docs/changelog.md`
 
 ## 2026-10-23 · Phase 4 · Step 4: staff login
 

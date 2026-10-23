@@ -120,8 +120,9 @@ Sunglasses use the same form with `category = sunglasses` (and the lens type and
 
 - **On the phone:** "Take photo" opens the camera (`accept="image/*"`, `capture="environment"`); "Choose from gallery" opens the photo picker.
 - **Before upload:** the browser resizes each photo to at most 1600 px on the long side and converts it to WebP (or JPEG), so uploads are fast on mobile data. A preview with a progress bar shows for each.
-- **Checks:** JPEG, PNG, WebP or HEIC only; at most 10 MB before resizing. The server checks the real file type (not just the extension) and the size again. Errors: "This file isn't a photo. Use JPG, PNG or WebP." and "This photo is too large (max 10 MB)."
+- **Checks:** the picker accepts JPEG, PNG, WebP or HEIC, at most 10 MB before resizing; the browser converts HEIC while resizing. The server accepts only JPEG, PNG and WebP (anything else, including SVG, GIF and HEIC, is refused), reads the real type from the file's first bytes rather than its name, and checks the 10 MB limit again (`src/lib/upload-rules.ts`). Errors: "This file isn't a photo. Use JPG, PNG or WebP." and "This photo is too large (max 10 MB)."
 - **Storage:** the `frames` uploads folder via `src/lib/storage.ts`, path `frames/<frame id>/<random>.webp`. Uploads only for signed-in staff; files are public only once the frame is approved and visible.
+- **Serving:** photos are shown through `/media/<path>`. It serves a file only if its database row is visible to the person asking (the lookup runs with their role), so drafts and hidden photos are 404 for the public and visible to signed-in staff. Public photos are cached for an hour; staff previews aren't cached. Any other path is a 404.
 - **Guidance on screen:** "Plain light background, whole frame in view, no reflections. Product-only photos unless the person gave written permission."
 - **Removing** a photo asks "Remove this photo?" and can be undone until saving.
 

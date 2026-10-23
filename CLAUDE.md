@@ -106,7 +106,7 @@ Page conventions:
 | Animation | Framer Motion, fades and slides only |
 | Database | PostgreSQL 17, running locally on the developer's laptop (database `vslm_dev`); Drizzle ORM and migrations |
 | Auth | Better Auth (email + password) for the `/admin` area, with two roles: `admin` and `staff`. No public sign-up |
-| Files | Local `uploads/` folder (frames, lenses, camps, gallery), only through `src/lib/storage.ts`, so it can move to cloud storage later |
+| Files | Local `uploads/` folder (frames, lenses, camps, gallery), only through `src/lib/storage.ts`, so it can move to cloud storage later. Rules (real type from the first bytes, JPEG/PNG/WebP, 10 MB) in `src/lib/upload-rules.ts`. Photos are served by `/media/<path>`, only when their database row is visible to the person asking |
 | Forms | Server actions + Zod validation |
 | Messaging | WhatsApp `wa.me` links. They work with a normal WhatsApp number, so no WhatsApp Business account is needed for launch. No WhatsApp API in the MVP. |
 | Favourites | Saved on the device only (`localStorage`), no login |
