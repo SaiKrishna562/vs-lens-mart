@@ -20,7 +20,7 @@ const roles = [
 
 export default function Home() {
   return (
-    <main id="main" className="flex-1">
+    <>
       <section className="bg-navy px-4 py-16 text-white sm:px-12">
         <p className="text-sm font-semibold uppercase tracking-[0.08em] text-brass">Trust / Care / Innovation</p>
         <h1 className="mt-3 text-4xl text-white sm:text-6xl">
@@ -66,6 +66,6 @@ export default function Home() {
           </button>
         </div>
       </section>
-    </main>
+    </>
   );
 }

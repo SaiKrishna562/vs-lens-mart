@@ -8,6 +8,7 @@
    so light and dark mode swap in one place.
    ========================================================================== */
 @import "tailwindcss";
+@import "../styles/site-chrome.css"; /* header, menus, sticky bar, footer (sprint 5.1) */
 
 /* Dark mode follows data-theme on <html> (set before paint in layout.tsx),
    or the device setting when the visitor hasn't chosen. */
@@ -58,6 +59,46 @@
   --shadow-panel: 0 18px 40px -12px rgb(13 27 42 / 0.35), 0 2px 6px rgb(13 27 42 / 0.12);
   --shadow-bar: 0 -6px 20px -6px rgb(13 27 42 / 0.30);
 
+  --ph-stripe: var(--navy-08); /* photo placeholder stripes */
+  --todo-ink: var(--ink); /* DUMMY tag text (development only) */
+
+  /* Type (mockups/styles.css section 1). The font names come from next/font in layout.tsx */
+  --font-display: var(--font-jakarta), "Inter", system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.5rem;
+  --fs-xl: 2.25rem;
+  --fs-2xl: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  --lh-tight: 1.1;
+  --lh-body: 1.6;
+  --track-caps: 0.08em;
+
+  /* Spacing (4 px base) and layout */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --max-w: 90rem;
+  --r-pill: 999px;
+  --r-md: 12px;
+  --r-sm: 8px;
+
+  /* Controls and sticky heights */
+  --btn-h: 48px;
+  --tap: 44px;
+  --utility-h: 40px;
+  --nav-h: 80px;
+  --stickybar-h: 64px;
+
   /* Motion: menus ≤300 ms, page/section fades 300–500 ms */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-menu: 220ms;
@@ -85,6 +126,8 @@
   --pressed-ink: var(--navy);
   --focus: var(--gold);
   --navy-edge: var(--white-12);
+  --ph-stripe: var(--white-08);
+  --todo-ink: var(--cream);
   --shadow-panel: 0 18px 40px -12px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
 }
 @media (prefers-color-scheme: dark) {
@@ -103,6 +146,8 @@
     --pressed-ink: var(--navy);
     --focus: var(--gold);
     --navy-edge: var(--white-12);
+    --ph-stripe: var(--white-08);
+    --todo-ink: var(--cream);
     --shadow-panel: 0 18px 40px -12px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
   }
 }
@@ -139,7 +184,7 @@
   --color-focus: var(--focus);
 
   /* Fonts come from next/font in layout.tsx */
-  --font-display: var(--font-jakarta), "Inter", system-ui, sans-serif;
+  --font-display: var(--font-jakarta), "Inter", system-ui, sans-serif; /* same value as the :root token */
   --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --radius-sm: 8px;
