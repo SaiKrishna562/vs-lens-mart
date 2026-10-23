@@ -52,6 +52,12 @@ async function Dashboard() {
         </div>
       </dl>
       <p className="mt-6 text-sm text-muted">The full dashboard comes in sprint 5.3.</p>
+      {process.env.NODE_ENV !== "production" && (
+        <p className="mt-2 text-sm">
+          <a href="/admin/upload-test" className="font-semibold text-heading underline">Try photo uploads</a>
+          <span className="text-muted"> (temporary test page, laptop only)</span>
+        </p>
+      )}
       <form action={signOut} className="mt-6">
         <button type="submit" className="inline-flex h-12 items-center rounded-pill border-2 border-btn-ink px-6 font-semibold text-btn-ink">
           Sign out

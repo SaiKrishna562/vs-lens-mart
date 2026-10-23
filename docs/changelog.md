@@ -24,6 +24,24 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-23 · Phase 4 · Temporary upload test page
+
+- **Changed:**
+  - Added `/admin/upload-test`, a temporary page:
+    - signed-in staff only, and a 404 when the app runs in production;
+    - any file can be uploaded; it's saved through `saveUpload()` as a **hidden** gallery photo and shown back through `/media/`;
+    - an admin can delete each one (row and file).
+  - Linked from the `/admin` placeholder on the laptop only.
+  - `next.config.ts`: server-action and proxy body limits raised from 1 MB to 12 MB, so a 10 MB photo reaches our own check.
+- **Why:** the developer wanted to try uploads before the frame form exists. It also tests `saveUpload()` end to end, which step 5 couldn't. Remove the `src/app/admin/upload-test/` folder in sprint 5.3.
+- **Checked** (throwaway admin account, in the browser):
+  - a real PNG is saved and displays;
+  - a text file named `fake.jpg` gets "This file isn't a photo. Use JPG, PNG or WebP.";
+  - an 11 MB file gets "This photo is too large (max 10 MB).";
+  - Delete removes the row and the file (`/media` then returns 404).
+  - Test account and files removed afterwards (0 files in `uploads/`). Lint and types are clean.
+- **Files:** `src/app/admin/upload-test/{page.tsx,actions.ts,upload-form.tsx,constants.ts}`, `src/app/admin/page.tsx`, `next.config.ts`, `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Step 5: photo uploads
 
 - **Changed:**
