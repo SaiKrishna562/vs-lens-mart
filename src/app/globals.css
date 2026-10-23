@@ -99,6 +99,22 @@
   --nav-h: 80px;
   --stickybar-h: 64px;
 
+  /* Main menu bar: white in light mode (developer idea 2026-10-23, for the client to
+     confirm; the approved mockup is navy). Dark mode keeps the navy bar. */
+  --nav-bg: var(--white);
+  --nav-ink: var(--navy);
+  --nav-ink-soft: var(--ink-72);
+  --nav-line: var(--ink-12);
+  --nav-hover: var(--navy-08);
+  --nav-current: var(--navy);     /* gold text is too faint on white; the gold underline stays */
+  --nav-accent: var(--navy-2);    /* WhatsApp icon, "EST. 1999", sun icon */
+  --nav-focus: var(--navy-2);
+  --nav-search-bg: var(--bg);
+  --nav-field-bg: var(--white);
+  --nav-field-line: var(--ink-12);
+  --nav-field-ink: var(--ink);
+  --nav-field-hint: var(--ink-72);
+
   /* Motion: menus ≤300 ms, page/section fades 300–500 ms */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-menu: 220ms;
@@ -128,6 +144,19 @@
   --navy-edge: var(--white-12);
   --ph-stripe: var(--white-08);
   --todo-ink: var(--cream);
+  --nav-bg: var(--navy);
+  --nav-ink: var(--white);
+  --nav-ink-soft: var(--white-80);
+  --nav-line: var(--white-08);
+  --nav-hover: var(--white-08);
+  --nav-current: var(--gold);
+  --nav-accent: var(--gold);
+  --nav-focus: var(--gold);
+  --nav-search-bg: var(--navy-2);
+  --nav-field-bg: var(--navy);
+  --nav-field-line: var(--white-12);
+  --nav-field-ink: var(--white);
+  --nav-field-hint: var(--white-64);
   --shadow-panel: 0 18px 40px -12px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
 }
 @media (prefers-color-scheme: dark) {
@@ -148,6 +177,19 @@
     --navy-edge: var(--white-12);
     --ph-stripe: var(--white-08);
     --todo-ink: var(--cream);
+    --nav-bg: var(--navy);
+    --nav-ink: var(--white);
+    --nav-ink-soft: var(--white-80);
+    --nav-line: var(--white-08);
+    --nav-hover: var(--white-08);
+    --nav-current: var(--gold);
+    --nav-accent: var(--gold);
+    --nav-focus: var(--gold);
+    --nav-search-bg: var(--navy-2);
+    --nav-field-bg: var(--navy);
+    --nav-field-line: var(--white-12);
+    --nav-field-ink: var(--white);
+    --nav-field-hint: var(--white-64);
     --shadow-panel: 0 18px 40px -12px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.35);
   }
 }

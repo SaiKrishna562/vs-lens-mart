@@ -9,6 +9,7 @@ Everything still open here has a placeholder in `docs/dummy-data.md`, so work ca
 | Question | Status | Notes |
 |---|---|---|
 | Customer enquiry email address | Pending | Not covered by the form. |
+| White menu bar in light mode? | **To confirm** | Developer proposal 2026-10-23: the main menu bar is white with navy text in light mode (navy in dark mode, utility strip stays navy). The client approved a navy bar on 2026-10-21. Show both and ask. |
 | Shop, staff, frame and eye camp photos | Pending | Client will photograph and upload frames (Q32, Q33). Who provides shop/staff photos is blank (Q144); hero photo or video "Not sure" (Q11). |
 | Founding story and founder details (1999) | Pending | Not covered by the form. |
 | "Vision of 25 years" vs 27 years (or "Since 1999") | **Partly answered** | "Since 1999" prominent: Yes (Q12). Highlight the 25/27 years: "Not sure" (Q13). Keep computing years in code. |

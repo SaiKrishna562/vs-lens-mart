@@ -166,7 +166,8 @@ From the client's form (Q20, Q27, Q34, Q37, Q39). It applies to sunglasses too (
 - Every page has a light and a dark mode. A sun/moon toggle in the header switches them.
 - It follows the device setting until the visitor chooses. The choice is saved on the device (`localStorage` `vslm-theme`) and applied in `<head>` before the page draws.
 - Components use colour roles (`--bg`, `--bg-alt`, `--surface`, `--text`, `--text-muted`, `--line`, `--heading`, `--accent-ink`, `--btn-ink`, `--pressed-bg` / `--pressed-ink`), never raw light colours, so both modes come from one stylesheet. See `mockups/styles.css` section 1.
-- Navy blocks (hero, nav, footer, quote band) and gold buttons look the same in both modes.
+- Navy blocks (hero, utility strip, footer, quote band) and gold buttons look the same in both modes.
+- **Main menu bar:** white with navy text in light mode, navy in dark mode (developer idea 2026-10-23, **not yet confirmed by the client**; the signed-off mockup is navy). It uses the `--nav-*` colour roles in `globals.css`. To go back, delete the marked block in `src/styles/site-chrome.css`.
 
 **Hero pattern:**
 - "Trust / Care / Innovation" eyebrow.

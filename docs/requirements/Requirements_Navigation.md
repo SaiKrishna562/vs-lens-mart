@@ -12,7 +12,7 @@ The navigation sits on every page. It must let customers:
 - find frames, sunglasses and lenses in one or two clicks;
 - book an eye test or contact the shop on WhatsApp from anywhere on the site.
 
-It has to look like the approved homepage design: a dark navy bar, gold accents and a gold underline on the active item. On the home page only, the bar is semi-opaque navy over the hero photo (`Requirements_HomePage.md` 3.1). There is no online checkout or customer login, so there is no cart or account icon. Favourites are saved on the device and shown as a heart on frame cards, not in the navigation.
+It has to look like the approved homepage design: a dark navy bar, gold accents and a gold underline on the active item. **Proposed change (developer, 2026-10-23, client to confirm):** in light mode the main menu bar is white with navy text, keeping the gold underline (the current item's text is navy, because gold text on white is too faint to read). The utility strip and dark mode stay navy. If the client prefers the approved navy bar, delete the marked block in `src/styles/site-chrome.css`. On the home page only, the bar is semi-opaque navy over the hero photo (`Requirements_HomePage.md` 3.1). There is no online checkout or customer login, so there is no cart or account icon. Favourites are saved on the device and shown as a heart on frame cards, not in the navigation.
 
 ## 2. Structure overview
 

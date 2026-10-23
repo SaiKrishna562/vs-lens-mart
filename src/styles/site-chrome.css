@@ -196,6 +196,24 @@
 .icon-btn--theme[aria-pressed="true"] .theme-icon--moon { display: none; }
 .burger { display: none; }
 
+/* app: white main menu bar in light mode (developer idea 2026-10-23, for the client
+   to confirm; the signed-off mockup is navy). Uses the --nav-* roles from
+   globals.css, so dark mode stays navy. To go back to navy, delete this block. */
+.nav { background: var(--nav-bg); color: var(--nav-ink); border-bottom-color: var(--nav-line); }
+.nav .brand__name { color: var(--nav-ink); }
+.nav .brand__est { color: var(--nav-accent); }
+.nav .menu__link { color: var(--nav-ink-soft); }
+.nav .menu__link:hover, .nav .menu__link[aria-expanded="true"] { color: var(--nav-ink); }
+.nav .menu__link[aria-current="page"] { color: var(--nav-current); }
+.nav .icon-btn { color: var(--nav-ink); }
+.nav .icon-btn:hover { background: var(--nav-hover); color: var(--nav-ink); }
+.nav .icon-btn--wa, .nav .icon-btn--theme[aria-pressed="true"] .theme-icon--sun { color: var(--nav-accent); }
+.nav :focus-visible { outline-color: var(--nav-focus); }
+.nav .search { background: var(--nav-search-bg); border-top-color: var(--nav-line); }
+.nav .search__field { background: var(--nav-field-bg); border-color: var(--nav-field-line); color: var(--nav-field-ink); }
+.nav .search__field input { color: var(--nav-field-ink); }
+.nav .search__field input::placeholder { color: var(--nav-field-hint); }
+
 /* 6.3 Mega panels (desktop) */
 .mega {
   position: absolute; left: 0; right: 0; top: 100%;

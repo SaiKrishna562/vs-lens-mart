@@ -24,6 +24,20 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-23 · Sprint 5.1 · White menu bar in light mode (proposal)
+
+- **Changed:**
+  - In light mode the main menu bar is white with navy text and logo name. The gold underline stays, but the current item's text is navy and the WhatsApp and sun icons are navy-2 (gold on white is too faint to read).
+  - The search panel is cream with a white field.
+  - Unchanged: dark mode stays navy, and so do the utility strip, phone menu and footer.
+  - Done with new `--nav-*` colour roles in `globals.css` and one marked override block in `src/styles/site-chrome.css`, so it's a one-block revert.
+- **Why:** the developer's idea, to show the client. The approved mockup is navy, so it's listed in `docs/open-questions.md` and marked "client to confirm" in `CLAUDE.md` and `Requirements_Navigation.md`.
+- **Checked:**
+  - In the browser: light mode at 1440 px (white bar, navy text, gold underline) and 375 px (white bar, navy menu icon, no overflow); dark mode still navy.
+  - The phone menu header and footer stay white-on-navy. No console errors.
+  - `npm test`: 69 passed.
+- **Files:** `src/app/globals.css`, `src/styles/site-chrome.css`, `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/open-questions.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Sprint 5.1 · Layout: utility bar, navigation, mega menus, phone menu, sticky bar, footer
 
 - **Changed:**
