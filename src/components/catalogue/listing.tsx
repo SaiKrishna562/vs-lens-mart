@@ -13,6 +13,7 @@ import { PickerButton } from "@/components/site/branch-picker";
 import { Icon } from "@/components/site/icons";
 import type { CatalogueItem, Kind } from "@/lib/queries/catalogue";
 import { slugify } from "@/lib/site-config";
+import { useCardsOnScroll } from "./cards-on-scroll";
 import { FrameCard } from "./frame-card";
 import { useFavourites } from "./favourites";
 
@@ -164,6 +165,8 @@ function ListingView({ kind, items, title, intro, search: url }: Props & { searc
   list.sort((a, b) => Number(a.sold) - Number(b.sold) || by(a, b)); // sold out always last
   const total = list.length;
   const visible = list.slice(0, n);
+  const grid = useRef<HTMLDivElement>(null);
+  useCardsOnScroll(grid, `${search}|${visible.length}`);
 
   const chips = groups.flatMap((g) => state.sel[g.key].map((v) => ({ key: g.key as Key | "stock", v, text: g.label ? g.label(v) : v })));
   if (state.stock) chips.push({ key: "stock", v: "", text: "In stock only" });
@@ -295,7 +298,7 @@ function ListingView({ kind, items, title, intro, search: url }: Props & { searc
 
           {total ? (
             <>
-              <div className="frames-row">
+              <div className="frames-row" ref={grid}>
                 {visible.map((f, i) => <FrameCard key={f.code} f={f} saved={favs.includes(f.code)} onToggle={toggle} eager={i < 4} />)}
               </div>
               <div className="results-foot">

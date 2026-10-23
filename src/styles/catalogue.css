@@ -254,5 +254,16 @@
   @media (prefers-reduced-motion: no-preference) {
     .listing .fcard { animation: card-in 360ms var(--ease-out) both; }
     @keyframes card-in { from { opacity: 0; transform: translateY(8px); } }
+    /* ...and cards below the screen fade in as they scroll into view (cards-on-scroll.ts) */
+    .listing .fcard.is-armed { animation: none; opacity: 0; transform: translateY(16px);
+      transition: opacity 360ms var(--ease-out), transform 360ms var(--ease-out); }
+    .listing .fcard.is-armed.is-in { opacity: 1; transform: none; }
+  }
+  /* A slight zoom on the card's photo while the mouse is over it (as the gallery's click-to-zoom).
+     Mouse only, never touch screens or reduced motion; the photo stays inside its box. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .fcard__media .fphoto, .fcard__media > .icon { transition: transform var(--dur-section) var(--ease-out); }
+    .fcard:hover .fcard__media .fphoto, .fcard:hover .fcard__media > .icon,
+    .fcard__media:focus-visible .fphoto, .fcard__media:focus-visible > .icon { transform: scale(1.05); }
   }
 }

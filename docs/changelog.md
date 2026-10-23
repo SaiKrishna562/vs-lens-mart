@@ -4,6 +4,14 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.3 · Frame cards: hover zoom and fade-in on scroll
+
+- **Changed:**
+  - **Hover zoom:** a frame card's photo (or frame drawing) zooms in 5% while the mouse is over the card or the photo link has keyboard focus. It's for mouse devices only, never touch screens or reduced motion, and the photo stays inside its rounded box.
+  - **Fade-in on scroll:** on `/frames` and `/sunglasses`, cards below the screen fade in and rise 16 px as they scroll into view, a row at a time, 80 ms apart (at most 4 steps). Cards on screen when they appear keep the existing load fade. Cards added by "Load more" or a filter change follow the same rule.
+- **Why:** the developer's request, to help customers focus on the frames. The zoom is a scale, not a fade or slide, but it's the same kind of zoom as the approved gallery's click-to-zoom. The cards are hidden only by the script, and a card that isn't laid out yet (still behind the loading placeholder) counts as below the screen, so no card is skipped or left hidden.
+- **Files:** `src/components/catalogue/cards-on-scroll.ts` (new), `src/components/catalogue/listing.tsx`, `src/styles/catalogue.css`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.3 · Scroll fade on Similar frames and the help band
 
 - **Changed:** a new `<Reveal>` component (`src/components/site/reveal.tsx`) gives the mockup's fade and slide up on scroll (section 7.1): 16 px over the section duration (420 ms), once, when a block is 10% into view. It's used on two blocks:
