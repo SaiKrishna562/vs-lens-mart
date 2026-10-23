@@ -4,6 +4,30 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-23 · Phase 4 · Step 4: staff login
+
+- **Changed:**
+  - **Better Auth server** (`src/lib/auth.ts`): connects as `vslm_auth`. Endpoints at `src/app/api/auth/[...all]/route.ts`. Sign-up is off; 12-hour sessions; 5 sign-in attempts a minute.
+  - **Login page** `/admin/login`: a card in the design tokens, with plain error messages (wrong details, too many attempts, account switched off). The return path only allows `/admin…`, so it can't send people to another site.
+  - **Gate** (`src/proxy.ts`): no session cookie means a redirect to login. **Real check** (`src/lib/session.ts`): `requireStaff()` against the database, refusing banned or role-less accounts.
+  - **Temporary `/admin`:** name, role and branch, two counts read with the signed-in role, and Sign out (a server action). The `/admin` area is noindex, and `robots.ts` disallows `/admin` and `/api/`.
+  - **`npm run staff:create`:** creates the first admin, or resets a password and signs that person out everywhere.
+  - **Other:** a shared `scripts/prompt.ts`; `.env.example` lists the variable names.
+- **Why:** Phase 4 Foundation, step 4 of the approved plan. Admin sign-in is half of the Foundation "done when".
+- **Checked:**
+  - Throwaway test accounts (staff, admin, a banned one), with random passwords that were never displayed; 14 HTTP checks, all pass:
+    - signed out → redirect to login;
+    - public sign-up refused (400);
+    - staff and admin sign in, see their own name and role, and read 4 drafts with their role;
+    - after sign-out the old cookie shows nothing;
+    - a forged cookie passes the proxy but gets no dashboard;
+    - the banned account gets 403;
+    - the 6th attempt in a minute gets 429.
+  - In the browser at 375 px: wrong password shows the message; correct password opens the dashboard; Sign out returns to login and Back doesn't reveal the dashboard; light and dark mode; no overflow.
+  - Test accounts deleted afterwards (0 users, 0 sessions). Lint, types and build clean.
+  - Fixed: the branch showed as a lowercase slug, and the `/admin` tab title missed "staff area" (a layout's title template doesn't apply to its own page).
+- **Files:** `src/lib/auth.ts`, `src/lib/auth-client.ts`, `src/lib/session.ts`, `src/proxy.ts`, `src/app/api/auth/[...all]/route.ts`, `src/app/admin/layout.tsx`, `src/app/admin/page.tsx`, `src/app/admin/actions.ts`, `src/app/admin/login/page.tsx`, `src/app/admin/login/login-form.tsx`, `src/app/robots.ts`, `scripts/staff-create.ts`, `scripts/prompt.ts`, `scripts/db-setup.ts`, `.env.example`, `package.json`, `CLAUDE.md`, `docs/requirements/Requirements_Admin.md`, `docs/changelog.md`
+
 ## 2026-10-22 · Phase 4 · Steps 1 and 3: local PostgreSQL, schema and security
 
 - **Changed:**

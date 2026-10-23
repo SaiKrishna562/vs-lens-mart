@@ -53,7 +53,7 @@ Two roles from the start (`CLAUDE.md`). Approval needs one person to upload and 
 ## 3. Sign-in and accounts
 
 - **Sign in:** `/admin/login` with email and password (Better Auth). The page has no link from the public site, and `/admin` is `noindex` and blocked in `robots.txt`.
-- **Accounts:** only an admin creates them (name, email, role, home branch). There's no public sign-up. New staff set their password from an invite link.
+- **Accounts:** only an admin creates them (name, email, role, home branch). There's no public sign-up. Until the Staff accounts page exists (sprint 5.3), accounts are created on the laptop with `npm run staff:create`, which also sets a new password for an existing account. Invite links need email sending, which isn't in the MVP.
 - **Leaving staff** (Q142 blank): an admin **disables** the account; it can't sign in, and the content it added stays.
 - **Forgotten password:** an admin sets a new temporary password (no email sending in the MVP).
 - **Sessions:** signed out after 12 hours without use (`DUMMY` C22). "Sign out" is always in the menu.

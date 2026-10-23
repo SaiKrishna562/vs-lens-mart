@@ -15,9 +15,10 @@ Commands:
 - `npm run db:generate`: after editing `src/db/schema.ts`, creates a migration in `db/migrations/`
 - `npm run db:migrate`: app tables, then Better Auth's login tables, then `db/security.sql` (safe to re-run)
 - `npm run db:seed`: resets the app tables to the DUMMY development data (login accounts are kept)
+- `npm run staff:create`: creates a staff-area account (admin or staff), or sets a new password for an existing one. You type the details; the password is hidden and stored only as a hash
 - Test commands are added in Phase 4 step 6. The scripts run on plain Node 24 (TypeScript type stripping), so they use relative `.ts` imports, not `@/` aliases.
 
-Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
+Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Staff area: `src/proxy.ts` only checks that a session cookie exists; every admin page and server action must call `requireStaff()` (`src/lib/session.ts`) and pass its role to `withRole()`. Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
 
 Don't invent client facts (prices, brands, founder story, email, hours, phone numbers). For anything the client hasn't confirmed, use the placeholder from `docs/dummy-data.md` and mark it `DUMMY`; if it isn't there, add it there first. Dummy values never go live. Check `docs/open-questions.md` for what's still pending.
 

@@ -10,42 +10,12 @@
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import pg from "pg";
+import { askHidden } from "./prompt.ts";
 
 const HOST = process.env.PGHOST ?? "localhost";
 const PORT = Number(process.env.PGPORT ?? 5432);
 const SUPERUSER = process.env.PGUSER ?? "postgres";
 const DB = "vslm_dev";
-
-/* Reads a password without echoing it to the terminal. */
-function askHidden(question: string): Promise<string> {
-  return new Promise((resolve) => {
-    const { stdin, stdout } = process;
-    stdout.write(question);
-    if (!stdin.isTTY) {
-      // Piped input (not used normally): read one line
-      let data = "";
-      stdin.setEncoding("utf8");
-      stdin.on("data", (c) => { data += c; if (data.includes("\n")) { stdin.pause(); resolve(data.split(/\r?\n/)[0]); } });
-      return;
-    }
-    let value = "";
-    stdin.setRawMode(true);
-    stdin.resume();
-    stdin.setEncoding("utf8");
-    const onData = (ch: string) => {
-      for (const c of ch) {
-        if (c === "\r" || c === "\n") {
-          stdin.setRawMode(false); stdin.pause(); stdin.off("data", onData); stdout.write("\n");
-          return resolve(value);
-        }
-        if (c === "\u0003") process.exit(130); // Ctrl+C
-        if (c === "\u007f" || c === "\b") value = value.slice(0, -1);
-        else value += c;
-      }
-    };
-    stdin.on("data", onData);
-  });
-}
 
 const secret = () => randomBytes(24).toString("base64url");
 const ident = (s: string) => `"${s.replace(/"/g, '""')}"`;

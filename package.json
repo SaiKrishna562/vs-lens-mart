@@ -12,7 +12,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/db-migrate.ts",
     "db:seed": "node scripts/db-seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "staff:create": "node scripts/staff-create.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.12",
