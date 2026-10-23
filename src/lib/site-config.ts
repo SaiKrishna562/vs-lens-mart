@@ -20,6 +20,8 @@ export const site = {
   name: "VS Lens Mart",
   since: 1999, // compute "years" from this; never hard-code a year count
   tagline: "Welcome to the Optical Family",
+  /** DUMMY D4: no domain yet (Q156). Used in share links and search-engine data. */
+  url: "https://vslensmart.example",
 } as const;
 
 export const branches: readonly BranchSeed[] = [
@@ -51,6 +53,7 @@ export const yearsSince = (now = new Date()) => now.getFullYear() - site.since;
    fails while any is still listed; remove an entry once the client's real value is in. */
 export const DUMMY = {
   D2: "Patelguda phone / WhatsApp number",
+  D4: "Domain (share links and search-engine data use vslensmart.example)",
   D5: "YouTube, Facebook and Instagram links",
   D8: "Logo (placeholder until the client's new logo arrives)",
   C7: "Price tier names and boundaries in the menus",

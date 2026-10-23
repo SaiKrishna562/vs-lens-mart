@@ -21,14 +21,21 @@ const P: Record<string, ReactNode> = {
   moon: <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
   ig: <><rect x="4" y="4" width="16" height="16" rx="4.5" /><circle cx="12" cy="12" r="3.6" /><circle cx="16.8" cy="7.2" r="0.6" /></>,
   fb: <path d="M14 8.5h2.5V5H14a3.5 3.5 0 0 0-3.5 3.5V11H8v3.5h2.5V21H14v-6.5h2.5L17 11h-3V9a.5.5 0 0 1 .5-.5z" />,
+  heart: <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z" />,
+  glasses: <><circle cx="11" cy="11" r="8" /><circle cx="37" cy="11" r="8" /><path d="M19 10c2.5-1.6 7.5-1.6 10 0M3 9L1 5M45 9l2-4" /></>,
+  lens: <><circle cx="12" cy="12" r="8.5" /><path d="M8 9.5a5 5 0 0 1 4-2" /></>,
+  adjust: <><path d="M4 7h10M18 7h2M4 17h2M10 17h10" /><circle cx="16" cy="7" r="2" /><circle cx="8" cy="17" r="2" /></>,
+  share: <><circle cx="18" cy="5.5" r="2.5" /><circle cx="6" cy="12" r="2.5" /><circle cx="18" cy="18.5" r="2.5" /><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1" /></>,
   yt: <><rect x="3" y="6" width="18" height="12" rx="3.5" /><path d="M10.5 9.5v5l4.2-2.5z" /></>,
 };
 
 export type IconName = keyof typeof P;
+// The frame drawing is wide; every other icon is drawn on a 24 x 24 grid
+const VIEWBOX: Partial<Record<IconName, string>> = { glasses: "0 0 48 20" };
 
 export function Icon({ name, className = "icon" }: { name: IconName; className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <svg className={className} viewBox={VIEWBOX[name] ?? "0 0 24 24"} aria-hidden="true" focusable="false">
       {P[name]}
     </svg>
   );

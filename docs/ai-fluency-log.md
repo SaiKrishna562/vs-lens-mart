@@ -449,6 +449,25 @@ Claude built the shared layout from the signed-off mockups. To match the approve
 
 ---
 
+## Tests That Caught What the Browser Check Missed — Sprint 5.3 part C, 2026-10-24
+
+### Delegation
+
+Claude built the public Frames, Sunglasses and frame detail pages from the signed-off mockups, then wrote tests at 360, 768 and 1440 px.
+
+### Discernment
+
+- **A claim that wasn't true in production:** Claude had written in the code and docs that a missing frame "answers with a real 404 status". That was true on the dev server, but the production server returns 200 (Next.js streams the not-found page, marked `noindex`). The test found it; the comment, requirements and changelog were corrected rather than the test loosened to hide it.
+- **A small bug no screenshot shows:** a ticked filter box snapped back for a moment, because it waited for the address bar to update. The filters now change at once, and the address follows.
+- **Not bugs, but noise:** links to pages not built yet were fetched in advance and logged 404s, so they now skip prefetching, as the menu's do. Other failures were the test clicking before the page had loaded its script.
+
+### Diligence
+
+- The full suite passed after the fixes: 113 passed, 16 skipped (tests meant for other screen sizes).
+- **Lesson:** checking in the dev browser isn't enough. The tests run against a production build, and that's where the 404 claim fell apart.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

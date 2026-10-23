@@ -83,7 +83,7 @@ async function main() {
     }
 
     // Frames and sunglasses: approved ones from the listings, plus the dashboard's drafts
-    const insertFrame = (f: MockFrame, st: string, note: string | null) => {
+    const insertFrame = (f: MockFrame, st: string, note: string | null, approvedAt: Date | null = null) => {
       const [lens, bridge, temple] = (f.size ?? "").split("-").map((n) => (n ? Number(n) : null));
       return q(
         `insert into frames (code, slug, brand_id, model, category, gender, colour_id, shape, material,
@@ -93,10 +93,12 @@ async function main() {
         [f.code, slug(f), brandId[f.brand], f.model, category(f.category), f.gender.toLowerCase(), colourId[f.colour],
           f.shape, f.material ?? null, lens, bridge, temple, f.lens ?? null, f.lensColour ?? null, f.price,
           f.sold ? "sold_out" : "in_stock", where(f.where), st, note,
-          st === "approved" ? "seed" : null, st === "approved" ? new Date() : null],
+          st === "approved" ? "seed" : null, st === "approved" ? approvedAt : null],
       );
     };
-    for (const f of frames) await insertFrame(f, "approved", null);
+    // The mockup lists are newest first, so each frame is dated a minute before the one above it ("Newest" sort)
+    const now = Date.now();
+    for (const [i, f] of frames.entries()) await insertFrame(f, "approved", null, new Date(now - i * 60_000));
     for (const d of DRAFTS) await insertFrame(d, status(d.status), d.note ?? null);
 
     // Eye camps (past ones carry a people count)

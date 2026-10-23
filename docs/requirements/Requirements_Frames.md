@@ -173,3 +173,16 @@ Done when:
 | Frame photos (staff will take them, Q32) | Client | Frame drawing placeholders |
 | Filter by branch? (Q94 "select a branch before browsing": "Not sure") | Client | Not shown; "Available at" on each card |
 | Should sold-out frames disappear after a while? (Q23 "Not sure") | Client | They stay, labelled "Sold out" |
+
+## 8. Build notes (sprint 5.3 part C, 2026-10-24)
+
+Decisions made while building `/frames`, `/sunglasses` and the detail pages. They don't change what the customer sees.
+
+- **Filtering runs in the browser.** The page gets every live frame of its kind (about 300, Q18), and filters, counts, sort and "Load more" run on the device, so they're instant. The address bar still holds every filter, so shared links and the mega-menu links work.
+- **The pre-rendered page is the unfiltered list.** It's built from the database, so search engines and slow phones see real frames; the filters in the address apply as soon as the page has read it.
+- **Filter changes replace the address rather than adding history**, as in the mockup, so Back leaves the page instead of undoing filters one at a time.
+- **Swatch colours** are the product colours from the mockup (`listing.js`), not design tokens. A colour the list doesn't know shows grey.
+- **Photos are resized by Next.js** for cards and thumbnails, so a phone downloads small versions, not the 1600 px originals. The resized copies are kept for an hour at most, so a removed photo or a hidden frame stops showing within the hour.
+- **A missing frame shows the not-found page** ("This frame isn't available") marked `noindex`, so search engines drop it. The production server streams that page, so the status code is 200 rather than 404 (the same Next.js behaviour as in the staff area). Live frames are pre-rendered; a frame approved later renders on its first visit.
+- **Share links and search-engine data use the `DUMMY` domain D4** (`vslensmart.example`) until the client buys one (Q156). `npm run check:launch` lists it.
+- **The phone filter panel's title is white.** In the mockup it was navy on navy in light mode.

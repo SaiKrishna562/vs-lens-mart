@@ -4,6 +4,31 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.3 (part C) · Frames, Sunglasses and frame detail pages
+
+- **Changed:**
+  - `/frames` and `/sunglasses`, built from the approved mockups (`frames.html`, `sunglasses.html`, `listing.js`):
+    - the client's filters with counts (empty options disabled), OR within a filter and AND across;
+    - quick gender chips, active-filter chips and Clear all;
+    - sort (sold out always last), "Saved (n)" and "Load more" (24 at a time);
+    - the phone filter panel ("Show n frames", Esc closes it, focus stays inside);
+    - both empty states and the help band.
+    - Every filter is kept in the address, so the mega menu's links (`?for=kids`, `?tier=premium`, `?lens=polarized`, `?brand=…`) land filtered.
+  - The frame card (`frame-card.tsx`), reused on the home page in 5.2: photo or frame drawing, price, where it's available, Sold out, heart, and Enquire (branch picker with the frame code in the WhatsApp text).
+  - Favourites are saved on the device (`vslm-favourites`, as in the mockups); all hearts on a page stay in step.
+  - `/frames/[slug]` and `/sunglasses/[slug]` (from `frame-detail.html`):
+    - gallery with thumbnails, arrow keys, swipe and click-to-zoom;
+    - title block, Enquire on WhatsApp ("Ask about similar frames" when sold out), heart, Share on WhatsApp (the customer picks the contact), Book an eye test;
+    - details table, lens and branch notes (hours from the `branches` table), up to 4 similar frames;
+    - `Product` structured data, title "Brand Model · ₹price", Open Graph photo.
+    - Pre-rendered from the database. A draft, hidden, wrong-page or unknown frame shows "This frame isn't available", marked `noindex` (status 200 on the production server, because Next.js streams it).
+  - Data: `src/lib/queries/catalogue.ts` (approved, active rows only), cached in `src/lib/catalogue-data.ts` under the `catalogue` tag that every staff save already refreshes.
+  - CSS: mockup sections 7.1, 7.7, 8 and 9 ported to `src/styles/catalogue.css`, plus a short block for real photos. Five icons were added from the mockup sprite.
+  - `next.config.ts` resizes `/media` photos for cards (at most an hour's cache). `site.url` is the `DUMMY` D4 domain, now listed by `check:launch`.
+  - The seed now dates its frames newest first, so "Newest" matches the mockup order (the existing dev rows were re-dated in place).
+- **Why:** sprint 5.3's last part (`ROADMAP.md`): an approved frame now appears on the public site, and a sold-out frame shows "Sold out". The decisions made while building are in `Requirements_Frames.md` section 8. The mockup's phone filter panel had a navy title on navy in light mode; the live one is white.
+- **Files:** `src/app/(site)/frames/page.tsx`, `src/app/(site)/frames/[slug]/page.tsx`, `src/app/(site)/frames/[slug]/not-found.tsx`, `src/app/(site)/sunglasses/` (same three), `src/components/catalogue/` (`catalogue-page.tsx`, `listing.tsx`, `frame-card.tsx`, `frame-text.ts`, `frame-photo.tsx`, `favourites.ts`, `fav-button.tsx`, `gallery.tsx`, `frame-detail.tsx`), `src/lib/queries/catalogue.ts`, `src/lib/catalogue-data.ts`, `src/lib/site-config.ts`, `src/components/site/icons.tsx`, `src/styles/catalogue.css`, `src/app/globals.css`, `src/app/layout.tsx`, `next.config.ts`, `scripts/db-seed.ts`, `tests/catalogue.spec.ts`, `tests/catalogue-query.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_Frames.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Logo concepts: presentation boards
 
 - **Changed:** `mockups/logo-concepts.html` is now a presentation deck on navy. It has a cover with the five marks, one board per concept, and a side-by-side board. Each concept board has six panels: primary logo, construction lines, the logo on the website (browser tab, header, hero), a brand line, a shop sign and business card, and icons with the colour swatches. Concepts 1 and 4 have a metallic brass-to-gold rim. A new `concept-4-icon.svg` (the badge without its ring text) is used at icon sizes. Printing the page (Save as PDF, landscape) puts one board on each page.

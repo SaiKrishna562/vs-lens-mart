@@ -16,6 +16,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url), // DUMMY D4 until the domain is bought
   title: { default: `${site.name} | Opticians in Indresham and Patelguda`, template: `%s | ${site.name}` },
   description: `A family optical shop since ${site.since}. Frames, sunglasses, lenses and eye tests in Indresham and Patelguda.`,
 };

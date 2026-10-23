@@ -3,6 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  images: {
+    // Frame photos are optimised from /media (public photos only: the optimiser
+    // asks without a login). Kept for an hour at most, so a photo removed or a
+    // frame hidden stops showing soon (the optimiser cache can't be cleared).
+    localPatterns: [{ pathname: "/media/**", search: "" }],
+    minimumCacheTTL: 3600,
+  },
   experimental: {
     // Photo uploads go through server actions. Room for one 10 MB photo plus
     // form overhead, so src/lib/upload-rules.ts gives the "too large" message
