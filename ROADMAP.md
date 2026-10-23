@@ -39,7 +39,9 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 | Email alerts for bookings and enquiries | Waiting on the client's enquiry email address. |
 | Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. No "Try-on" button anywhere until it exists. |
 
-## 3. Before the sprints: Foundation (Phase 4)
+## 3. Before the sprints: Foundation (Phase 4), complete 2026-10-23
+
+Done: all of the scope below, proven by `npm test` (46 automated tests). The DigitalOcean deployment and the real dashboard are not part of it.
 
 | Scope | Done when | Effort |
 |---|---|---|

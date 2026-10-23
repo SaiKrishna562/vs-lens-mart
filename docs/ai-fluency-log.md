@@ -406,6 +406,30 @@ Claude wrote the PostgreSQL schema, the row-level security rules (`db/security.s
 
 ---
 
+## Automated Tests Found Two Real Holes — Phase 4, 2026-10-23
+
+### Delegation
+
+Claude turned the manual database, login and upload checks into a permanent Playwright suite (`npm test`, 46 tests), as the last step of Phase 4.
+
+### Discernment
+
+- **Sign-in limit bypass:** while designing the rate-limit test, Claude read how Better Auth works out a visitor's IP. It trusts `X-Forwarded-For`, which any browser can fake. A quick experiment proved it: 7 wrong passwords, each with a different fake IP, and none were blocked. Better Auth falls back to a single shared bucket when no IP is trusted, which fails safe, so trusting no header locally is the fix. A real proxy header gets configured at deployment.
+- **Back button after sign-out:** a browser test (not the earlier manual check on the dev server) showed the dashboard after signing out and pressing Back. Next.js keeps visited pages in memory for 5 minutes (`x-nextjs-stale-time: 300`). The page itself was already `no-store`, so the fix had to be a fresh page load on sign-out.
+- **Test mistakes:** four first-run failures were in the tests, not the app. Each was diagnosed before changing anything, so the app wasn't "fixed" to satisfy a wrong test. Example: a sign-out request without an `Origin` header was correctly refused by CSRF protection, which then got a test of its own.
+- **A test that couldn't fail:** after the Back-button fix, the test passed only because Back landed on a blank page. Claude changed it so Back lands on a real staff page, and confirmed the fix still held.
+
+### Diligence
+
+- Both holes were reproduced before the fix and re-tested after.
+- The full suite was re-run until it passed (46/46), and Claude checked that it left no accounts, rows or files behind.
+- **Lessons:**
+  - Read how a library decides who someone is before trusting its security feature.
+  - Test the production build, not only the dev server.
+  - When a test passes, ask whether it could have failed.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

@@ -13,7 +13,8 @@
     "db:migrate": "node scripts/db-migrate.ts",
     "db:seed": "node scripts/db-seed.ts",
     "db:studio": "drizzle-kit studio",
-    "staff:create": "node scripts/staff-create.ts"
+    "staff:create": "node scripts/staff-create.ts",
+    "test": "playwright test"
   },
   "dependencies": {
     "better-auth": "^1.7.12",

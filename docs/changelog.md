@@ -24,6 +24,30 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-23 · Phase 4 · Step 6: automated tests; Phase 4 complete
+
+- **Changed:**
+  - **`npm test`:**
+    - Playwright builds the app and runs its own production server on port 3100;
+    - global setup and teardown make and delete throwaway accounts with random passwords;
+    - one worker, with the rate-limit test last.
+  - **46 tests:**
+    - `db-security.spec.ts` (18): every table has forced row-level security; the website's user can't bypass it; public, staff and admin rules, in rolled-back transactions.
+    - `admin-auth.spec.ts` (9): redirects, noindex and robots, no sign-up, staff and admin sign-in and sign-out, a cross-site sign-out refused (CSRF), forged cookie, switched-off account, identical "wrong details" messages, the real limit of 5 a minute.
+    - `uploads.spec.ts` (9): file-type and size rules, traversal paths, `/media` visibility for the public and staff, the upload test page is a 404 in production.
+    - `ui.spec.ts` (3 × 3 widths): no overflow, fonts and colours, error message, sign-in and sign-out, Back after sign-out, no redirect to other sites.
+    - `rate-limit.spec.ts` (1).
+  - **Security fix 1, sign-in limit:** a browser could dodge it by sending a new fake `X-Forwarded-For` on every try (7 wrong passwords, no block). No IP header is trusted now unless `TRUSTED_IP_HEADER` is set at deployment. The test server's limit is raised with `E2E_SIGNIN_LIMIT` (tests only); the real limit of 5 has its own test.
+  - **Security fix 2, Back after sign-out:** the Back button showed the dashboard (name and counts) from Next.js's in-page memory. Sign out is now a button that loads the login page fresh, replacing the `signOut` server action (`src/app/admin/actions.ts` removed).
+  - `.env.example` documents `TRUSTED_IP_HEADER`; `tests/.auth/` is gitignored.
+  - Phase 4 is marked complete in `CLAUDE.md` and `ROADMAP.md`.
+- **Why:** Phase 4 step 6. Foundation is "done when" a public request can't read private data and the admin can sign in; both are now proven by tests that run on every change.
+- **Checked:**
+  - **Fixes:** both were reproduced before fixing and pass after: 7 spoofed-IP attempts now get 429 from the 6th; Back lands on the login page with no staff data.
+  - **Test mistakes fixed on the way:** React's `<!-- -->` text markers; Next.js's own `role="alert"` route announcer; a sign-out test without an `Origin` header (correctly refused by CSRF protection); and a Back test that landed on a blank page and would have passed without proving anything.
+  - **Result:** the full suite passes (46/46). Afterwards there are no test accounts, rows or files left. The 2 files in `uploads/` are the developer's own upload-test photos.
+- **Files:** `playwright.config.ts`, `tests/*.ts`, `src/lib/auth-options.ts`, `src/app/admin/sign-out-button.tsx`, `src/app/admin/page.tsx`, `src/app/admin/actions.ts` (removed), `package.json`, `.gitignore`, `.env.example`, `CLAUDE.md`, `ROADMAP.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Temporary upload test page
 
 - **Changed:**

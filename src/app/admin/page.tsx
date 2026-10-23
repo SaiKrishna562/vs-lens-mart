@@ -5,7 +5,7 @@ import { appointments, frames } from "@/db/schema";
 import { withRole } from "@/lib/db";
 import { branches as branchFacts } from "@/lib/site-config";
 import { requireStaff } from "@/lib/session";
-import { signOut } from "./actions";
+import { SignOutButton } from "./sign-out-button";
 
 // Absolute: the admin layout's title template only applies to pages below /admin
 export const metadata: Metadata = { title: { absolute: "Dashboard | VS Lens Mart staff area" } };
@@ -58,11 +58,9 @@ async function Dashboard() {
           <span className="text-muted"> (temporary test page, laptop only)</span>
         </p>
       )}
-      <form action={signOut} className="mt-6">
-        <button type="submit" className="inline-flex h-12 items-center rounded-pill border-2 border-btn-ink px-6 font-semibold text-btn-ink">
-          Sign out
-        </button>
-      </form>
+      <div className="mt-6">
+        <SignOutButton />
+      </div>
     </>
   );
 }
