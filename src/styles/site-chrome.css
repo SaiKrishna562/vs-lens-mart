@@ -504,3 +504,18 @@
 .crumbs li + li::before { content: "›"; margin-right: var(--s-2); color: var(--brass); }
 .section__eyebrow { color: var(--brass); margin-bottom: var(--s-2); }
 }
+
+/* Fade and slide up on scroll (mockup 7.1, 300–500 ms), set by <Reveal>.
+   Hidden only once the script has armed a block below the screen. */
+@layer components {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal.is-armed, .reveal--stagger.is-armed .fcard { opacity: 0; transform: translateY(16px);
+      transition: opacity var(--dur-section) var(--ease-out), transform var(--dur-section) var(--ease-out); }
+    .reveal.is-armed.is-in, .reveal--stagger.is-in .fcard { opacity: 1; transform: none; }
+    /* Cards follow the heading, 80 ms apart, at most 4 steps so it never feels slow */
+    .reveal--stagger .fcard:nth-child(1) { transition-delay: 80ms; }
+    .reveal--stagger .fcard:nth-child(2) { transition-delay: 160ms; }
+    .reveal--stagger .fcard:nth-child(3) { transition-delay: 240ms; }
+    .reveal--stagger .fcard:nth-child(n + 4) { transition-delay: 320ms; }
+  }
+}

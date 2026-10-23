@@ -4,6 +4,14 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.3 · Scroll fade on Similar frames and the help band
+
+- **Changed:** a new `<Reveal>` component (`src/components/site/reveal.tsx`) gives the mockup's fade and slide up on scroll (section 7.1): 16 px over the section duration (420 ms), once, when a block is 10% into view. It's used on two blocks:
+  - the frame detail page's "Similar frames", with the cards following 80 ms apart, at most 4 steps;
+  - the Frames and Sunglasses help band.
+- **Why:** the developer asked for scroll animation where it can't disturb the layout. It only changes opacity and position. Nothing is hidden without the script, for a block already on screen, or when the device asks for reduced motion. Image-sequence scroll animation from AI-generated video was discussed and not used: it's against the "fades and slides only" and "no generated people" rules, heavy on phones, and would show frames the shop doesn't stock. Home page sections get the same component in sprint 5.2.
+- **Files:** `src/components/site/reveal.tsx` (new), `src/styles/site-chrome.css`, `src/components/catalogue/frame-detail.tsx`, `src/components/catalogue/catalogue-page.tsx`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.3 (part C) · Frames, Sunglasses and frame detail pages
 
 - **Changed:**

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { PickerButton } from "@/components/site/branch-picker";
 import { Icon } from "@/components/site/icons";
+import { Reveal } from "@/components/site/reveal";
 import { getCatalogue } from "@/lib/catalogue-data";
 import type { Kind } from "@/lib/queries/catalogue";
 import { Listing, ListingUnfiltered } from "./listing";
@@ -40,7 +41,7 @@ export async function CataloguePage({ kind }: { kind: Kind }) {
       </div>
 
       <section className="help-band" aria-labelledby="help-title">
-        <div className="container help-band__inner">
+        <Reveal className="container help-band__inner">
           <div>
             <h2 id="help-title">{t.help}</h2>
             <p>{t.helpText}</p>
@@ -49,7 +50,7 @@ export async function CataloguePage({ kind }: { kind: Kind }) {
             <PickerButton kind="whatsapp" className="btn btn--primary"><Icon name="wa" className="icon icon--sm" />Ask on WhatsApp</PickerButton>
             <Link className="btn btn--outline" href={t.second.href} prefetch={false}>{t.second.label}</Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </>
   );

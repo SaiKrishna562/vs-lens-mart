@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PickerButton } from "@/components/site/branch-picker";
 import { Icon } from "@/components/site/icons";
+import { Reveal } from "@/components/site/reveal";
 import { rupees } from "@/components/site/menu-links";
 import { hoursLine } from "@/components/site/site-chrome";
 import { getCatalogue, getFrame } from "@/lib/catalogue-data";
@@ -141,7 +142,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
 
       {more.length > 0 && (
         <section className="section section--white" aria-labelledby="related-title">
-          <div className="container">
+          <Reveal className="container" stagger>
             <div className="section__head">
               <div>
                 <p className="caps section__eyebrow">You may also like</p>
@@ -150,7 +151,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
               <Link className="link-arrow" href={k.path}>View all {k.many} <Icon name="arrow" /></Link>
             </div>
             <CardRow items={more} />
-          </div>
+          </Reveal>
         </section>
       )}
     </>
