@@ -101,6 +101,7 @@
 .on-dark .dummy-tag, .drawer .dummy-tag, .picker .dummy-tag, .footer .dummy-tag { color: var(--white); background: var(--white-08); }
 .on-dark .mega .dummy-tag { color: var(--todo-ink); background: var(--gold-16); }
 
+/* ==========================================================================
    6. Component: site header (utility bar, main nav, mega menus,
       mobile accordion, sticky bottom bar). Shared by every page mockup.
    ========================================================================== */
@@ -460,6 +461,7 @@
 @media (min-width: 768px) {
   .drawer { padding-bottom: 0; }
 }
+
 
 /* Footer (mockup section 7) */
 .footer { background: var(--navy); color: var(--white-80); padding-block: var(--s-8) var(--s-6); font-size: var(--fs-sm); }
