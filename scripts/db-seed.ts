@@ -4,6 +4,7 @@
    - Frames, sunglasses, drafts, eye camps: the DUMMY data of the signed-off mockups
      (mockups/frames-data.js, mockups/camps-data.js, mockups/admin.js; docs/dummy-data.md C4, C5, C13, C14, C19, C22)
    - Testimonials: DUMMY C8
+   - Lenses: the lens catalogue of mockups/lenses.html (DUMMY C6 brands, C16 lenses)
    Everything except the branch facts is DUMMY and must never reach the live site.
    Runs as vslm_owner with app.role = admin (row-level security is forced even for the owner). */
 import { readFileSync } from "node:fs";
@@ -31,6 +32,12 @@ type MockFrame = {
 type MockCamp = { slug: string; title: string; date: string; start: string; end: string; place: string; with?: string; text: string; people?: number };
 const V = loadMockup("mockups/frames-data.js").VSLM as { ALL: MockFrame[] };
 const CAMPS = loadMockup("mockups/camps-data.js").VSLM_CAMPS as { CAMPS: MockCamp[]; OFFERED: string[] };
+// lenses.html keeps its DUMMY lens list inline: read its BRANDS and LENSES arrays as data
+const lensesHtml = readFileSync("mockups/lenses.html", "utf8");
+const inlineArray = (name: string) => new RegExp(`const ${name} = (\\[[\\s\\S]*?\\n {2}\\])`).exec(lensesHtml)?.[1] ?? "[]";
+const LENS_BRANDS: { id: string; name: string }[] = vm.runInNewContext(`(${inlineArray("BRANDS")})`);
+const LENSES: [string, string, string, string[], number | null][] = vm.runInNewContext(`(${inlineArray("LENSES")})`);
+
 // admin.js builds the staff shell into a DOM; only its DRAFTS list is needed, so read it as data
 const draftsSrc = /const DRAFTS = (\[[\s\S]*?\n {2}\]);/.exec(readFileSync("mockups/admin.js", "utf8"))?.[1];
 const DRAFTS: (MockFrame & { status: string; note?: string })[] = draftsSrc ? vm.runInNewContext(`(${draftsSrc})`) : [];
@@ -102,6 +109,16 @@ async function main() {
       );
     }
 
+    // DUMMY C16 lenses with C6 brands (lens brands are separate from frame brands)
+    const lensBrandId: Record<string, string> = {};
+    for (const b of LENS_BRANDS) {
+      lensBrandId[b.id] = (await q("insert into brands (name, for_lenses) values ($1, true) returning id", [b.name])).rows[0].id;
+    }
+    for (const [brand, name, type, features, price] of LENSES) {
+      await q("insert into lenses (brand_id, name, type, features, price) values ($1, $2, $3, $4, $5)",
+        [lensBrandId[brand], name, type.replace(/-/g, "_"), features, price]);
+    }
+
     // DUMMY C8 testimonials (never live; the section stays hidden until real ones exist)
     const quotes = [
       ["Sample Customer 1", "indresham", "They tested my eyes carefully and explained everything simply."],
@@ -116,7 +133,7 @@ async function main() {
     await q("select set_config('app.role', 'admin', false)"); // the transaction's setting ended with it
     const count = async (t: string) => (await q(`select count(*)::int as n from ${t}`)).rows[0].n;
     console.log(`Seeded: ${await count("branches")} branches, ${await count("frames")} frames (${DRAFTS.length} drafts), ` +
-      `${await count("eye_camps")} eye camps, ${await count("testimonials")} testimonials. All DUMMY except branch facts.`);
+      `${await count("lenses")} lenses, ${await count("eye_camps")} eye camps, ${await count("testimonials")} testimonials. All DUMMY except branch facts.`);
   } catch (e) {
     await q("rollback");
     throw e;
