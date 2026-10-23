@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: Phase 4 (Foundation) is complete as of 2026-10-23; next is Phase 5, sprint 5.1 Layout (`ROADMAP.md` section 4). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
+Status: Phase 5 in progress. Phase 4 (Foundation) is complete as of 2026-10-23; sprint 5.1 Layout is done (2026-10-23), and next is sprint 5.3 Admin + frames (`ROADMAP.md` section 4 build order). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
 
 Commands:
 - `npm run dev`: the app at http://localhost:3000 (or the `app` config in `.claude/launch.json`)
@@ -15,9 +15,12 @@ Commands:
 - `npm run db:generate`: after editing `src/db/schema.ts`, creates a migration in `db/migrations/`
 - `npm run db:migrate`: app tables, then Better Auth's login tables, then `db/security.sql` (safe to re-run)
 - `npm run db:seed`: resets the app tables to the DUMMY development data (login accounts are kept)
+- `npm run check:launch`: the pre-launch gate. Lists every DUMMY value still in use (the register in `src/lib/site-config.ts`, placeholder facts, and seed data in the database) and fails while any remain. Not part of `npm test`.
 - `npm run staff:create`: creates a staff-area account (admin or staff), or sets a new password for an existing one. You type the details; the password is hidden and stored only as a hash
 - `npm test`: the Playwright suite. It builds the app and starts its **own** production server on port 3100 (the dev server is untouched), makes throwaway accounts and rows, and removes them afterwards. Database checks run in rolled-back transactions. One worker, in order; `rate-limit.spec.ts` runs last. Run it before every commit that touches security, auth, uploads or the schema, and add a test for every new table or rule.
 - The scripts run on plain Node 24 (TypeScript type stripping), so they use relative `.ts` imports, not `@/` aliases.
+
+**Layout (sprint 5.1):** public pages live in `src/app/(site)/` and get the shared chrome from `src/app/(site)/layout.tsx`: utility bar, nav with mega menus, phone menu, sticky bar, branch picker and footer, all in `src/components/site/`. The chrome's CSS is ported unchanged from `mockups/styles.css` into `src/styles/site-chrome.css`; edit it there. Layout data comes from `src/lib/site-data.ts` (cached, tags `branches` and `catalogue`). Admin saves that change frames, lenses or branches must call `updateTag("catalogue")` or `updateTag("branches")`. **The layout is pre-rendered at build time, so `npm run build` and `npm test` need PostgreSQL running.** Call and WhatsApp buttons use `<PickerButton>` (`branch-picker.tsx`); `<DummyTag id>` marks placeholders in development only.
 
 Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Staff area: `src/proxy.ts` only checks that a session cookie exists; every admin page and server action must call `requireStaff()` (`src/lib/session.ts`) and pass its role to `withRole()`. Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
 

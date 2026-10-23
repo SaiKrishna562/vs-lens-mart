@@ -24,6 +24,40 @@ New entries go at the top, newest first. Each entry starts with a heading `## YY
 - **Why:** the Grammarly extension adds `data-gr-ext-installed` and `data-new-gr-c-s-check-loaded` to `<body>` before React loads, which showed a hydration mismatch in the dev error panel. It only ignores attribute differences on the `<body>` tag itself, not the page content.
 - **Files:** `src/app/layout.tsx`, `docs/changelog.md`
 
+## 2026-10-23 · Sprint 5.1 · Layout: utility bar, navigation, mega menus, phone menu, sticky bar, footer
+
+- **Changed:**
+  - Public pages now live in the `src/app/(site)/` route group with a shared layout (the staff area keeps its own). Built from the signed-off mockups and `Requirements_Navigation.md`:
+    - **Utility bar:** Since 1999, hours, each branch's call link, "2 branches", Book an eye test; a shortened strip on phones.
+    - **Navigation:** the 8 items in the client's order with the gold underline on the current section; mega menus open on hover, click or keyboard and close on Esc, mouse-out or a click outside.
+    - **Theme and search:** the light/dark toggle (remembered, no flash); the search panel (results page in 5.6).
+    - **Phone and tablet menu:** full screen, + / − one section at a time, scroll locked, focus kept inside.
+    - **Sticky bar:** Call / WhatsApp / Book test.
+    - **Branch picker:** one picker for the whole site.
+    - **Footer:** both branches, quick links, social links, privacy link.
+  - **Data:**
+    - Branches, menu brands and "from ₹" prices are read from the database (approved, active rows only) and cached with tags for instant refresh after admin edits.
+    - A tier with no products is hidden (never ₹0).
+    - The seed now includes the mockups' DUMMY lens catalogue.
+  - **Styles:** the mockup's header and footer CSS is ported unchanged (`src/styles/site-chrome.css`); the remaining tokens are added to `globals.css`.
+  - **Dummy safety:**
+    - `site-config.ts` has a DUMMY register (D2, D5, D8, C7).
+    - `<DummyTag>` shows only in development.
+    - A placeholder phone number never works as a link.
+    - New `npm run check:launch` fails while any placeholder remains (currently 14 items).
+  - **Tests:** `tests/layout.spec.ts` (16 checks across 360 / 768 / 1440) and `tests/menu-data.spec.ts` (3).
+- **Why:** sprint 5.1, the first build sprint. Every later page sits inside this layout.
+- **Checked:**
+  - `npm test`: 69 passed (the 46 earlier ones too). The 16 skipped are width-specific.
+  - In the browser at 1440 and 375 px:
+    - the header, the Frames mega menu (database brands, "Premium from ₹3,290"), the phone menu and the sticky-bar WhatsApp picker all match the mockups;
+    - DUMMY tags show beside placeholder values only.
+  - **Found and fixed:**
+    - the CSS port skipped a comment's opening line, which broke the dev build; the production build had only warned and silently dropped the header styles;
+    - a footer-year `<script>` caused a hydration mismatch and was replaced with a small client component;
+    - a lint error (state reset in an effect) was moved to React's render-time pattern.
+- **Files:** `src/app/(site)/*`, `src/components/site/*`, `src/styles/site-chrome.css`, `src/app/globals.css`, `src/lib/site-config.ts`, `src/lib/queries/site.ts`, `src/lib/site-data.ts`, `scripts/db-seed.ts`, `scripts/launch-check.ts`, `public/logo-placeholder.svg`, `tests/layout.spec.ts`, `tests/menu-data.spec.ts`, `playwright.config.ts`, `package.json`, `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-23 · Phase 4 · Step 6: automated tests; Phase 4 complete
 
 - **Changed:**

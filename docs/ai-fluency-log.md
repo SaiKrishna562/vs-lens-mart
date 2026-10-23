@@ -430,6 +430,25 @@ Claude turned the manual database, login and upload checks into a permanent Play
 
 ---
 
+## A Build That Passed But Was Broken — Sprint 5.1, 2026-10-23
+
+### Delegation
+
+Claude built the shared layout from the signed-off mockups. To match the approved design exactly, it ported the mockup's header CSS by copying line ranges with a script, rather than retyping it.
+
+### Discernment
+
+- **Silent failure:** the copy started one line too late and missed the line that opens a `/* … */` comment, so the comment's text became broken CSS. `npm run build` reported success with only a vague "1 warning while optimizing CSS", and the production CSS had silently dropped the rules after the break. The dev server, opened in the browser, refused the file outright and showed the real error. The fix was the line range; Claude then checked that comment openers and closers and the braces balanced.
+- **Console errors after a restart:** a hydration mismatch from a footer-year `<script>` showed up only in the browser console. Claude replaced it with React's pattern for values that differ between server and browser (`useSyncExternalStore`).
+
+### Diligence
+
+- After the fixes: a fresh page load with no console errors, checks at 1440 and 375 px against the mockups, and the full suite (69 passed).
+- The new layout tests fail on any console error, so the same class of problem is caught automatically next time.
+- **Lesson:** "build succeeded" isn't "it works". A warning can hide dropped styles, and the only proof is looking at the page and its console.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

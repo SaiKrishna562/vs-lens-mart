@@ -14,7 +14,8 @@
     "db:seed": "node scripts/db-seed.ts",
     "db:studio": "drizzle-kit studio",
     "staff:create": "node scripts/staff-create.ts",
-    "test": "playwright test"
+    "test": "playwright test",
+    "check:launch": "node scripts/launch-check.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.12",

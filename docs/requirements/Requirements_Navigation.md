@@ -1,6 +1,6 @@
 # Requirements: Navigation
 
-Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied).
+Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied). Built in sprint 5.1 (2026-10-23); acceptance criteria covered by `tests/layout.spec.ts` and `tests/menu-data.spec.ts`.
 Plan version: v1.1 (navigation update), updated 2026-10-09 with the client's form and prescription card
 Sources: project plan v1.1 section 3 "Navigation bar (mega menu)", `docs/client-answers.md` (incl. the 160-question form), `docs/prescription_card.jpg`, `docs/dummy-data.md`, homepage design image (`docs/Premium Eyewear Visionary Hero.png`), navigation mockup (`docs/vs_lens_mart_navbar_mega_menu.html`), `CLAUDE.md`
 
@@ -222,7 +222,7 @@ Done when:
 | Is the eye test free? | Client |
 | Real photos for Men/Women/Kids tiles and Eye care cards | Client |
 | Branch picker for Call / WhatsApp (proposal) | Client to approve |
-| Search behaviour | Developer |
-| Utility bar on mobile | Developer / design |
+| Search behaviour | Developer: the panel is built; results page in sprint 5.6 |
+| Utility bar on mobile | Decided 2026-10-23: a shortened strip ("Since 1999 · Open 7 days, 9 AM–9:30 PM") as in the mockup; calls and booking move to the sticky bar |
 
 Answered on 2026-10-09: opening time (9:00 AM–9:30 PM), separate numbers per branch (9550685417 = Indresham), "Since 1999" shown prominently.
