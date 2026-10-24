@@ -4,6 +4,7 @@
 import { expect, test } from "@playwright/test";
 import { addDays, bookingFields, BOOKING, cleanPhone, dayLabel, isDay, isOffered, newReference, nowInIndia, slotsFor, timeLabel } from "../src/lib/booking-rules";
 import { enquiryFields, frameFromUrl, topicFromUrl } from "../src/lib/enquiry-rules";
+import { campSlug, isUpcoming as campUpcoming, longDate, timeRange } from "../src/lib/camp-rules";
 
 const HOURS = { opens: "09:00", closes: "21:30", openDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] };
 const NOW = { day: "2026-10-24", minutes: 10 * 60 + 5 }; // Sat 24 Oct, 10:05 AM in India
@@ -92,3 +93,12 @@ test("the contact form's checks (Requirements_Contact.md 4)", () => {
   expect(frameFromUrl("VSF-1024")).toBe("VSF-1024");
   expect(frameFromUrl("vsf-1024'><b>")).toBe("");
 });
+
+test("eye camp wording and dates (Requirements_EyeCamps.md 5)", () => {
+  expect(longDate("2026-11-15")).toBe("Sun, 15 Nov 2026");
+  expect(timeRange("09:00", "13:00")).toBe("9:00 AM–1:00 PM");
+  expect(campSlug("Free Eye Camp, Patelguda!", "2026-11-15")).toBe("free-eye-camp-patelguda-2026-11-15");
+  expect(campUpcoming("2026-10-24", "2026-10-24"), "upcoming on its own day").toBe(true);
+  expect(campUpcoming("2026-10-23", "2026-10-24"), "past from the next day").toBe(false);
+});
+

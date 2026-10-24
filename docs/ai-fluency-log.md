@@ -468,6 +468,24 @@ Claude built the public Frames, Sunglasses and frame detail pages from the signe
 
 ---
 
+## Two Problems No Single Page Showed: Sprint 5.5 part B, 2026-10-24
+
+### Delegation
+
+Claude built the Eye camps pages and the staff camp form from the signed-off mockups.
+
+### Discernment
+
+- **Clashing class names:** the mockup used the class name `camp-row` for two different things: public "More upcoming" rows and staff list rows. Each mockup page loaded only its own styles, so it never mattered there. In the app all styles load together, so each set would have leaked borders and padding into the other. Claude scoped both, then scanned every stylesheet pair for other classes styled in two places (only the shared form field, which is intended).
+- **A test that passed by luck:** the first camp test passed although the "Saved" message vanished after the form moved to the new camp's address; it had caught the old message in time. The second test exposed it. The message is now carried in the address. A further detail: Next.js 16 keeps the previous page hidden in memory for Back, so the same text exists twice, and tests must look only at the visible copy.
+
+### Diligence
+
+- Full suite: 201 passed, 16 skipped (other screen sizes).
+- **Lesson:** a passing test isn't proof if it could pass for the wrong reason. Check what it actually saw.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

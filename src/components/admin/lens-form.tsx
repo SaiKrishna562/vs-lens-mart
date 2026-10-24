@@ -4,7 +4,7 @@
    frame form's style. Features are short tags the brand or shop states; the
    site adds no claims of its own. Price is optional ("Ask for price"). */
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { deleteLens, saveLens } from "@/app/admin/(staff)/lenses/actions";
 import { fieldErrors } from "@/lib/booking-rules";
@@ -32,7 +32,8 @@ export function LensForm({ role, brands, lens }: LensFormProps) {
   const [photos, setPhotos] = useState<PickedPhoto[]>(lens?.photo ? [{ key: "existing", url: `/media/${lens.photo}`, showsPeople: false, consent: false }] : []);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
-  const [saved, setSaved] = useState("");
+  // A new lens opens its own edit page after saving; ?saved=1 carries the message there
+  const [saved, setSaved] = useState(useSearchParams().get("saved") === "1" ? "Saved. It's on the Lenses page now." : "");
   const [asking, setAsking] = useState(false);
   const summary = useRef<HTMLDivElement>(null);
   const dlg = useRef<HTMLDialogElement>(null);
@@ -64,7 +65,7 @@ export function LensForm({ role, brands, lens }: LensFormProps) {
       const r = await saveLens(fd);
       if (!r.ok) return setErrors(r.errors);
       setSaved(active ? "Saved. It's on the Lenses page now." : "Saved. It's hidden from the site.");
-      if (!lens) router.replace(`/admin/lenses/${r.id}`);
+      if (!lens) router.replace(`/admin/lenses/${r.id}?saved=1`);
       else router.refresh();
     } finally {
       setBusy(false);

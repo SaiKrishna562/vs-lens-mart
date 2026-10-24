@@ -4,6 +4,41 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.5 (part B) · Eye camps pages and staff eye camps
+
+- **Changed:**
+  - **`/eye-camps`**, built from the approved mockup:
+    - hero with "{n} camps · {people} people checked";
+    - the next camp (date box, facts, description, what's offered, Directions, Add to calendar, Share on WhatsApp, Details) and more upcoming camps;
+    - past camps with year chips kept in the address (`?year=`) and Load more (9 at a time);
+    - the "Bring a camp" band, the CTA, and all the empty states.
+  - **`/eye-camps/[slug]`:**
+    - upcoming camps: what's offered, what to bring, actions, `Event` data;
+    - past camps: people checked and a photo grid opening the shared photo viewer;
+    - more camps; "This camp isn't available" for hidden or unknown camps.
+  - **`/admin/eye-camps`**, `/new`, `/[slug]`: Upcoming / Past lists with flags; the camp form, with "After the camp" (people, up to 12 photos with the "shows people" and permission ticks) opening once the date has passed; staff hide, admin deletes (photo files too). Actions `saveCamp` and `deleteCamp` refresh the `content` cache.
+  - **Shared:**
+    - `src/components/site/photo-viewer.tsx` (native `<dialog>`, also for the gallery);
+    - `src/lib/camp-rules.ts` (India-time upcoming / past, date wording, `.ics`, share link, form rules);
+    - camp queries and cached `getCamps()` / `getCamp()` / `getCampSlugs()`.
+  - DUMMY register: C19.
+- **Fixed:**
+  - **Clashing class names:** the mockup uses `camp-row` both for the public "More upcoming" rows and for the staff list rows, and the app loads all styles together. Each set is now scoped to its own list (`.camp-rows`, `.camp-list`). A scan found no other class styled in both.
+  - **Lost "Saved" message:** after adding a new lens or camp, the form opens the new item's edit page, where the "Saved" message was lost. It's now carried in the address (`?saved=1`).
+  - **Date wording:** dates read "Sun, 15 Nov 2026"; the Indian date format had added a comma before the year.
+- **Why:** sprint 5.5 part B (`ROADMAP.md`, `Requirements_EyeCamps.md`, `Requirements_Admin.md` 7.2). Build decisions are in `Requirements_EyeCamps.md` section 8.
+- **Checked:**
+  - In the browser: `/eye-camps` at 1440 px (next camp, 5 past camps, the 461 total checked by hand) and a camp page at 360 px in dark mode.
+  - New `eye-camps.spec.ts` at 3 widths: order and totals, the calendar file and share link, year chips and the address, upcoming / past / unknown camp pages.
+  - `staff-content.spec.ts` adds:
+    - an upcoming camp (no photos before the day) that's on the site at once;
+    - a past camp with photos, where a photo of people is refused without the tick by the browser, the server and the database;
+    - the photo viewer by keyboard (arrows, Esc, focus back);
+    - admin-only delete removing the files.
+  - The camp wording was added to `booking-rules.spec.ts`.
+  - Full suite: 201 passed, 16 skipped (other screen sizes).
+- **Files:** `src/app/(site)/eye-camps/page.tsx`, `src/app/(site)/eye-camps/[slug]/` (`page.tsx`, `not-found.tsx`), `src/components/camps/` (`camp-card.tsx`, `past-camps.tsx`, `camp-detail.tsx`, `camp-photos.tsx`), `src/components/site/photo-viewer.tsx`, `src/app/admin/(staff)/eye-camps/` (`page.tsx`, `new/page.tsx`, `[slug]/page.tsx`, `actions.ts`), `src/app/admin/(staff)/[...section]/page.tsx`, `src/components/admin/` (`camps-list.tsx`, `camp-form.tsx`, `camp-form-page.tsx`, `lens-form.tsx`), `src/lib/camp-rules.ts`, `src/lib/queries/content.ts`, `src/lib/queries/admin.ts`, `src/lib/content-data.ts`, `src/lib/site-config.ts`, `src/styles/pages.css`, `src/styles/admin.css`, `playwright.config.ts`, `tests/eye-camps.spec.ts`, `tests/staff-content.spec.ts`, `tests/booking-rules.spec.ts`, `docs/requirements/Requirements_EyeCamps.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.5 (part A) · Lenses page and staff lenses
 
 - **Changed:**

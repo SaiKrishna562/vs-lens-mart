@@ -534,11 +534,11 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
 
 /* 14.2 More upcoming: compact rows */
 .camp-rows { display: grid; gap: var(--s-2); }
-.camp-row { display: grid; grid-template-columns: 9rem 1fr auto; gap: var(--s-4); align-items: center; padding: var(--s-4) var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--text); }
-.camp-row:hover { border-color: var(--brass); }
-.camp-row time { font-weight: 600; color: var(--brass); }
-.camp-row b { color: var(--heading); display: block; }
-.camp-row small { color: var(--text-muted); }
+.camp-rows .camp-row { display: grid; grid-template-columns: 9rem 1fr auto; gap: var(--s-4); align-items: center; padding: var(--s-4) var(--s-5); border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); text-decoration: none; color: var(--text); }
+.camp-rows .camp-row:hover { border-color: var(--brass); }
+.camp-rows .camp-row time { font-weight: 600; color: var(--brass); }
+.camp-rows .camp-row b { color: var(--heading); display: block; }
+.camp-rows .camp-row small { color: var(--text-muted); }
 
 /* 14.3 Past camp cards */
 .year-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-5); }
@@ -584,7 +584,7 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .next-camp { grid-template-columns: 1fr; padding: var(--s-5); }
   .datebox { width: 88px; height: 88px; }
   .datebox b { font-size: 2rem; }
-  .camp-row { grid-template-columns: 1fr; gap: var(--s-1); }
+  .camp-rows .camp-row { grid-template-columns: 1fr; gap: var(--s-1); }
   .past-grid { grid-template-columns: 1fr; }
   .camp-actions .btn { flex: 1 1 100%; }
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
@@ -619,5 +619,13 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
      headings inherit); the app's base gives every heading the --heading role, which is
      navy in light mode and cream in dark mode, so it vanished on navy / gold. */
   .hero h1, .hero h2, .book-band h2, .help-band h2, .section--navy h2, .section--navy h3 { color: inherit; }
+  /* Real photos in the shared photo viewer, camp cards and photo grids (the mockup had placeholders) */
+  .lightbox__img { position: relative; width: 100%; aspect-ratio: 4 / 3; }
+  .lightbox__img img { object-fit: contain; }
+  .lightbox__prev { display: inline-flex; transform: rotate(180deg); }
+  .ccard__img, .photo-grid .pg-img { position: relative; overflow: hidden; }
+  .ccard__img { aspect-ratio: 3 / 2; border-radius: var(--r-md); }
+  .photo-grid .pg-img { aspect-ratio: 1; width: 100%; display: block; }
+  .ccard__img img, .photo-grid .pg-img img { object-fit: cover; }
   .branch__map iframe { display: block; width: 100%; aspect-ratio: 16 / 7; border: 0; border-bottom: 1px dashed var(--brass-40); }
 }

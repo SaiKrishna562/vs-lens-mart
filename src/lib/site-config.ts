@@ -64,6 +64,7 @@ export const DUMMY = {
   D9: "Retention: bookings and messages deleted after 1 year (RETENTION_DAYS)",
   C23: "Privacy contact: \"the shop owner\", replies within 30 days; legal owner's name",
   C21: "Enquiry reply time: within a day",
+  C19: "Eye camps: what's offered and what to bring (src/lib/camp-rules.ts)",
 } as const;
 export type DummyId = keyof typeof DUMMY;
 

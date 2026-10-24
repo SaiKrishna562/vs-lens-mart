@@ -118,3 +118,13 @@ Done when:
 | Permission to publish photos with people (Q146) | Client | Placeholders only |
 | Is every camp free? | Client | "Free" in `DUMMY` titles only |
 | What "Other" means in Q100 | Client | — |
+
+## 8. Build notes (sprint 5.5 part B, 2026-10-24)
+
+- **Upcoming or past** is decided in India time: a camp is upcoming on its own day and past from the next day. The listing is cached for at most an hour, so a camp moves to "Past" within the hour after midnight.
+- **Addresses:** a new camp's address is made from its title and date (`free-eye-camp-patelguda-2026-11-15`) and never changes afterwards, so shared links keep working. The seed's camps keep their mockup addresses.
+- **Next camp actions:** Directions searches Google Maps for the place; Add to calendar is a calendar file made on the page (no server round trip); Share on WhatsApp lets the customer pick the contact.
+- **Upcoming camp page:** the mockup's map placeholder is replaced by a short "walk in on the day, no need to register" note (Q99), with Directions in the actions.
+- **Photos:** the shared photo viewer (also used by the gallery) opens from each photo, moves with buttons, arrow keys or a swipe, closes with Esc and gives focus back. A photo of people needs the permission tick: the staff form, the server and the database (`camp_photos_consent`) each refuse it otherwise.
+- **Staff (`/admin/eye-camps`):** Upcoming / Past, past camps missing a count or photos flagged; the form from `admin-camps.html`. "After the camp" opens once the entered date has passed, so an old camp can also be recorded. Staff hide; only an admin deletes (photo files too).
+- **Placeholders:** what's offered and what to bring are `DUMMY` C19 (now in the register, so `check:launch` lists them).

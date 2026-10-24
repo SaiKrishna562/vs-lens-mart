@@ -3,7 +3,7 @@
    so row-level security still decides what each role can see. "Today" is
    India time (Asia/Kolkata), whatever the server's clock zone is. */
 import { and, asc, desc, eq, ilike, inArray, ne, or, sql, type SQL } from "drizzle-orm";
-import { appointments, branches, brands, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses } from "../../db/schema";
+import { appointments, branches, brands, campPhotos, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses } from "../../db/schema";
 import type { Tx } from "../db";
 
 const TODAY = sql`(now() at time zone 'Asia/Kolkata')::date`;
@@ -143,4 +143,28 @@ export async function lensById(tx: Tx, id: string) {
 /** Lens brands for the form's list. */
 export async function lensBrandNames(tx: Tx) {
   return (await tx.select({ name: brands.name }).from(brands).where(eq(brands.forLenses, true)).orderBy(asc(brands.name))).map((b) => b.name);
+}
+
+/** Staff eye camps: upcoming (soonest first) or past (newest first), hidden ones included. */
+export function campsAdminList(tx: Tx, when: "upcoming" | "past", today: string) {
+  return tx.select({
+    id: eyeCamps.id, slug: eyeCamps.slug, title: eyeCamps.title, day: eyeCamps.day, starts: eyeCamps.starts, ends: eyeCamps.ends,
+    place: eyeCamps.place, people: eyeCamps.people, isVisible: eyeCamps.isVisible,
+    photos: sql<number>`(select count(*)::int from ${campPhotos} where ${campPhotos.campId} = ${eyeCamps.id})`,
+  }).from(eyeCamps)
+    .where(when === "upcoming" ? sql`${eyeCamps.day} >= ${today}` : sql`${eyeCamps.day} < ${today}`)
+    .orderBy(when === "upcoming" ? asc(eyeCamps.day) : desc(eyeCamps.day)).limit(300);
+}
+
+/** One camp for the form, with its photos, or undefined. */
+export async function campBySlug(tx: Tx, slug: string) {
+  const [camp] = await tx.select({
+    id: eyeCamps.id, slug: eyeCamps.slug, title: eyeCamps.title, day: eyeCamps.day, starts: eyeCamps.starts, ends: eyeCamps.ends,
+    branch: branches.slug, place: eyeCamps.place, organisedWith: eyeCamps.organisedWith, description: eyeCamps.description,
+    offered: eyeCamps.offered, people: eyeCamps.people, isVisible: eyeCamps.isVisible,
+  }).from(eyeCamps).leftJoin(branches, eq(branches.id, eyeCamps.branchId)).where(eq(eyeCamps.slug, slug));
+  if (!camp) return undefined;
+  const photos = await tx.select({ id: campPhotos.id, path: campPhotos.path, showsPeople: campPhotos.showsPeople, consent: campPhotos.consent })
+    .from(campPhotos).where(eq(campPhotos.campId, camp.id)).orderBy(asc(campPhotos.position));
+  return { ...camp, photos };
 }

@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: "Coming soon" };
 /* Sidebar sections that later sprints build (ROADMAP.md section 4), so their
    links don't lead to a bare 404 in the meantime. Anything else is a 404. */
 const LATER: Record<string, [string, string]> = {
-  "eye-camps": ["Eye camps", "5.5"], gallery: ["Gallery", "5.5"],
+  gallery: ["Gallery", "5.5"],
   testimonials: ["Testimonials", "5.5"],
   branches: ["Branches", "5.4"], staff: ["Staff accounts", "5.5"], holidays: ["Branch holidays", "5.4"],
 };
