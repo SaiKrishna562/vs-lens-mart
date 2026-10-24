@@ -102,7 +102,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
                 aria-label={`Share ${sun ? "these sunglasses" : "this frame"} on WhatsApp`} title="Share on WhatsApp">
                 <Icon name="share" />
               </a>
-              <Link className="btn btn--outline-dark pactions__book" href="/book-eye-test" prefetch={false}>Book an eye test</Link>
+              <Link className="btn btn--outline-dark pactions__book" href="/book-eye-test">Book an eye test</Link>
             </div>
 
             <div className="specs">
@@ -127,7 +127,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
               {!sun ? (
                 <div><b>Need prescription lenses?</b><p>All branded lenses are available. We fit them in store. <Link href="/lenses" prefetch={false}>See lenses</Link></p></div>
               ) : f.lens.includes("Power sunglasses") ? (
-                <div><b>Made to your prescription</b><p>Power sunglasses are made to your prescription in store. Book an eye test first if you don’t have a recent prescription. <Link href="/book-eye-test" prefetch={false}>Book an eye test</Link></p></div>
+                <div><b>Made to your prescription</b><p>Power sunglasses are made to your prescription in store. Book an eye test first if you don’t have a recent prescription. <Link href="/book-eye-test">Book an eye test</Link></p></div>
               ) : (
                 <div><b>Want this pair with your power?</b><p>Ask us on WhatsApp and we’ll tell you if these can be made with your prescription.</p></div>
               )}

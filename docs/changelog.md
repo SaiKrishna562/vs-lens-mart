@@ -4,6 +4,34 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.4 (part A) · Book an eye test
+
+- **Changed:**
+  - `/book-eye-test`, built from the approved mockup:
+    - three steps on one page: branch, then one of 14 day chips or "Pick another date", then a time by part of the day; full slots show "Full", closed days "Closed";
+    - details (name, mobile, who it's for, optional area, optional note with a counter, consent with the privacy link);
+    - an error summary that takes focus; the summary card (sticky on desktop) and an inline line on phones;
+    - the confirmation, with the reference, "Send to the branch on WhatsApp" (that branch's own number, full prefilled message), "Add to calendar" (`.ics`) and "Call or WhatsApp to change or cancel".
+    - `?branch=&date=` prefill.
+    - The phone sticky bar is hidden on this page.
+  - Server actions `getSlots` (counts only) and `bookEyeTest` (Zod, the slot re-checked, saved with the public role, insert only).
+  - New shared pieces:
+    - `src/lib/booking-rules.ts` (DUMMY C18 rules, India time, form checks, random `VS-XXXX` references);
+    - `src/lib/booking-core.ts` (per-slot lock, then count, then insert);
+    - `src/lib/form-guard.ts` (spam trap, minimum fill time, per-minute limit);
+    - `src/components/site/hide-on.tsx`;
+    - `src/styles/pages.css` (mockup 7.2–7.13, 7.15, 10, 12, 16, 18 ported for this sprint and the next pages).
+  - DUMMY register: C18 and D7. Links to `/book-eye-test` now prefetch, since the page exists.
+- **Why:** sprint 5.4 part A (`ROADMAP.md`, `Requirements_Booking.md`). It's the site's first form with personal data, so the public role can only add a booking, never read one, and the last place can't be double-booked. Build decisions are in `Requirements_Booking.md` section 10.
+- **Checked:**
+  - In the browser at 360 and 1440 px, light and dark: a real booking was saved (reference, 10-digit phone, consent time) and then removed.
+  - New tests:
+    - `booking-rules.spec.ts` (hours, notice, window, closed days, full slots, form checks);
+    - `booking-race.spec.ts` (two people at once for the last place: one booking, one "full"; the public role reads nothing back);
+    - `booking.spec.ts` at 3 widths (full booking and its WhatsApp link, prefill, Full slots with no personal data sent, validation, "just filled up", spam trap).
+  - Full suite: 140 passed, 16 skipped (other screen sizes).
+- **Files:** `src/app/(site)/book-eye-test/page.tsx`, `src/app/(site)/book-eye-test/actions.ts`, `src/components/booking/booking-form.tsx`, `src/lib/booking-rules.ts`, `src/lib/booking-core.ts`, `src/lib/form-guard.ts`, `src/lib/site-config.ts`, `src/components/site/hide-on.tsx`, `src/components/site/site-chrome.tsx`, `src/components/site/mega-panels.tsx`, `src/components/catalogue/frame-detail.tsx`, `src/styles/pages.css`, `src/app/globals.css`, `playwright.config.ts`, `tests/booking-rules.spec.ts`, `tests/booking-race.spec.ts`, `tests/booking.spec.ts`, `docs/requirements/Requirements_Booking.md`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.3 · CLAUDE.md brought up to date
 
 - **Changed:** `CLAUDE.md` now:

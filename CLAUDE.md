@@ -144,6 +144,7 @@ Page conventions:
 - **Private tables** (customers, prescriptions, appointments, enquiries, orders): staff-only for both read and write. The public booking form may **insert** into appointments but never select.
 - Every form that collects a name and phone needs a consent checkbox (DPDP Act 2023). The site needs a `/privacy` page. Its data-retention period is a `DUMMY` value from `docs/dummy-data.md` until the client confirms it.
 - Database URLs, passwords and the auth secret live only in `.env.local` (gitignored); `.env.example` lists the names only. None of them reach the browser.
+- **Public forms** (booking, enquiry) are guarded by `src/lib/form-guard.ts`: a hidden spam-trap field, a 3-second minimum fill time (both answered with a fake success), and a per-minute limit that uses the same `TRUSTED_IP_HEADER` rule as sign-in (one shared bucket without it). Bookings are saved by `placeBooking()` (`src/lib/booking-core.ts`) under a per-slot advisory lock, so two people can't take the last place.
 - **Sign-in limit:** 5 attempts a minute. Visitor IP headers such as `X-Forwarded-For` are **not trusted** unless `TRUSTED_IP_HEADER` names one that the host's proxy overwrites (a browser can fake them; tested 2026-10-23). Locally, all attempts share one bucket. **At deployment:** set `TRUSTED_IP_HEADER` and re-run the rate-limit test against the real host.
 - **Sign out** loads the login page fresh (`src/app/admin/sign-out-button.tsx`), so Back can't show a staff page from the browser's memory. Keep it that way for any new sign-out control.
 

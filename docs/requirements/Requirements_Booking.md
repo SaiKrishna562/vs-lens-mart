@@ -153,3 +153,16 @@ Done when:
 | Walk-ins welcome too? | Client | "Booking means less waiting" |
 | Is the eye test free? | Client | `DUMMY` D7 |
 | Who at the shop checks new bookings, and how often? (Q82 "Both") | Client | Admin bookings list |
+
+## 10. Build notes (sprint 5.4 part A, 2026-10-24)
+
+Decisions made while building. They don't change what the customer sees.
+
+- **Rules in one place:** `src/lib/booking-rules.ts` holds the DUMMY C18 numbers, the slot rules and the form checks, used by both the browser and the server action. "Today" and "now" are always India time.
+- **Last place:** the server takes a short lock on the branch, day and time before counting and saving, so two people can't take the last place (tested with two real connections at once).
+- **The public role never reads a booking back.** The reference is made on the server and returned without reading the table; slot availability comes from `slot_counts()`, which has only times and counts.
+- **Spam and abuse:** a hidden field and a 3-second minimum fill time get a convincing "You're booked!" that saves nothing; there's also a per-minute limit. The limit tells visitors apart only once `TRUSTED_IP_HEADER` is set at deployment (as for staff sign-in); until then everyone shares one, more generous limit.
+- **Days are shown once the page has loaded,** because the page is pre-rendered and "today" must be the visitor's day in India, not the build day.
+- **The address field** is shown on this form (client change 2026-10-21) and named in the consent text.
+- "Free eye test" is shown with the `DUMMY` D7 tag until the client confirms; `check:launch` lists D7 and C18.
+

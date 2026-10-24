@@ -27,11 +27,11 @@ export default defineConfig({
   globalTeardown: "./tests/global-teardown.ts",
   use: { baseURL: BASE, trace: "retain-on-failure" },
   projects: [
-    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|frame-form)\.spec\.ts/ },
+    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|booking-rules|booking-race|frame-form)\.spec\.ts/ },
     // Layout checks at the CLAUDE.md test widths
-    { name: "phone-360", testMatch: /(ui|layout|admin-shell|catalogue)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
-    { name: "tablet-768", testMatch: /(ui|layout|admin-shell|catalogue)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
-    { name: "desktop-1440", testMatch: /(ui|layout|admin-shell|catalogue)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
+    { name: "phone-360", testMatch: /(ui|layout|admin-shell|catalogue|booking)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
+    { name: "tablet-768", testMatch: /(ui|layout|admin-shell|catalogue|booking)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
+    { name: "desktop-1440", testMatch: /(ui|layout|admin-shell|catalogue|booking)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
     // Last, because it uses up the sign-in limit for a minute
     { name: "rate-limit", testMatch: /rate-limit\.spec\.ts/, dependencies: ["security", "phone-360", "tablet-768", "desktop-1440"] },
   ],
@@ -40,6 +40,7 @@ export default defineConfig({
     url: `${BASE}/admin/login`,
     reuseExistingServer: false,
     timeout: 300_000,
-    env: { BETTER_AUTH_URL: BASE, E2E_SIGNIN_LIMIT: String(E2E_SIGNIN_LIMIT) },
+    // Forms: tests fill them in well under the 3-second spam check, and send many a minute
+    env: { BETTER_AUTH_URL: BASE, E2E_SIGNIN_LIMIT: String(E2E_SIGNIN_LIMIT), E2E_FORM_MIN_FILL_MS: "0", E2E_FORM_LIMIT: "500" },
   },
 });

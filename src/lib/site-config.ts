@@ -57,6 +57,8 @@ export const DUMMY = {
   D5: "YouTube, Facebook and Instagram links",
   D8: "Logo (placeholder until the client's new logo arrives)",
   C7: "Price tier names and boundaries in the menus",
+  C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
+  D7: "Eye test price: shown as free",
 } as const;
 export type DummyId = keyof typeof DUMMY;
 
@@ -97,3 +99,6 @@ export function time12(t: string): string {
 
 /** URL-friendly brand id, matching the mockups' ?brand= links ("Kodak Lens" → "kodak-lens"). */
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** DUMMY D7: the client hasn't confirmed the eye test is free; shown with the tag until then. */
+export const EYE_TEST_FREE = true;

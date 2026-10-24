@@ -127,7 +127,7 @@ export function LensesPanel({ menu }: { menu: MenuData }) {
         )}
         <Col title="Not sure which lens?" href="/book-eye-test">
           <p className="card__text">Our optometrist checks your eyes and suggests the right lens for your power and daily use.</p>
-          <p style={{ marginTop: 16 }}><Link className="link-arrow" href="/book-eye-test" prefetch={false}>Book an eye test <Icon name="arrow" /></Link></p>
+          <p style={{ marginTop: 16 }}><Link className="link-arrow" href="/book-eye-test">Book an eye test <Icon name="arrow" /></Link></p>
         </Col>
       </div>
       <Foot note="All branded lenses available." href="/lenses" label="View all lenses" />

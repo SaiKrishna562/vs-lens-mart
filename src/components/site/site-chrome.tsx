@@ -10,6 +10,7 @@ import { PickerButton } from "./branch-picker";
 import { DummyTag } from "./dummy-tag";
 import { Icon } from "./icons";
 import { FooterYear } from "./footer-year";
+import { HideOn } from "./hide-on";
 import { EyeCarePanel, FramesPanel, LensesPanel, SunglassesPanel } from "./mega-panels";
 import { Nav } from "./nav";
 
@@ -47,7 +48,7 @@ export async function UtilityBar() {
           <li className="u-branches"><Icon name="pin" /><Link href="/contact#branches" prefetch={false}>{branches.length} branches</Link></li>
         </ul>
         <div className="utility__cta">
-          <Link className="btn btn--primary btn--sm" href="/book-eye-test" prefetch={false}>Book an eye test</Link>
+          <Link className="btn btn--primary btn--sm" href="/book-eye-test">Book an eye test</Link>
         </div>
       </div>
     </div>
@@ -75,13 +76,15 @@ export async function SiteHeader() {
 
 export function StickyBar() {
   return (
+    <HideOn paths={["/book-eye-test"]}>
     <div className="stickybar" role="navigation" aria-label="Quick actions">
       <div className="stickybar__inner">
         <PickerButton kind="call"><Icon name="phone" />Call</PickerButton>
         <PickerButton kind="whatsapp"><Icon name="wa" />WhatsApp</PickerButton>
-        <Link className="stickybar__book" href="/book-eye-test" prefetch={false}><Icon name="cal" />Book test</Link>
+        <Link className="stickybar__book" href="/book-eye-test"><Icon name="cal" />Book test</Link>
       </div>
     </div>
+    </HideOn>
   );
 }
 
