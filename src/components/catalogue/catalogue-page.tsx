@@ -48,7 +48,7 @@ export async function CataloguePage({ kind }: { kind: Kind }) {
           </div>
           <div className="help-band__actions">
             <PickerButton kind="whatsapp" className="btn btn--primary"><Icon name="wa" className="icon icon--sm" />Ask on WhatsApp</PickerButton>
-            <Link className="btn btn--outline" href={t.second.href} prefetch={false}>{t.second.label}</Link>
+            <Link className="btn btn--outline" href={t.second.href}>{t.second.label}</Link>
           </div>
         </Reveal>
       </section>

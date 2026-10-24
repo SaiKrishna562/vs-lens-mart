@@ -134,7 +134,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
             </div>
             <div className="note">
               <Icon name="store" />
-              <div><b>Try it on at a branch</b><p>{branchNames}, {hoursLine(branches).replace(/^Open/, "open")}. <Link href="/contact#branches" prefetch={false}>Find a branch</Link></p></div>
+              <div><b>Try it on at a branch</b><p>{branchNames}, {hoursLine(branches).replace(/^Open/, "open")}. <Link href="/contact#branches">Find a branch</Link></p></div>
             </div>
           </div>
         </div>

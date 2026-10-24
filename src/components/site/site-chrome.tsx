@@ -45,7 +45,7 @@ export async function UtilityBar() {
               )}
             </li>
           ))}
-          <li className="u-branches"><Icon name="pin" /><Link href="/contact#branches" prefetch={false}>{branches.length} branches</Link></li>
+          <li className="u-branches"><Icon name="pin" /><Link href="/contact#branches">{branches.length} branches</Link></li>
         </ul>
         <div className="utility__cta">
           <Link className="btn btn--primary btn--sm" href="/book-eye-test">Book an eye test</Link>

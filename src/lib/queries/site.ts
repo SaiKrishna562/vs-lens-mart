@@ -4,7 +4,7 @@
    They filter for approved, active and visible rows themselves, as well as
    relying on row-level security, so they're right whichever role runs them. */
 import { and, asc, count, desc, eq, inArray, sql } from "drizzle-orm";
-import { branches, brands, frames, lenses } from "../../db/schema";
+import { branchClosures, branches, brands, frames, lenses } from "../../db/schema";
 import type { Tx } from "../db";
 import { branches as branchSeed, isDummyPhone, PREMIUM_FROM, priceTiers, slugify } from "../site-config";
 
@@ -102,4 +102,14 @@ export async function menuQuery(tx: Tx): Promise<MenuData> {
     framePrices: prices("frames"),
     sunglassPrices: prices("sunglasses"),
   };
+}
+
+export type Closure = { branchSlug: string | null; day: string; note: string | null };
+
+/** Closed days from today on (festivals); a null branch means both branches. */
+export async function closuresQuery(tx: Tx): Promise<Closure[]> {
+  return tx.select({ branchSlug: branches.slug, day: branchClosures.day, note: branchClosures.note })
+    .from(branchClosures).leftJoin(branches, eq(branches.id, branchClosures.branchId))
+    .where(sql`${branchClosures.day} >= (now() at time zone 'Asia/Kolkata')::date`)
+    .orderBy(asc(branchClosures.day));
 }

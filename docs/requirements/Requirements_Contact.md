@@ -153,3 +153,17 @@ Done when:
 | What "Other" payment means (Q131: Cash, UPI, Other) | Client | "Cash and UPI" only |
 | Separate page per branch (Q95 "Not sure") | Client | One page with an anchor per branch |
 | WhatsApp Business account (Q83 "Planning to create one") | Client | Normal `wa.me` links work without it |
+
+## 9. Build notes (sprint 5.4 part B, 2026-10-24)
+
+Decisions made while building. They don't change what the customer sees.
+
+- **Maps:** a Google Maps embed that needs no API key (`maps.google.com/maps?q=<address>&output=embed`). It loads only when its card is scrolled near, or on "Show map", so no request goes to Google before then. "Directions" uses the branch's `map_url` when the admin sets one, otherwise a Google Maps search for the address. Exact pins are still a TODO for the client.
+- **Open now / Closed now** is worked out in the visitor's browser in India time and refreshes every minute, because the page is pre-rendered. It's shown as text on a pill, not colour alone.
+- **The holiday line** comes from the `branch_closures` table (the next closed day, for that branch or both), so it changes when the admin edits holidays. The seed's Diwali row is still `DUMMY` D3.
+- **The enquiry form** uses the same checks, spam trap and per-minute limit as the booking form, and the public role can only add an enquiry.
+- **Prefill:** `?topic=` accepts the dashed form (`eye-test`); `?frame=` accepts only a frame code in the staff form's format, and a message that's only the prefilled "About frame …:" isn't accepted.
+- **Mobile number field:** up to 16 characters, so "+91 98765 43210" fits. The mockup's limit of 14 cut it off; the server keeps only the 10 digits.
+- **Search engines:** `OpticianStore` data per branch from the `branches` table, with the Patelguda phone left out while it's a placeholder.
+- **Placeholders:** the email (D1), the reply time (C21) and the holiday (D3) are tagged in development and listed by `check:launch`.
+

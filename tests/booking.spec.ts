@@ -65,9 +65,10 @@ async function pickBranchDayTime(page: Page, slug: string, day: string, time: st
   await expect(slot(page, time)).toBeVisible();
   await slot(page, time).click();
 }
-async function details(page: Page, phone = "98765 43210") {
+async function details(page: Page, phone = "+91 98765 43210") {
   await page.getByLabel("Full name").fill(NAME);
   await page.getByLabel("Mobile number").fill(phone);
+  await expect(page.getByLabel("Mobile number"), "the whole number fits").toHaveValue(phone);
   await page.getByLabel(/I agree that VS Lens Mart/).check();
 }
 

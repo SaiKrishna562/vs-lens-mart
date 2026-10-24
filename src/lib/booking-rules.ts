@@ -73,8 +73,9 @@ export function isOffered(result: DaySlots, time: string) {
 
 /** "+91 95506 85417" → "9550685417" */
 export const cleanPhone = (s: string) => s.replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "").replace(/^0(?=\d{10}$)/, "");
-const phone = z.string().transform(cleanPhone).pipe(z.string().regex(/^[6-9]\d{9}$/, "Enter a 10-digit mobile number starting with 6, 7, 8 or 9"));
-const optionalText = (max: number, label: string) =>
+/** Indian mobile, shared with the enquiry form. */
+export const phone = z.string().transform(cleanPhone).pipe(z.string().regex(/^[6-9]\d{9}$/, "Enter a 10-digit mobile number starting with 6, 7, 8 or 9"));
+export const optionalText = (max: number, label: string) =>
   z.string().trim().max(max, `${label} can be up to ${max} characters`).transform((s) => s || null);
 
 export const FOR_WHOM = [["myself", "Myself"], ["someone_else", "Someone else"]] as const;

@@ -1,7 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { withRole } from "./db";
-import { branchesQuery, menuQuery } from "./queries/site";
+import { branchesQuery, closuresQuery, menuQuery } from "./queries/site";
 
 /* Cached layout data, read with the public role. The tags let admin saves
    refresh it straight away (sprint 5.3 and /admin/branches call updateTag), so
@@ -21,4 +21,12 @@ export async function getMenu() {
   cacheTag("catalogue");
   cacheLife("hours");
   return withRole("public", (tx) => menuQuery(tx));
+}
+
+/** Closed days, with the branch facts (admin edits both; tag "branches"). */
+export async function getClosures() {
+  "use cache";
+  cacheTag("branches");
+  cacheLife("hours");
+  return withRole("public", (tx) => closuresQuery(tx));
 }

@@ -52,13 +52,16 @@ export const yearsSince = (now = new Date()) => now.getFullYear() - site.since;
    Every placeholder the site uses from docs/dummy-data.md. `npm run check:launch`
    fails while any is still listed; remove an entry once the client's real value is in. */
 export const DUMMY = {
+  D1: "Enquiry email (info@vslensmart.example)",
   D2: "Patelguda phone / WhatsApp number",
+  D3: "Holidays: closed on Diwali day at both branches (branch_closures)",
   D4: "Domain (share links and search-engine data use vslensmart.example)",
   D5: "YouTube, Facebook and Instagram links",
   D8: "Logo (placeholder until the client's new logo arrives)",
   C7: "Price tier names and boundaries in the menus",
   C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
   D7: "Eye test price: shown as free",
+  C21: "Enquiry reply time: within a day",
 } as const;
 export type DummyId = keyof typeof DUMMY;
 
@@ -102,3 +105,8 @@ export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-"
 
 /** DUMMY D7: the client hasn't confirmed the eye test is free; shown with the tag until then. */
 export const EYE_TEST_FREE = true;
+
+/** DUMMY D1: the client hasn't sent the shop's email (answer 4). */
+export const shopEmail = "info@vslensmart.example";
+/** DUMMY C21: how soon the shop replies to a contact-form message. */
+export const replyTime = "within a day";

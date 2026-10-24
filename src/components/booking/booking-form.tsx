@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, useTransition, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { bookEyeTest, getSlots } from "@/app/(site)/book-eye-test/actions";
+import { BranchLink } from "@/components/site/branch-link";
 import { PickerButton } from "@/components/site/branch-picker";
 import { DummyTag } from "@/components/site/dummy-tag";
 import { Icon } from "@/components/site/icons";
@@ -195,7 +196,7 @@ function BookingFormView({ branches, freeTest, prefill }: Props & { prefill: { b
           <div className={`ffield${errors.phone ? " has-error" : ""}`}>
             <label htmlFor="phone">Mobile number</label>
             <div className="phone"><span className="phone__pre" aria-hidden="true">+91</span>
-              <input type="tel" id="phone" name="phone" autoComplete="tel-national" inputMode="numeric" maxLength={14} aria-invalid={!!errors.phone}
+              <input type="tel" id="phone" name="phone" autoComplete="tel-national" inputMode="numeric" maxLength={16} aria-invalid={!!errors.phone}
                 aria-describedby={`phone-hint${errors.phone ? " phone-err" : ""}`} onBlur={(e) => { e.currentTarget.value = cleanPhone(e.currentTarget.value) || e.currentTarget.value; }} />
             </div>
             <span className="ffield__hint" id="phone-hint">10-digit mobile. We use it for this booking only.</span>
@@ -253,18 +254,6 @@ function BookingFormView({ branches, freeTest, prefill }: Props & { prefill: { b
         </div>
       </aside>
     </div>
-  );
-}
-
-/** A call / WhatsApp link to one branch; a DUMMY number never dials (D2). */
-function BranchLink({ b, kind, text, className, children }: { b: Branch; kind: "call" | "whatsapp"; text?: string; className: string; children: React.ReactNode }) {
-  const href = kind === "call" ? `tel:+91${b.phone}` : `https://wa.me/91${b.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
-  return (
-    <a className={className} href={href} {...(kind === "whatsapp" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      onClick={b.dummy ? (e) => e.preventDefault() : undefined} aria-disabled={b.dummy ? true : undefined}>
-      {kind === "whatsapp" ? <Icon name="wa" className="icon icon--sm" /> : <Icon name="phone" className="icon icon--sm" />}{children}
-      {b.dummy && <DummyTag id="D2" />}
-    </a>
   );
 }
 

@@ -4,6 +4,30 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.4 (part B) · Contact page and enquiry form
+
+- **Changed:**
+  - `/contact`, built from the approved mockup:
+    - page hero; three quick cards (WhatsApp and Call through the branch picker, Book an eye test);
+    - "Our branches" (`#branches`, `#indresham`, `#patelguda`): each card shows its address, hours, the next closed day, four services and an "Open now / Closed now" label (India time), with Directions, Call and WhatsApp for **that branch's own number**;
+    - a Google map per branch that loads only when scrolled near or on "Show map";
+    - "Send us a message": the enquiry form, with the "Faster on WhatsApp" and email side notes, and a thank-you showing only what was sent;
+    - FAQ and the gold "Ready for an eye test?" band;
+    - `OpticianStore` search-engine data (no placeholder phone).
+  - Server action `sendEnquiry` (spam trap, per-minute limit, Zod, insert only as the public role). Rules in `src/lib/enquiry-rules.ts`.
+  - `?topic=&frame=` prefill. Closed days come from a new cached `getClosures()` (tag `branches`).
+  - `BranchLink` (call / WhatsApp one branch; a placeholder number never dials) moved to `src/components/site/branch-link.tsx`, shared with the booking confirmation.
+  - Links to `/contact` now prefetch. DUMMY register: D1, D3, C21.
+- **Fixed:**
+  - **Invisible headings on bands:** headings on the navy hero and help bands, and the gold book band, took the dark heading colour (navy on navy in light mode; in dark mode cream on gold). They now inherit the band's colour, as in the mockup. This also fixes the Frames / Sunglasses "Not sure what suits you?" band in light mode.
+  - **Mobile number cut off:** the field allowed 14 characters (from the mockup), so "+91 98765 43210" lost its last digit. It now allows 16, on both forms.
+- **Why:** sprint 5.4 part B (`ROADMAP.md`, `Requirements_Contact.md`). Build decisions are in `Requirements_Contact.md` section 9.
+- **Checked:**
+  - In the browser at 360 and 1440 px, light and dark: each card's links go to its own branch, and maps load only when scrolled to.
+  - New `contact.spec.ts` at 3 widths covers the cards and their numbers, maps not loaded before scrolling, an enquiry saved with consent time, prefill, validation, and the search-engine data. The contact form's rules were added to `booking-rules.spec.ts`. The booking test now types "+91 98765 43210".
+  - Full suite: 159 passed, 16 skipped (other screen sizes).
+- **Files:** `src/app/(site)/contact/page.tsx`, `src/app/(site)/contact/actions.ts`, `src/components/contact/enquiry-form.tsx`, `src/components/contact/branch-live.tsx`, `src/components/site/branch-link.tsx`, `src/components/booking/booking-form.tsx`, `src/lib/enquiry-rules.ts`, `src/lib/booking-rules.ts`, `src/lib/queries/site.ts`, `src/lib/site-data.ts`, `src/lib/site-config.ts`, `src/components/site/site-chrome.tsx`, `src/components/catalogue/catalogue-page.tsx`, `src/components/catalogue/frame-detail.tsx`, `src/styles/pages.css`, `playwright.config.ts`, `tests/contact.spec.ts`, `tests/booking-rules.spec.ts`, `tests/booking.spec.ts`, `docs/requirements/Requirements_Contact.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.4 (part A) · Book an eye test
 
 - **Changed:**

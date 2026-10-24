@@ -446,3 +446,14 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
 }
 
 }
+
+/* ==========================================================================
+   Live additions (not in the mockup, which only had map placeholders)
+   ========================================================================== */
+@layer components {
+  /* Headings on navy or gold bands take the band's text colour, as in the mockup (whose
+     headings inherit); the app's base gives every heading the --heading role, which is
+     navy in light mode and cream in dark mode, so it vanished on navy / gold. */
+  .hero h1, .hero h2, .book-band h2, .help-band h2 { color: inherit; }
+  .branch__map iframe { display: block; width: 100%; aspect-ratio: 16 / 7; border: 0; border-bottom: 1px dashed var(--brass-40); }
+}

@@ -3,6 +3,7 @@
    days, full slots, and the form's checks. */
 import { expect, test } from "@playwright/test";
 import { addDays, bookingFields, BOOKING, cleanPhone, dayLabel, isDay, isOffered, newReference, nowInIndia, slotsFor, timeLabel } from "../src/lib/booking-rules";
+import { enquiryFields, frameFromUrl, topicFromUrl } from "../src/lib/enquiry-rules";
 
 const HOURS = { opens: "09:00", closes: "21:30", openDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] };
 const NOW = { day: "2026-10-24", minutes: 10 * 60 + 5 }; // Sat 24 Oct, 10:05 AM in India
@@ -69,4 +70,25 @@ test("the form's checks: name, Indian mobile, lengths and consent", () => {
   expect(bad({ note: "x".repeat(301) })).toMatch(/up to 300 characters/);
   expect(bad({ address: "x".repeat(151) })).toMatch(/up to 150 characters/);
   expect(bad({ forWhom: "boss" })).not.toBeNull();
+});
+
+test("the contact form's checks (Requirements_Contact.md 4)", () => {
+  const ok = { name: "Asha", phone: "98765 43210", address: "", branch: "either", topic: "eye_test", message: "Do you test children's eyes?", frameCode: "", replyBy: "whatsapp", consent: "yes" };
+  const r = enquiryFields.safeParse(ok);
+  expect(r.success && r.data.phone).toBe("9876543210");
+  const bad = (patch: Record<string, string>) => {
+    const p = enquiryFields.safeParse({ ...ok, ...patch });
+    return p.success ? null : p.error.issues[0].message;
+  };
+  expect(bad({ name: "" })).toBe("Enter your name");
+  expect(bad({ topic: "" })).toBe("Choose a topic");
+  expect(bad({ message: "Hi" })).toBe("Write a message of at least 10 characters");
+  expect(bad({ message: "x".repeat(501) })).toMatch(/up to 500 characters/);
+  expect(bad({ consent: "" })).toBe("Tick the box to agree, so we can reply to you");
+  expect(bad({ branch: "mumbai" })).not.toBeNull();
+  expect(bad({ frameCode: "VSF-1024", message: "About frame VSF-1024:" }), "only the prefilled words").toBe("Write a message of at least 10 characters");
+  expect(topicFromUrl("eye-test")).toBe("eye_test");
+  expect(topicFromUrl("<script>")).toBe("");
+  expect(frameFromUrl("VSF-1024")).toBe("VSF-1024");
+  expect(frameFromUrl("vsf-1024'><b>")).toBe("");
 });
