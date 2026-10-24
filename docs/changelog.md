@@ -4,6 +4,33 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.4 (part C) · Privacy policy, retention, staff Bookings and Enquiries
+
+- **Changed:**
+  - **`/privacy`**, from the approved mockup:
+    - page hero with "Last updated"; "In short"; contents (beside the text on desktop, "On this page" on phones, current section marked);
+    - the ten policy sections; a contact card (WhatsApp with a prefilled question, Call, email, both addresses);
+    - the print style.
+    - "What we collect" now includes the optional area or address on both forms, so the page matches what is really stored. The footer link now prefetches.
+  - **Retention:** `purge_expired(days)` in `db/security.sql` (security definer, refuses under 30 days, owner-only delete policies) and `src/lib/retention.ts`.
+    - It's called after every booking and enquiry and when staff open the lists, using `RETENTION_DAYS` (`DUMMY` D9, 365), the same setting the privacy page's "1 year" is worked out from.
+  - **`/admin/bookings`:** day / branch / status filters, previous and next day, each row with Call / WhatsApp and status; admin-only Delete with a confirmation.
+  - **`/admin/enquiries`:** New / Replied / Closed, with the message, frame code and preferred reply.
+  - New: `RowControls`, `customer-lists.tsx`, the `bookingsList` / `enquiriesList` queries, and the `setEnquiryStatus` / `deleteCustomerRow` actions. The "coming soon" placeholders for these two pages are gone.
+  - DUMMY register: D9, C23.
+- **Why:** sprint 5.4 part C (`ROADMAP.md`, `Requirements_Privacy.md`, `Requirements_Admin.md` 7; the staff lists were added to this sprint by the developer on 2026-10-24). Build decisions: `Requirements_Privacy.md` 9, `Requirements_Admin.md` 12.
+- **Checked:**
+  - In the browser: the privacy page at 360 px, with the contents collapsed and no sideways scroll.
+  - New `staff-lists.spec.ts`:
+    - logged out, the lists redirect and show no customer;
+    - staff see the details, change the status and can't delete;
+    - enquiries move between tabs;
+    - the admin deletes after confirming;
+    - retention deletes old rows, keeps new ones and refuses 10 days.
+  - New `privacy.spec.ts` at 3 widths: links from the footer and both consent boxes, the fields and keys named, the retention words, no third-party requests, and the contents.
+  - Full suite: 173 passed, 16 skipped (other screen sizes). `check:launch` lists the new placeholders.
+- **Files:** `src/app/(site)/privacy/page.tsx`, `src/components/privacy/contents.tsx`, `src/app/admin/(staff)/bookings/page.tsx`, `src/app/admin/(staff)/enquiries/page.tsx`, `src/app/admin/(staff)/[...section]/page.tsx`, `src/app/admin/(staff)/actions.ts`, `src/components/admin/customer-lists.tsx`, `src/components/admin/row-controls.tsx`, `src/lib/queries/admin.ts`, `src/lib/retention.ts`, `src/lib/site-config.ts`, `src/app/(site)/book-eye-test/actions.ts`, `src/app/(site)/contact/actions.ts`, `src/components/site/site-chrome.tsx`, `src/styles/admin.css`, `db/security.sql`, `playwright.config.ts`, `tests/staff-lists.spec.ts`, `tests/privacy.spec.ts`, `docs/requirements/Requirements_Privacy.md`, `docs/requirements/Requirements_Admin.md`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.4 (part B) · Contact page and enquiry form
 
 - **Changed:**

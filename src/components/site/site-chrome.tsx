@@ -132,7 +132,7 @@ export async function SiteFooter() {
         </div>
         <div className="footer__bottom">
           <span>© <FooterYear /> {site.name} · Since {site.since}</span>
-          <Link href="/privacy" prefetch={false}>Privacy policy</Link>
+          <Link href="/privacy">Privacy policy</Link>
         </div>
       </div>
     </footer>

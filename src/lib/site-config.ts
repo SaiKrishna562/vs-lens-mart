@@ -61,6 +61,8 @@ export const DUMMY = {
   C7: "Price tier names and boundaries in the menus",
   C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
   D7: "Eye test price: shown as free",
+  D9: "Retention: bookings and messages deleted after 1 year (RETENTION_DAYS)",
+  C23: "Privacy contact: \"the shop owner\", replies within 30 days; legal owner's name",
   C21: "Enquiry reply time: within a day",
 } as const;
 export type DummyId = keyof typeof DUMMY;
@@ -110,3 +112,15 @@ export const EYE_TEST_FREE = true;
 export const shopEmail = "info@vslensmart.example";
 /** DUMMY C21: how soon the shop replies to a contact-form message. */
 export const replyTime = "within a day";
+
+/** DUMMY D9: how long bookings and messages are kept before automatic deletion
+ *  (purge_expired() in db/security.sql refuses anything under 30 days). */
+export const RETENTION_DAYS = 365;
+/** The period in words for /privacy, from the same number ("1 year", "2 years", "180 days"). */
+export const retentionText = RETENTION_DAYS % 365 === 0
+  ? `${RETENTION_DAYS / 365} year${RETENTION_DAYS === 365 ? "" : "s"}`
+  : `${RETENTION_DAYS} days`;
+/** DUMMY C23: who answers questions about personal details, and how fast. */
+export const privacyContact = { who: "the shop owner", replyDays: 30 };
+/** The privacy policy's "Last updated" date. Change it whenever the policy changes. */
+export const privacyUpdated = "2026-10-24";

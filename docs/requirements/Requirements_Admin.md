@@ -218,3 +218,13 @@ Done when:
 | What happens when staff leave (Q142 blank) | Client | Admin disables the account |
 | Session length | Client | `DUMMY` C22: 12 hours |
 | Customer address on bookings and enquiries: wanted on both forms? | Client | Optional field on both |
+
+## 12. Build notes: Bookings and Enquiries (sprint 5.4 part C, 2026-10-24; not mocked up)
+
+- **`/admin/bookings`:** one day at a time (default today, India time) with Previous / Next day, branch (default the working branch; "Both" available) and status filters, in the address.
+  - Each row: time, name, branch, phone, reference, "for someone else", note and address, Call / WhatsApp the customer, and the status (Booked / Attended / No-show / Cancelled).
+- **`/admin/enquiries`:** New / Replied / Closed, newest first.
+  - Each row: when, name, topic (and frame code), branch, phone, preferred reply, the message and address, Call / WhatsApp, and the status.
+- **Delete:** admin only, after a confirmation; the database refuses staff anyway. Staff change status only.
+- **Retention:** opening either list also deletes rows past the retention period (`DUMMY` D9; see `Requirements_Privacy.md` 9).
+- They reuse the dashboard's booking rows and the frames list's filter form; there was no mockup for these pages.

@@ -91,3 +91,28 @@ export function framesList(tx: Tx, kind: Kind, f: ListFilters, userId: string) {
     )
     .limit(200);
 }
+
+export const BOOKING_STATUSES = [["booked", "Booked"], ["attended", "Attended"], ["no_show", "No-show"], ["cancelled", "Cancelled"]] as const;
+export const ENQUIRY_STATUSES = [["new", "New"], ["replied", "Replied"], ["closed", "Closed"]] as const;
+
+/** Bookings for one day (Requirements_Admin.md 7): optionally one branch and one status; by time. */
+export function bookingsList(tx: Tx, f: { day: string; branch?: string; status?: string }) {
+  const where: SQL[] = [eq(appointments.day, f.day)];
+  if (f.branch) where.push(eq(branches.slug, f.branch));
+  if (BOOKING_STATUSES.some(([s]) => s === f.status)) where.push(eq(appointments.status, f.status as "booked"));
+  return tx.select({
+    id: appointments.id, reference: appointments.reference, time: appointments.slotStart, name: appointments.name, phone: appointments.phone,
+    forWhom: appointments.forWhom, note: appointments.note, address: appointments.address, status: appointments.status,
+    branch: branches.name, branchSlug: branches.slug,
+  }).from(appointments).innerJoin(branches, eq(branches.id, appointments.branchId))
+    .where(and(...where)).orderBy(asc(appointments.slotStart), asc(branches.name)).limit(500);
+}
+
+/** Enquiries with one status, newest first. */
+export function enquiriesList(tx: Tx, status: string) {
+  return tx.select({
+    id: enquiries.id, name: enquiries.name, phone: enquiries.phone, address: enquiries.address, branch: enquiries.branch,
+    topic: enquiries.topic, message: enquiries.message, frameCode: enquiries.frameCode, replyBy: enquiries.replyBy,
+    status: enquiries.status, createdAt: enquiries.createdAt,
+  }).from(enquiries).where(eq(enquiries.status, status as "new")).orderBy(desc(enquiries.createdAt)).limit(200);
+}

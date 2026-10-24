@@ -8,6 +8,7 @@ import { fieldErrors } from "@/lib/booking-rules";
 import { withRole } from "@/lib/db";
 import { ENQUIRY_KEYS, enquiryFields } from "@/lib/enquiry-rules";
 import { looksLikeSpam, withinLimit } from "@/lib/form-guard";
+import { purgeExpired } from "@/lib/retention";
 
 export type EnquiryResult =
   | { ok: true }
@@ -23,10 +24,13 @@ export async function sendEnquiry(fd: FormData): Promise<EnquiryResult> {
   const f = parsed.data;
   try {
     // Inserted without RETURNING: the public role can't read the row back
-    await withRole("public", (tx) => tx.insert(enquiries).values({
-      name: f.name, phone: f.phone, address: f.address, branch: f.branch, topic: f.topic as typeof enquiries.$inferInsert.topic,
-      message: f.message, frameCode: f.frameCode, replyBy: f.replyBy, consentAt: new Date(),
-    }));
+    await withRole("public", async (tx) => {
+      await tx.insert(enquiries).values({
+        name: f.name, phone: f.phone, address: f.address, branch: f.branch, topic: f.topic as typeof enquiries.$inferInsert.topic,
+        message: f.message, frameCode: f.frameCode, replyBy: f.replyBy, consentAt: new Date(),
+      });
+      await purgeExpired(tx);
+    });
     return { ok: true };
   } catch (e) {
     console.error("Enquiry could not be saved", e instanceof Error ? e.message : e);

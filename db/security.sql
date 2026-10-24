@@ -169,3 +169,31 @@ as $$
 $$;
 revoke all on function slot_counts(uuid, date) from public;
 grant execute on function slot_counts(uuid, date) to vslm_app;
+
+-- ---------- Retention: bookings and messages are deleted after the period on /privacy ----------
+-- (Requirements_Privacy.md 4.5; the period is DUMMY D9, RETENTION_DAYS in src/lib/site-config.ts.)
+-- SECURITY DEFINER, like slot_counts: the website calls it after each booking or message
+-- and when staff open the lists, so deletion needs no separate scheduler. It refuses a
+-- period shorter than 30 days, so a slip in code can't wipe recent bookings.
+create policy owner_purge on appointments for delete to vslm_owner using (true);
+create policy owner_read on enquiries for select to vslm_owner using (true);
+create policy owner_purge on enquiries for delete to vslm_owner using (true);
+
+create or replace function purge_expired(p_days integer)
+returns integer
+language plpgsql volatile security definer
+set search_path = public
+as $$
+declare n integer; m integer;
+begin
+  if p_days is null or p_days < 30 then
+    raise exception 'purge_expired: a retention period under 30 days is refused (%)', p_days;
+  end if;
+  delete from appointments where created_at < now() - make_interval(days => p_days);
+  get diagnostics n = row_count;
+  delete from enquiries where created_at < now() - make_interval(days => p_days);
+  get diagnostics m = row_count;
+  return n + m;
+end $$;
+revoke all on function purge_expired(integer) from public;
+grant execute on function purge_expired(integer) to vslm_app;

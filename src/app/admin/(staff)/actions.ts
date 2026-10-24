@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { revalidatePath, updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
-import { appointments, frames } from "@/db/schema";
+import { appointments, enquiries, frames } from "@/db/schema";
 import { BRANCH_COOKIE, branchSlugs } from "@/lib/admin-branch";
 import { withRole } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
@@ -48,5 +48,27 @@ export async function setBookingStatus(appointmentId: string, status: string) {
   await withRole(staff.role, (tx) =>
     tx.update(appointments).set({ status: s, updatedBy: staff.id, updatedAt: new Date() })
       .where(and(eq(appointments.id, aid))), staff.id);
-  revalidatePath("/admin");
+  revalidatePath("/admin", "layout");
+}
+
+const enquiryStatus = z.enum(["new", "replied", "closed"]);
+
+/** Enquiries: New / Replied / Closed. */
+export async function setEnquiryStatus(enquiryId: string, status: string) {
+  const staff = await requireStaff();
+  const eid = id.parse(enquiryId), s = enquiryStatus.parse(status);
+  await withRole(staff.role, (tx) =>
+    tx.update(enquiries).set({ status: s, updatedBy: staff.id, updatedAt: new Date() }).where(eq(enquiries.id, eid)), staff.id);
+  revalidatePath("/admin", "layout");
+}
+
+/** Admin only: delete a booking or an enquiry for good (the database refuses staff anyway). */
+export async function deleteCustomerRow(kind: "booking" | "enquiry", rowId: string) {
+  const staff = await requireStaff();
+  if (staff.role !== "admin") return { ok: false as const };
+  const rid = id.parse(rowId);
+  await withRole(staff.role, (tx) =>
+    kind === "booking" ? tx.delete(appointments).where(eq(appointments.id, rid)) : tx.delete(enquiries).where(eq(enquiries.id, rid)), staff.id);
+  revalidatePath("/admin", "layout");
+  return { ok: true as const };
 }

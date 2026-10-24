@@ -131,3 +131,12 @@ Done when:
 | Who can see customer data (Q136 blank) | Client | Signed-in staff only (`Requirements_Admin.md`) |
 | Hosting provider and data location | Developer | TODO note |
 | Google Analytics (Q155) | Later | Not on the site; page says so |
+
+## 9. Build notes (sprint 5.4 part C, 2026-10-24)
+
+- **Matches reality:** "What we collect" now names the optional **area or address** on both forms (client change 2026-10-21), which the mockup's table didn't. A test checks that the page names every stored field and browser key.
+- **Retention:** one setting, `RETENTION_DAYS` in `src/lib/site-config.ts` (`DUMMY` D9, 365). The page's wording ("1 year") is worked out from it, and `purge_expired()` in the database uses the same number. It runs after each booking or message and whenever staff open the Bookings or Enquiries list, so nothing older stays around while the site is in use. It refuses a period under 30 days. At deployment, also run it daily from the host's scheduler.
+- **Hosting provider:** still a TODO for the developer (named once deployment is decided); the page says "our website hosting provider".
+- **No third-party requests on load:** fonts are served by the site itself (`next/font`), there's no tracking, and Google Maps loads only on the contact page when scrolled to. Tested.
+- **Contents:** always open beside the text on desktop; a collapsed "On this page" on phones that closes after a tap; the section being read is marked.
+- **Placeholders:** D1 (email), D9 (retention), C23 (contact person, 30-day reply, legal owner's name) are tagged in development and listed by `check:launch`. The wording still needs the client's legal review before launch.

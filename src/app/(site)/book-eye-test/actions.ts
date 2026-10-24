@@ -10,6 +10,7 @@ import { branchClosures, branches } from "@/db/schema";
 import { placeBooking } from "@/lib/booking-core";
 import { bookingFields, fieldErrors, isDay, isOffered, newReference, slotsFor, type DaySlots } from "@/lib/booking-rules";
 import { withRole, type Tx } from "@/lib/db";
+import { purgeExpired } from "@/lib/retention";
 import { looksLikeSpam, withinLimit } from "@/lib/form-guard";
 
 async function daySlots(tx: Tx, branchSlug: string, day: string): Promise<{ branchId: string; result: DaySlots } | null> {
@@ -58,6 +59,7 @@ export async function bookEyeTest(fd: FormData): Promise<BookingResult> {
         branchId: slots.branchId, day: f.day, time: f.time, name: f.name, phone: f.phone,
         forWhom: f.forWhom, address: f.address, note: f.note,
       });
+      if (r.ok) await purgeExpired(tx);
       return r.ok ? r : { ok: false, full: f.time };
     });
   } catch (e) {
