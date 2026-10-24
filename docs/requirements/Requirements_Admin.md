@@ -236,3 +236,13 @@ Done when:
 - **When changes appear:** at once across the site (cache tag `branches`): utility bar, footer, Contact, the branch picker and the booking form's times.
 - **Numbers:** 10-digit Indian mobiles. The all-zero placeholder stays allowed, so the Patelguda number can remain `DUMMY` D2 until the client sends it; the card shows the D2 tag in development.
 - **Unsaved changes:** reloading or closing the tab asks first, and "Undo changes" restores the saved values.
+
+## 14. Build notes: Branch holidays (2026-10-24; not mocked up)
+
+- **`/admin/holidays`:** a list of closed days, upcoming first; past days are folded away. Each row shows the date, the branch (or "Both branches") and an optional note (up to 60 characters, shown on Contact).
+- **Adding (admin only):** date (today or later), branch or both, note. The same day can't be closed twice for a branch, and closing both branches clashes with a day already closed for one of them.
+- **Bookings already on that day:** after adding, the page says how many there are, with a link to them in Bookings, so the branch can call those customers to move.
+- **Removing (admin only):** after a confirmation; the day can be booked again at once.
+- **Staff** see the list read-only; the database refuses a staff change as well.
+- **When changes appear:** at once (cache tag `branches`): the booking form shows "Closed" for that day and Contact shows the next closed day.
+- **Real days:** still a question for the client (Q91, `docs/open-questions.md`); the seed's Diwali day is `DUMMY` D3.

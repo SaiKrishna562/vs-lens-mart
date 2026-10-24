@@ -3,7 +3,7 @@
    so row-level security still decides what each role can see. "Today" is
    India time (Asia/Kolkata), whatever the server's clock zone is. */
 import { and, asc, desc, eq, ilike, inArray, ne, or, sql, type SQL } from "drizzle-orm";
-import { appointments, branches, brands, campPhotos, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses, testimonials } from "../../db/schema";
+import { appointments, branchClosures, branches, brands, campPhotos, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses, testimonials } from "../../db/schema";
 import type { Tx } from "../db";
 
 const TODAY = sql`(now() at time zone 'Asia/Kolkata')::date`;
@@ -191,5 +191,11 @@ export function branchesAdmin(tx: Tx) {
     slug: branches.slug, name: branches.name, address: branches.address, mapUrl: branches.mapUrl, phone: branches.phone,
     whatsapp: branches.whatsapp, opens: branches.opens, closes: branches.closes, openDays: branches.openDays, isVisible: branches.isVisible,
   }).from(branches).orderBy(asc(branches.sort), asc(branches.name));
+}
+
+/** Every closed day with its branch (null = both), soonest first. */
+export function closuresAdmin(tx: Tx) {
+  return tx.select({ id: branchClosures.id, day: branchClosures.day, branch: branches.name, note: branchClosures.note })
+    .from(branchClosures).leftJoin(branches, eq(branches.id, branchClosures.branchId)).orderBy(asc(branchClosures.day)).limit(500);
 }
 

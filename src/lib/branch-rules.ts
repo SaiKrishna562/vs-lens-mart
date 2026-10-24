@@ -3,7 +3,7 @@
    is still the all-zero placeholder (DUMMY D2), which stays allowed until the
    client sends the real one. */
 import { z } from "zod";
-import { cleanPhone } from "./booking-rules";
+import { cleanPhone, isDay, nowInIndia } from "./booking-rules";
 
 export const WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 
@@ -24,3 +24,13 @@ export const branchFields = z.object({
   isVisible: z.boolean(),
 }).refine((b) => b.closes > b.opens, { path: ["closes"], message: "Closing time must be after opening time." });
 export type BranchInput = z.infer<typeof branchFields>;
+
+/* Closed days (Requirements_Admin.md settings): festivals and holidays. An empty
+   branch means both branches. Only today or later can be added. */
+export const closureFields = z.object({
+  day: z.string().refine(isDay, "Pick the date.").refine((d) => d >= nowInIndia().day, "Pick today or a later date."),
+  branch: z.string().regex(/^[a-z0-9-]*$/).transform((s) => s || null),
+  note: z.string().trim().max(60, "Keep the note under 60 characters.").transform((s) => s || null),
+});
+export type ClosureInput = z.infer<typeof closureFields>;
+

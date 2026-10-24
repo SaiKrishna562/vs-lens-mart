@@ -67,6 +67,7 @@ Decided by the developer and applied to `CLAUDE.md`, `ROADMAP.md` and `Requireme
 
 Blank in the form:
 - **Homepage:** main headline (Q8), what goes above the fold (Q10).
+- **Branch holidays:** which days is each branch closed (festivals, holidays), and are they the same for both branches? (Q91, "Not sure"). Until then the seed has one placeholder closed day, Diwali (`DUMMY` D3); the admin adds the real days at `/admin/holidays`.
 - **Branches:** which frames are at which branch (Q93); branch picker or branch pages, "Not sure" (Q94, Q95).
 - **Eye camps:** who organises them and how often (Q97, Q98).
 - **Staff:** who is the administrator (Q102); audit log (Q111, Q112, Q141); what happens when staff leave (Q142).

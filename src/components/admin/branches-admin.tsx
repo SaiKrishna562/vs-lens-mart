@@ -18,7 +18,7 @@ export async function BranchesAdmin() {
         <p>Address, phone, WhatsApp and opening hours for each branch. Changes show on the website straight away: footer, Contact page, branch picker and booking form.</p>
       </header>
       {!admin && <p className="adm-readonly">Only an admin can change branch details. Ask the admin if something here is wrong.</p>}
-      <BranchesForm key={rows.map((r) => r.slug + r.phone + r.opens + r.closes).join("|")} admin={admin} workingBranch={working}
+      <BranchesForm admin={admin} workingBranch={working}
         branches={rows.map((r) => ({ ...r, openDays: r.openDays }))} />
     </>
   );

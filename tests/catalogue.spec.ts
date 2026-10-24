@@ -173,9 +173,11 @@ test("Enquire opens the branch picker with the frame code in the WhatsApp text",
   await page.getByRole("button", { name: `Enquire about ${f.brand} ${f.model} on WhatsApp` }).click();
   const picker = page.getByRole("dialog", { name: "WhatsApp which branch?" });
   await expect(picker).toBeVisible();
-  const href = await picker.getByRole("link").first().getAttribute("href");
-  const text = decodeURIComponent(new URL(href!).searchParams.get("text") ?? "");
-  expect(text).toBe(`Hi VS Lens Mart, I'm interested in frame ${f.code} (${f.brand} ${f.model}). Is it available?`);
+  // The picker fills in the message just after it opens, so keep reading until it's there
+  await expect.poll(async () => {
+    const href = await picker.getByRole("link").first().getAttribute("href");
+    return decodeURIComponent(new URL(href!).searchParams.get("text") ?? "");
+  }).toBe(`Hi VS Lens Mart, I'm interested in frame ${f.code} (${f.brand} ${f.model}). Is it available?`);
 });
 
 test("frame detail: every field, both WhatsApp actions, search-engine data", async ({ page }) => {

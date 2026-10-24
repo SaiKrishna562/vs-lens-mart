@@ -4,6 +4,21 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Staff settings (part B) · Branch holidays page
+
+- **Changed:**
+  - **`/admin/holidays`** (not mocked up, staff-area style): upcoming closed days, past ones folded away; an admin form to add a day (date, one branch or both, note) and a Remove button with a confirmation.
+  - After adding, it says how many bookings already stand on that day, with a link to them.
+  - The same day twice for a branch, or both branches over a one-branch day, is refused with a plain message.
+  - Only an admin can add or remove (checked in the action and by the database); staff see the list read-only.
+  - Saving refreshes the `branches` cache, so the booking form and Contact show the change at once.
+  - The "Saved" message on `/admin/branches` no longer disappears straight after saving.
+  - The "coming later" page now covers only Staff accounts.
+- **Why:** the developer's decision (2026-10-24) to build the staff settings with `DUMMY` values. The real closed days are a question for the client (Q91, added to `docs/open-questions.md`); the seed's Diwali day stays `DUMMY` D3. Build notes: `Requirements_Admin.md` 14.
+- **Checked:** `staff-settings.spec.ts` (4 tests pass): staff read-only and a database refusal; the admin closes a day, sees the bookings warning, gets the duplicate message, the booking form and Contact show it, and removing it makes the day bookable again. Full `npm test`: 222 passed and 1 timing failure, now fixed; the two changed specs then passed twice at every size (56 runs).
+  - **Test fixes:** two earlier runs stopped halfway left the Indresham closing time at 8:30 PM and two throwaway `E2E-M` frames (removed by hand). The Branches test now restores the seed value from `site-config.ts`, not the value it found. The Enquire test keeps reading the WhatsApp link until the picker has filled in the message.
+- **Files:** `src/app/admin/(staff)/holidays/{page,actions}.ts(x)`, `src/components/admin/{holiday-form,holidays-admin,branches-admin}.tsx`, `src/lib/branch-rules.ts`, `src/lib/queries/admin.ts`, `src/app/admin/(staff)/[...section]/page.tsx`, `tests/staff-settings.spec.ts`, `tests/catalogue.spec.ts`, `docs/open-questions.md`, `docs/requirements/Requirements_Admin.md`
+
 ## 2026-10-24 · Staff settings (part A) · Branches page
 
 - **Changed:**
