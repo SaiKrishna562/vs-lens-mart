@@ -22,7 +22,7 @@ export default async function GalleryPage() {
     <>
       <section className="hero hero--page" aria-labelledby="gallery-title">
         <div className="container hero__inner">
-          <nav aria-label="Breadcrumb"><ol className="crumbs"><li><Link href="/">Home</Link></li><li><Link href="/about" prefetch={false}>About</Link></li><li aria-current="page">Gallery</li></ol></nav>
+          <nav aria-label="Breadcrumb"><ol className="crumbs"><li><Link href="/">Home</Link></li><li><Link href="/about">About</Link></li><li aria-current="page">Gallery</li></ol></nav>
           <p className="eyebrow"><span>GALLERY</span></p>
           <h1 className="hero__title" id="gallery-title">Inside <span className="gold">VS Lens Mart.</span></h1>
           <p className="hero__sub">Our shops, our team and our eye camps, since {site.since}.</p>

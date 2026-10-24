@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { BranchMap, OpenStatus } from "@/components/contact/branch-live";
+import { BranchCard } from "@/components/contact/branch-card";
 import { EnquiryForm, EnquiryFormPlain } from "@/components/contact/enquiry-form";
-import { BranchLink } from "@/components/site/branch-link";
 import { PickerButton } from "@/components/site/branch-picker";
-import { DummyTag } from "@/components/site/dummy-tag";
 import { Icon } from "@/components/site/icons";
-import { eyeCareServices } from "@/components/site/menu-links";
 import { Reveal } from "@/components/site/reveal";
 import { hoursLine } from "@/components/site/site-chrome";
-import { dayLabel } from "@/lib/booking-rules";
-import type { Branch, Closure } from "@/lib/queries/site";
+import type { Branch } from "@/lib/queries/site";
 import { replyTime, shopEmail, site, time12 } from "@/lib/site-config";
 import { getBranches, getClosures } from "@/lib/site-data";
 
@@ -26,11 +22,6 @@ export const metadata: Metadata = {
    Every shop fact comes from the branches table. */
 
 const DAY_CODES: Record<string, string> = { Mon: "Mo", Tue: "Tu", Wed: "We", Thu: "Th", Fri: "Fr", Sat: "Sa", Sun: "Su" };
-const directions = (b: Branch) => b.mapUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`VS Lens Mart, ${b.address}`)}`;
-const days = (b: Branch) => (b.openDays.length === 7 ? "Mon–Sun" : b.openDays.join(", "));
-/** A closure's note without the seed's DUMMY marker (the tag shows it instead, in development). */
-const cleanNote = (n: string | null) => (n ?? "").replace(/\s*\(DUMMY[^)]*\)/, "").trim();
-
 /** OpticianStore data per branch for search engines; a placeholder phone is left out. */
 function storeData(branches: Branch[]) {
   return branches.map((b) => ({
@@ -40,34 +31,6 @@ function storeData(branches: Branch[]) {
     openingHours: `${b.openDays.map((d) => DAY_CODES[d]).join(",")} ${b.opens}-${b.closes}`.replace("Mo,Tu,We,Th,Fr,Sa,Su", "Mo-Su"),
     url: `${site.url}/contact#${b.slug}`,
   }));
-}
-
-function BranchCard({ b, closures }: { b: Branch; closures: Closure[] }) {
-  const mine = closures.filter((c) => c.branchSlug === null || c.branchSlug === b.slug);
-  const next = mine[0];
-  return (
-    <article className="branch" id={b.slug} aria-labelledby={`${b.slug}-name`}>
-      <BranchMap name={b.name} address={`VS Lens Mart, ${b.address}`} />
-      <div className="branch__body">
-        <div className="branch__head">
-          <h3 className="branch__name" id={`${b.slug}-name`}>{b.name}</h3>
-          <OpenStatus opens={b.opens} closes={b.closes} openDays={b.openDays} closedDays={mine.map((c) => c.day)} />
-        </div>
-        <p className="branch__row"><Icon name="pin" /><span>{b.address}</span></p>
-        <p className="branch__row"><Icon name="clock" /><span>
-          {days(b)} · {time12(b.opens)}–{time12(b.closes)}
-          {next && <><br />Closed on {dayLabel(next.day)}{cleanNote(next.note) && ` (${cleanNote(next.note)})`} <DummyTag id="D3" /></>}
-        </span></p>
-        <p className="branch__row"><Icon name="phone" /><span>{b.dummy ? "+91 00000 00000" : b.phone}{b.dummy && <> <DummyTag id="D2" /></>}</span></p>
-        <ul className="pill-list" aria-label={`Services at ${b.name}`}>{eyeCareServices.map((s) => <li key={s.label}>{s.label}</li>)}</ul>
-        <div className="branch__actions">
-          <a className="btn btn--outline-dark" href={directions(b)} target="_blank" rel="noopener noreferrer" aria-label={`Directions to the ${b.name} branch`}><Icon name="pin" className="icon icon--sm" />Directions</a>
-          <BranchLink b={b} kind="call" className="btn btn--outline-dark" label={`Call the ${b.name} branch`}>Call</BranchLink>
-          <BranchLink b={b} kind="whatsapp" className="btn btn--outline-dark" label={`WhatsApp the ${b.name} branch`} text={`Hi VS Lens Mart, I have a question for the ${b.name} branch.`}>WhatsApp</BranchLink>
-        </div>
-      </div>
-    </article>
-  );
 }
 
 export default async function ContactPage() {

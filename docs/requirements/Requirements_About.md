@@ -157,3 +157,10 @@ Done when:
 
 - **Staff (`/admin/testimonials`):** the customer's first name (and initial if they like), optional branch, their words (up to 300 characters), and the date they agreed to be quoted. That date is required and can't be in the future, so a review can't be added without the customer's agreement on record. Staff add, edit and hide; only an admin deletes.
 - **On the site:** visible testimonials, the most recently agreed first. The About reviews section (part D) and the home page (sprint 5.2) read them; with none visible, the section stays hidden. The seed's three "Sample Customer" rows are `DUMMY` C8 and are listed by `check:launch`.
+
+## 8. Build notes: the page (sprint 5.5 part D, 2026-10-24)
+
+- **Years** ("For 27 years", "Today: … 27 years") are worked out in the visitor's browser from 1999 (the page is pre-rendered, so the server never reads the clock), the same way as the footer year.
+- **Placeholders** each have their own tag and register entry: founding story C1, founder name and quote C2, Patelguda opening year C3, team roles C10, the 2010 and 2016 milestones C15. Dr. N. Venkateswarlu isn't mentioned (a test checks it).
+- **From the database:** the branch cards are the Contact page's (`src/components/contact/branch-card.tsx`, now shared), with maps that load only when scrolled to. The gallery preview shows the 5 newest visible photos (the mockup's grid), hidden with none. The reviews show up to 6 visible testimonials, hidden with none, **without star ratings** (testimonials don't record one, so none are invented). The camps band names the next camp, or links to past camps when none is scheduled.
+- **Search engines:** `Organization` data with the founding year 1999.

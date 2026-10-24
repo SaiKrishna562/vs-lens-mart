@@ -65,6 +65,12 @@ export const DUMMY = {
   C23: "Privacy contact: \"the shop owner\", replies within 30 days; legal owner's name",
   C21: "Enquiry reply time: within a day",
   C19: "Eye camps: what's offered and what to bring (src/lib/camp-rules.ts)",
+  C17: "Eye care health copy: eye-test steps, when to get checked, tips (optometrist to review)",
+  C1: "About: the founding story",
+  C2: "About: the founder's name, photo and quote",
+  C3: "About: the year the Patelguda branch opened (2022)",
+  C10: "About: team roles (no names until each person agrees)",
+  C15: "About: journey milestones 2010 and 2016",
 } as const;
 export type DummyId = keyof typeof DUMMY;
 

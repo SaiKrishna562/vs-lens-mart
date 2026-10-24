@@ -148,3 +148,10 @@ Done when:
 | Using another doctor's prescription | Client | TODO |
 | Payment "Other" (Q131): card? | Client | "Cash or UPI" |
 | Test-room photo | Client | Placeholder |
+
+## 7. Build notes (sprint 5.5 part D, 2026-10-24)
+
+- **Placeholders:** the eye-test steps, the "when to get checked" list and the tips are tagged `DUMMY` C17 in development (now in the register, so `check:launch` lists it until the shop's optometrist approves them). "Free" is tagged D7 and comes from `EYE_TEST_FREE`.
+- **FAQ data for search engines** includes only answers marked confirmed: how long a test takes, how soon glasses are ready, lens brands, frame repair, payment. "Is the eye test free?", "Do I need an appointment?" and "another doctor's prescription" stay on the page but out of the data until the client confirms them. A test checks this.
+- **The safety note** ("Sudden loss of vision… see a doctor or hospital straight away") is fixed text, always shown.
+- **Quick links** use icon placeholders until the client sends photos (no stock photos).

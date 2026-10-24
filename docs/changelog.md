@@ -4,6 +4,32 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.5 (part D) · Eye care and About pages; sprint 5.5 done
+
+- **Changed:**
+  - **`/eye-care`**, built from the approved mockup:
+    - hero; the four services with their anchors (`#eye-testing`, `#lens-fitting`, `#frame-adjustment`, `#frame-repair`), "Free" tagged D7;
+    - "What happens at your eye test"; "When to get your eyes checked" with the always-visible safety note; tips;
+    - FAQ (`<details>`), with `FAQPage` data from confirmed answers only;
+    - quick links; CTA; "General information only, not medical advice".
+  - **`/about`**, built from the approved mockup:
+    - hero with the years worked out from 1999; founder and family; the journey as an ordered list (1999 … Today); values; team;
+    - branch cards (shared with Contact); gallery preview (5 newest photos, hidden with none); reviews from testimonials (hidden with none, no star ratings); the eye camps band (next camp, or past camps); CTA;
+    - `Organization` data.
+  - **Shared:** the branch card moved out of the Contact page (`src/components/contact/branch-card.tsx`); `YearsSince` next to the footer year; tool and alert icons from the mockup sprite.
+  - DUMMY register: C1, C2, C3, C10, C15, C17.
+  - The gallery's breadcrumb link to `/about` prefetches again now that About exists.
+- **Why:** sprint 5.5 part D (`ROADMAP.md`, `Requirements_EyeCare.md`, `Requirements_About.md`). Build decisions are in `Requirements_EyeCare.md` 7 and `Requirements_About.md` 8. With this part, **sprint 5.5 is done**: staff can add lenses, eye camps, gallery photos and testimonials, and every content page reads them.
+- **Checked:**
+  - In the browser: About at 1440 px ("For 27 years", sections in order, gallery preview hidden with no photos) and Eye care at 360 px (`#frame-repair` lands below the header, FAQ data with 5 confirmed answers), with no console errors.
+  - New `about-eye-care.spec.ts` at 3 widths covers:
+    - the four services and every anchor below the header;
+    - the safety note; the FAQ by keyboard; confirmed-only FAQ data;
+    - the years from 1999; the ordered timeline; the About anchors; `Organization` data;
+    - the database sections matching the data (branches, photos, reviews, camps band), with no star ratings.
+  - Full suite: 220 passed, 16 skipped (other screen sizes). `check:launch` lists the new placeholders.
+- **Files:** `src/app/(site)/eye-care/page.tsx`, `src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`, `src/app/(site)/gallery/page.tsx`, `src/components/contact/branch-card.tsx`, `src/components/site/footer-year.tsx`, `src/components/site/icons.tsx`, `src/lib/site-config.ts`, `src/styles/pages.css`, `playwright.config.ts`, `tests/about-eye-care.spec.ts`, `docs/requirements/Requirements_EyeCare.md`, `docs/requirements/Requirements_About.md`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.5 (part C) · Gallery page, staff gallery and testimonials
 
 - **Changed:**
