@@ -184,3 +184,12 @@ export function testimonialsAdminList(tx: Tx) {
     agreedOn: testimonials.agreedOn, isVisible: testimonials.isVisible,
   }).from(testimonials).leftJoin(branches, eq(branches.id, testimonials.branchId)).orderBy(desc(testimonials.agreedOn), desc(testimonials.createdAt)).limit(300);
 }
+
+/** Every branch for the admin's Branches page, hidden ones included. */
+export function branchesAdmin(tx: Tx) {
+  return tx.select({
+    slug: branches.slug, name: branches.name, address: branches.address, mapUrl: branches.mapUrl, phone: branches.phone,
+    whatsapp: branches.whatsapp, opens: branches.opens, closes: branches.closes, openDays: branches.openDays, isVisible: branches.isVisible,
+  }).from(branches).orderBy(asc(branches.sort), asc(branches.name));
+}
+

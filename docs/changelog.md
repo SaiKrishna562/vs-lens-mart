@@ -4,6 +4,24 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Staff settings (part A) · Branches page
+
+- **Changed:**
+  - **`/admin/branches`**, built from the approved mockup:
+    - one card per branch (address, Google Maps link, phone, WhatsApp with "Same as phone", opening and closing time, open days, "Show this branch on the site"), saved together;
+    - plain messages for wrong numbers or times; "Undo changes"; a warning before leaving with unsaved changes.
+  - **Who can save:** only an admin (checked in the action and refused by the database for staff); staff see it read-only.
+  - **Saving** refreshes the `branches` cache, so the utility bar, footer, Contact, branch picker and booking times update at once.
+  - The Patelguda placeholder number (D2) stays allowed and tagged. The "coming later" entry for Branches is gone.
+- **Why:** the developer's decision (2026-10-24) to build the staff settings with the current `DUMMY` values; the client asked for branch editing on 2026-10-21 (`Requirements_Admin.md` 7.1). Build notes: `Requirements_Admin.md` 13.
+- **Checked:**
+  - New `staff-settings.spec.ts`:
+    - staff see the page read-only at 360 px and the database refuses a staff change;
+    - the admin's plain messages for a bad number or closing time;
+    - closing at 8:30 PM shows in the footer and makes 8:00 PM the last booking time, then it's put back through the page.
+  - Full suite: 216 passed, 16 skipped. Two tests failed only because **drive C: ran out of space** during the run (`ENOSPC`); both passed on a rerun.
+- **Files:** `src/app/admin/(staff)/branches/` (`page.tsx`, `actions.ts`), `src/app/admin/(staff)/[...section]/page.tsx`, `src/components/admin/branches-admin.tsx`, `src/components/admin/branches-form.tsx`, `src/lib/branch-rules.ts`, `src/lib/queries/admin.ts`, `playwright.config.ts`, `tests/staff-settings.spec.ts`, `docs/requirements/Requirements_Admin.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.5 (part D) · Eye care and About pages; sprint 5.5 done
 
 - **Changed:**

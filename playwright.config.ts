@@ -27,7 +27,7 @@ export default defineConfig({
   globalTeardown: "./tests/global-teardown.ts",
   use: { baseURL: BASE, trace: "retain-on-failure" },
   projects: [
-    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|booking-rules|booking-race|staff-lists|staff-content|frame-form)\.spec\.ts/ },
+    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|booking-rules|booking-race|staff-lists|staff-content|staff-settings|frame-form)\.spec\.ts/ },
     // Layout checks at the CLAUDE.md test widths
     { name: "phone-360", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
     { name: "tablet-768", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },

@@ -228,3 +228,11 @@ Done when:
 - **Delete:** admin only, after a confirmation; the database refuses staff anyway. Staff change status only.
 - **Retention:** opening either list also deletes rows past the retention period (`DUMMY` D9; see `Requirements_Privacy.md` 9).
 - They reuse the dashboard's booking rows and the frames list's filter form; there was no mockup for these pages.
+
+## 13. Build notes: Branches (2026-10-24)
+
+- **`/admin/branches`**, from `admin-branches.html`: one card per branch (address, Google Maps link, phone, WhatsApp with "Same as phone", opens / closes, open days, show on the site), saved together.
+- **Who can save:** only the admin; the database refuses staff as well. Staff see the cards read-only with the mockup's note.
+- **When changes appear:** at once across the site (cache tag `branches`): utility bar, footer, Contact, the branch picker and the booking form's times.
+- **Numbers:** 10-digit Indian mobiles. The all-zero placeholder stays allowed, so the Patelguda number can remain `DUMMY` D2 until the client sends it; the card shows the D2 tag in development.
+- **Unsaved changes:** reloading or closing the tab asks first, and "Undo changes" restores the saved values.
