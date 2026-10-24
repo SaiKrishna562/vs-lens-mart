@@ -3,7 +3,7 @@
    so row-level security still decides what each role can see. "Today" is
    India time (Asia/Kolkata), whatever the server's clock zone is. */
 import { and, asc, desc, eq, ilike, inArray, ne, or, sql, type SQL } from "drizzle-orm";
-import { appointments, branches, brands, campPhotos, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses } from "../../db/schema";
+import { appointments, branches, brands, campPhotos, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses, testimonials } from "../../db/schema";
 import type { Tx } from "../db";
 
 const TODAY = sql`(now() at time zone 'Asia/Kolkata')::date`;
@@ -167,4 +167,20 @@ export async function campBySlug(tx: Tx, slug: string) {
   const photos = await tx.select({ id: campPhotos.id, path: campPhotos.path, showsPeople: campPhotos.showsPeople, consent: campPhotos.consent })
     .from(campPhotos).where(eq(campPhotos.campId, camp.id)).orderBy(asc(campPhotos.position));
   return { ...camp, photos };
+}
+
+/** Staff gallery: every photo, hidden ones included, newest added first. */
+export function galleryAdminList(tx: Tx) {
+  return tx.select({
+    id: galleryPhotos.id, path: galleryPhotos.path, tag: galleryPhotos.tag, caption: galleryPhotos.caption, branch: galleryPhotos.branch,
+    month: galleryPhotos.month, showsPeople: galleryPhotos.showsPeople, isVisible: galleryPhotos.isVisible,
+  }).from(galleryPhotos).orderBy(desc(galleryPhotos.createdAt)).limit(500);
+}
+
+/** Staff testimonials: every one, hidden ones included. */
+export function testimonialsAdminList(tx: Tx) {
+  return tx.select({
+    id: testimonials.id, firstName: testimonials.firstName, branch: branches.slug, branchName: branches.name, quote: testimonials.quote,
+    agreedOn: testimonials.agreedOn, isVisible: testimonials.isVisible,
+  }).from(testimonials).leftJoin(branches, eq(branches.id, testimonials.branchId)).orderBy(desc(testimonials.agreedOn), desc(testimonials.createdAt)).limit(300);
 }

@@ -83,3 +83,13 @@ Done when:
 | Permission to publish customer photos (Q146 "Will confirm later") | Client | "Customers" tag with placeholders, tagged |
 | Gallery tags | Client | `DUMMY` C20 list |
 | Who uploads gallery photos | Client | Staff, in admin |
+
+## 7. Build notes (sprint 5.5 part C, 2026-10-24)
+
+- **Photos come only from the staff area** (`/admin/gallery`); the seed adds none, so a fresh install shows "Photos coming soon".
+- **Upload:** up to 10 photos at a time, each resized in the browser. Each needs a tag and a caption (also its alt text), with the branch and month taken optional. "Shows people" needs the permission tick: the form, the server and the database (`gallery_photos_consent`) each refuse it otherwise.
+- **Customers tag:** blocked until the client confirms permission to publish customer photos (Q146). The staff form doesn't offer it, the server refuses it, and the public page leaves out any photo with that tag. One setting turns it on: `CUSTOMER_PHOTOS_ALLOWED` in `src/lib/gallery-rules.ts`.
+- **Order:** newest first by the month taken, then by when it was added. Manual ordering isn't built (not needed yet).
+- **Staff list:** every photo with its thumbnail, tag, branch and month, an "On the site" switch, and admin-only Delete (the file goes too). Editing a caption means deleting and re-adding for now.
+- **Large view:** the shared photo viewer from the camp pages; previous and next stay within the selected tag.
+- **Tags in the address** use the label's dashed form (`?tag=eye-camps`, `?tag=frames-on-display`).

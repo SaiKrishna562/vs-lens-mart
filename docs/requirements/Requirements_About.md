@@ -152,3 +152,8 @@ Done when:
 | Family / shop photo for the hero, gallery photos | Client (Q144) | Placeholders |
 | Permission to publish customer photos (Q146 "Will confirm later") | Client | No customer photos |
 | Google Business Profile for reviews | Client | `DUMMY` C8 |
+
+## 7. Build notes: testimonials (sprint 5.5 part C, 2026-10-24)
+
+- **Staff (`/admin/testimonials`):** the customer's first name (and initial if they like), optional branch, their words (up to 300 characters), and the date they agreed to be quoted. That date is required and can't be in the future, so a review can't be added without the customer's agreement on record. Staff add, edit and hide; only an admin deletes.
+- **On the site:** visible testimonials, the most recently agreed first. The About reviews section (part D) and the home page (sprint 5.2) read them; with none visible, the section stays hidden. The seed's three "Sample Customer" rows are `DUMMY` C8 and are listed by `check:launch`.

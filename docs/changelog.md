@@ -4,6 +4,31 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.5 (part C) · Gallery page, staff gallery and testimonials
+
+- **Changed:**
+  - **`/gallery`**, built from the approved mockup:
+    - hero (Home › About › Gallery); tag chips with counts, only tags that have photos, kept in the address (`?tag=`);
+    - the photo wall (first photo larger, 24 at a time with Load more); the shared photo viewer, staying within the tag (caption, branch, month, "n of m");
+    - the consent note with "Ask us on WhatsApp" to have a photo removed; "Photos coming soon" when there are none; the CTA.
+  - **`/admin/gallery`:** upload up to 10 photos at a time (resized in the browser), each with tag, caption, branch, month, and "Shows people" with the permission tick; the photo list with an "On the site" switch; admin-only Delete (file too). The Customers tag is blocked until Q146 (`CUSTOMER_PHOTOS_ALLOWED`).
+  - **`/admin/testimonials`:** add or edit a customer's first name, branch, words and the date they agreed to be quoted (required, not in the future); the list with edit links; admin-only Delete.
+  - **Shared:** `src/lib/gallery-rules.ts` (tags, form rules), gallery and testimonial queries with cached `getGallery()` / `getTestimonials()`, server actions refreshing the `content` cache. The "coming later" placeholders for Gallery and Testimonials are gone.
+- **Fixed:**
+  - The gallery's breadcrumb link to `/about` no longer prefetches until About exists (part D); it logged a 404.
+  - The gallery "On the site" switch flips at once instead of snapping back while the server saves.
+- **Why:** sprint 5.5 part C (`ROADMAP.md`, `Requirements_Gallery.md`, `Requirements_Admin.md` 7). Build decisions are in `Requirements_Gallery.md` 7 and `Requirements_About.md` 7.
+- **Checked:**
+  - `staff-content.spec.ts` adds:
+    - three photos uploaded on a phone, the permission tick required, no Customers option, and the database refusing a photo of people without consent;
+    - the public gallery's chips and address, the viewer wrapping within a tag, Esc and focus back, and a hidden photo leaving the page;
+    - staff can't delete; an admin's delete removes the file;
+    - testimonials need an agreed date, not in the future; staff add; only an admin deletes.
+  - New `gallery.spec.ts` at 3 widths: hero, photos or "coming soon", the consent note's WhatsApp text, the CTA, no sideways scroll.
+  - `admin-shell.spec.ts` now uses Staff accounts as its "coming later" example.
+  - Full suite: 208 passed, 16 skipped (other screen sizes).
+- **Files:** `src/app/(site)/gallery/page.tsx`, `src/components/gallery/gallery-wall.tsx`, `src/app/admin/(staff)/gallery/` (`page.tsx`, `actions.ts`), `src/app/admin/(staff)/testimonials/` (`page.tsx`, `actions.ts`), `src/app/admin/(staff)/[...section]/page.tsx`, `src/components/admin/` (`gallery-admin.tsx`, `gallery-upload.tsx`, `gallery-controls.tsx`, `testimonials-admin.tsx`, `testimonial-form.tsx`), `src/lib/gallery-rules.ts`, `src/lib/queries/content.ts`, `src/lib/queries/admin.ts`, `src/lib/content-data.ts`, `src/styles/pages.css`, `src/styles/admin.css`, `playwright.config.ts`, `tests/staff-content.spec.ts`, `tests/gallery.spec.ts`, `tests/admin-shell.spec.ts`, `docs/requirements/Requirements_Gallery.md`, `docs/requirements/Requirements_About.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.5 (part B) · Eye camps pages and staff eye camps
 
 - **Changed:**

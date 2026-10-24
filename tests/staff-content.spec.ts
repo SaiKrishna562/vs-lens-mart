@@ -39,8 +39,12 @@ test.afterAll(async () => {
   await c.query("delete from brands where name like 'E2E Content%'");
   const camps = (await c.query("select id from eye_camps where title like 'E2E Content%'")).rows as { id: string }[];
   await c.query("delete from eye_camps where title like 'E2E Content%'");
+  const photos = (await c.query("select id from gallery_photos where caption like 'E2E Content%'")).rows as { id: string }[];
+  await c.query("delete from gallery_photos where caption like 'E2E Content%'");
+  await c.query("delete from testimonials where first_name like 'E2E Content%'");
   await c.end();
   for (const { id } of camps) rmSync(path.join(process.cwd(), "uploads", "camps", id), { recursive: true, force: true });
+  for (const { id } of photos) rmSync(path.join(process.cwd(), "uploads", "gallery", id), { recursive: true, force: true });
 });
 test.describe.configure({ mode: "serial" });
 
@@ -186,5 +190,117 @@ test("only an admin deletes a camp, and its photo files go too", async ({ browse
   await admin.getByRole("dialog").getByRole("button", { name: "Delete camp" }).click();
   await expect(admin).toHaveURL(/\/admin\/eye-camps$/);
   expect(paths.some((p) => existsSync(uploads(p))), "photo files removed").toBe(false);
+});
+
+test("staff add gallery photos with tags and captions; a photo of people needs the tick; Customers is blocked", async ({ browser }) => {
+  const page = await as(browser, "staff", 360);
+  await page.goto("/admin/gallery");
+  await ready(page, "[data-testid=gallery-input]");
+  await page.getByTestId("gallery-input").setInputFiles([1, 2, 3].map((n) => ({ name: `g${n}.png`, mimeType: "image/png", buffer: PNG })));
+  const items = page.locator(".gup__item");
+  await expect(items).toHaveCount(3);
+  const fill = async (i: number, tag: string, caption: string) => {
+    await items.nth(i).getByLabel("Tag").selectOption({ label: tag });
+    await items.nth(i).getByLabel("Caption").fill(caption);
+  };
+  await expect(items.first().getByLabel("Tag").locator("option", { hasText: "Customers" }), "customer photos wait for permission (Q146)").toHaveCount(0);
+  await fill(0, "Shop", `E2E Content Shop front ${STAMP}`);
+  await fill(1, "Shop", `E2E Content Shop counter ${STAMP}`);
+  await fill(2, "Team", `E2E Content Team ${STAMP}`);
+  await items.nth(2).getByLabel("Shows people").check();
+  await page.getByRole("button", { name: "Add 3 photos to the gallery" }).click();
+  await expect(items.nth(2)).toContainText("Tick the permission box for a photo that shows people");
+  await items.nth(2).getByLabel(/gave written permission/).check();
+  await page.getByRole("button", { name: "Add 3 photos to the gallery" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "3 photos added to the gallery." })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), "sideways scroll").toBe(0);
+
+  const c = await owner();
+  const rows = (await c.query("select tag, shows_people, consent, path from gallery_photos where caption like $1 order by caption", [`E2E Content%${STAMP}`])).rows;
+  expect(rows.map((r) => r.tag).sort()).toEqual(["shop", "shop", "team"]);
+  expect(rows.every((r) => /^gallery\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.webp$/.test(r.path))).toBe(true);
+  await expect(c.query("update gallery_photos set consent = false where caption = $1", [`E2E Content Team ${STAMP}`]), "the database refuses it too")
+    .rejects.toThrow(/gallery_photos_consent/);
+  await c.end();
+});
+
+test("the public gallery: tag chips with counts in the address, the viewer stays within the tag, hidden photos go", async ({ browser }) => {
+  const page = await (await browser.newContext({ viewport: { width: 1280, height: 900 } })).newPage();
+  await page.goto("/gallery");
+  await page.waitForFunction(() => { const b = document.querySelector(".year-chips button"); return !!b && Object.keys(b).some((k) => k.startsWith("__react")); });
+  const chips = page.getByRole("group", { name: "Filter photos" });
+  await expect(chips.getByRole("button", { name: /^Shop \(\d+\)$/ })).toBeVisible();
+  await expect(chips.getByRole("button", { name: /^Customers/ }), "no customer photos until permission").toHaveCount(0);
+  await chips.getByRole("button", { name: /^Team \(/ }).click();
+  await expect(page).toHaveURL(/\?tag=team$/);
+  await page.goto("/gallery?tag=shop");
+  await page.waitForFunction(() => { const b = document.querySelector(".gtile"); return !!b && Object.keys(b).some((k) => k.startsWith("__react")); });
+  const shop = await page.locator(".gtile").count();
+  const first = page.locator(".gtile").first();
+  await first.click();
+  const viewer = page.locator("dialog.lightbox");
+  await expect(viewer).toContainText(`1 of ${shop}`);
+  await page.keyboard.press("ArrowLeft");
+  await expect(viewer, "wraps around within the Shop photos").toContainText(`${shop} of ${shop}`);
+  await page.keyboard.press("Escape");
+  await expect(viewer).toBeHidden();
+  await expect(first).toBeFocused();
+
+  // Hide one in the staff area: it leaves the public page at once
+  const staff = await as(browser, "staff");
+  await staff.goto("/admin/gallery");
+  const row = staff.locator(".gadm-row", { hasText: `E2E Content Shop counter ${STAMP}` });
+  await row.getByRole("switch").uncheck();
+  await expect(row.getByRole("switch")).not.toBeChecked();
+  await expect(row.getByRole("button", { name: /^Delete/ }), "staff can't delete").toHaveCount(0);
+  await expect.poll(async () => {
+    await page.goto("/gallery?tag=shop");
+    return page.getByRole("button", { name: `E2E Content Shop counter ${STAMP}` }).count();
+  }).toBe(0);
+});
+
+test("an admin deletes a gallery photo and its file", async ({ browser }) => {
+  const c = await owner();
+  const { path: stored } = (await c.query("select path from gallery_photos where caption = $1", [`E2E Content Shop front ${STAMP}`])).rows[0];
+  await c.end();
+  expect(existsSync(uploads(stored))).toBe(true);
+  const admin = await as(browser, "admin");
+  await admin.goto("/admin/gallery");
+  await admin.getByRole("button", { name: `Delete "E2E Content Shop front ${STAMP}"` }).click();
+  await admin.getByRole("dialog").getByRole("button", { name: "Delete photo" }).click();
+  await expect(admin.locator(".gadm-row", { hasText: `E2E Content Shop front ${STAMP}` })).toHaveCount(0);
+  await expect.poll(() => existsSync(uploads(stored)), "photo file removed").toBe(false);
+});
+
+test("testimonials: the agreed date is required and can't be in the future; staff add, only an admin deletes", async ({ browser }) => {
+  const name = `E2E Content Asha ${STAMP}`;
+  const page = await as(browser, "staff");
+  await page.goto("/admin/testimonials");
+  await ready(page, "#t-firstName");
+  await page.getByLabel("Customer's first name").fill(name);
+  await page.getByLabel("What they said").fill("Careful eye test and honest advice on frames.");
+  await page.getByRole("button", { name: "Add testimonial" }).click();
+  await expect(page.locator(".esummary")).toContainText("Enter the date the customer agreed to be quoted.");
+  await page.getByLabel("Date they agreed to be quoted").fill(addDays(nowInIndia().day, 5));
+  await page.getByRole("button", { name: "Add testimonial" }).click();
+  await expect(page.locator(".esummary")).toContainText("can't be in the future");
+  await page.getByLabel("Date they agreed to be quoted").fill(nowInIndia().day);
+  await page.getByLabel("Branch").selectOption("indresham");
+  await page.getByRole("button", { name: "Add testimonial" }).click();
+  await expect(page.getByText("Saved. It shows with the reviews on the site.").filter({ visible: true })).toBeVisible();
+  await expect(page.locator(".bk-row", { hasText: name })).toBeVisible();
+
+  const c = await owner();
+  const row = (await c.query("select t.id, t.agreed_on::text, b.slug from testimonials t left join branches b on b.id = t.branch_id where first_name = $1", [name])).rows[0];
+  await c.end();
+  expect(row).toMatchObject({ agreed_on: nowInIndia().day, slug: "indresham" });
+
+  await page.goto(`/admin/testimonials?id=${row.id}`);
+  await expect(page.getByRole("button", { name: "Delete" }), "staff can't delete").toHaveCount(0);
+  const admin = await as(browser, "admin");
+  await admin.goto(`/admin/testimonials?id=${row.id}`);
+  await admin.getByRole("button", { name: "Delete", exact: true }).click();
+  await admin.getByRole("dialog").getByRole("button", { name: "Delete testimonial" }).click();
+  await expect(admin.locator(".bk-row", { hasText: name })).toHaveCount(0);
 });
 

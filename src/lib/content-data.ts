@@ -3,7 +3,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { withRole } from "./db";
 import { isUpcoming } from "./camp-rules";
 import { nowInIndia } from "./booking-rules";
-import { campDetailQuery, campsQuery, lensesQuery } from "./queries/content";
+import { campDetailQuery, campsQuery, galleryQuery, lensesQuery, testimonialsQuery } from "./queries/content";
 
 /* Cached content reads with the public role, tagged "content": every staff save
    of a lens, eye camp, gallery photo or testimonial calls updateTag("content"),
@@ -46,4 +46,18 @@ export async function getCampSlugs() {
   cacheLife("hours");
   const all = await withRole("public", (tx) => campsQuery(tx));
   return all.map((c) => c.slug);
+}
+
+export async function getGallery() {
+  "use cache";
+  cacheTag("content");
+  cacheLife("hours");
+  return withRole("public", (tx) => galleryQuery(tx));
+}
+
+export async function getTestimonials() {
+  "use cache";
+  cacheTag("content");
+  cacheLife("hours");
+  return withRole("public", (tx) => testimonialsQuery(tx));
 }

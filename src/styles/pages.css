@@ -627,5 +627,9 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .ccard__img { aspect-ratio: 3 / 2; border-radius: var(--r-md); }
   .photo-grid .pg-img { aspect-ratio: 1; width: 100%; display: block; }
   .ccard__img img, .photo-grid .pg-img img { object-fit: cover; }
+  .gtile__img { position: relative; display: block; width: 100%; aspect-ratio: 1; border-radius: var(--r-md); overflow: hidden; }
+  .gtile:first-child .gtile__img { aspect-ratio: auto; height: 100%; min-height: 12rem; }
+  .gtile__img img { object-fit: cover; transition: transform var(--dur-section) var(--ease-out); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) { .gtile:hover .gtile__img img { transform: scale(1.04); } }
   .branch__map iframe { display: block; width: 100%; aspect-ratio: 16 / 7; border: 0; border-bottom: 1px dashed var(--brass-40); }
 }

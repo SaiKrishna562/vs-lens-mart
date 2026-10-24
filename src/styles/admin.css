@@ -240,6 +240,13 @@
    Same rows as the dashboard's today's bookings, plus status and the admin's Delete. */
 @layer components {
   .bk-row__ctl { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); }
+  /* Gallery: the upload cards and the photo rows (not mocked up) */
+  .gup { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: var(--s-4); }
+  .gup__item { display: grid; gap: var(--s-2); align-content: start; padding: var(--s-3); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); }
+  .gup__item .ffield { margin-bottom: 0; }
+  .gadm-row { grid-template-columns: 4.5rem minmax(0, 1fr) auto; }
+  .gadm-thumb { display: block; width: 4.5rem; aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden; background: var(--bg); border: 1px solid var(--line); }
+  .gadm-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .bk-row__who .bk-row__msg { color: var(--text); font-size: var(--fs-sm); white-space: pre-wrap; margin-block: 2px; }
   @media (max-width: 767px) {
     .bk-row .bk-row__ctl { grid-column: 2 / -1; }

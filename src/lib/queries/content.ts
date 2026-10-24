@@ -2,8 +2,9 @@
    follow. Plain functions that take a transaction, like queries/site.ts; they
    filter for active / visible rows themselves as well as relying on row-level
    security. src/lib/content-data.ts caches them under the "content" tag. */
-import { and, asc, eq, sql } from "drizzle-orm";
-import { branches, brands, campPhotos, eyeCamps, lenses } from "../../db/schema";
+import { and, asc, desc, eq, ne, sql } from "drizzle-orm";
+import { branches, brands, campPhotos, eyeCamps, galleryPhotos, lenses, testimonials } from "../../db/schema";
+import { CUSTOMER_PHOTOS_ALLOWED } from "../gallery-rules";
 import type { Tx } from "../db";
 import { slugify } from "../site-config";
 
@@ -53,4 +54,24 @@ export async function campDetailQuery(tx: Tx, slug: string): Promise<CampDetail 
   const photos = await tx.select({ path: campPhotos.path, showsPeople: campPhotos.showsPeople }).from(campPhotos)
     .where(eq(campPhotos.campId, row.id)).orderBy(asc(campPhotos.position));
   return { ...toCamp(row), photos };
+}
+
+export type GalleryItem = { id: string; path: string; tag: string; caption: string; branch: string; month: string | null };
+
+/** Visible gallery photos, newest first (by the month taken, then when added). Customer
+ *  photos stay off the site until the client confirms permission (Q146). */
+export async function galleryQuery(tx: Tx): Promise<GalleryItem[]> {
+  const where = CUSTOMER_PHOTOS_ALLOWED ? eq(galleryPhotos.isVisible, true) : and(eq(galleryPhotos.isVisible, true), ne(galleryPhotos.tag, "customers"));
+  return tx.select({ id: galleryPhotos.id, path: galleryPhotos.path, tag: galleryPhotos.tag, caption: galleryPhotos.caption, branch: galleryPhotos.branch, month: galleryPhotos.month })
+    .from(galleryPhotos).where(where)
+    .orderBy(sql`${galleryPhotos.month} desc nulls last`, desc(galleryPhotos.createdAt));
+}
+
+export type TestimonialItem = { id: string; firstName: string; branch: string | null; quote: string; agreedOn: string };
+
+/** Visible testimonials, the most recently agreed first. */
+export async function testimonialsQuery(tx: Tx): Promise<TestimonialItem[]> {
+  return tx.select({ id: testimonials.id, firstName: testimonials.firstName, branch: branches.name, quote: testimonials.quote, agreedOn: testimonials.agreedOn })
+    .from(testimonials).leftJoin(branches, eq(branches.id, testimonials.branchId))
+    .where(eq(testimonials.isVisible, true)).orderBy(desc(testimonials.agreedOn), desc(testimonials.createdAt));
 }

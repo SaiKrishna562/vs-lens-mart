@@ -88,9 +88,9 @@ test("frames list: search finds a frame, and Sold out saves to the database", as
 
 test("later sections say when they're coming; unknown staff pages show not found", async ({ page }) => {
   await signInUI(page, "staff");
-  await page.goto("/admin/gallery");
-  await expect(page.getByRole("heading", { name: "Gallery" })).toBeVisible();
-  await expect(page.getByText(/arrives in sprint 5\.5/)).toBeVisible();
+  await page.goto("/admin/staff");
+  await expect(page.getByRole("heading", { name: "Staff accounts" })).toBeVisible();
+  await expect(page.getByText(/arrives in sprint/)).toBeVisible();
   // The staff shell streams in after the sign-in check, so the status line is already
   // sent (200) when a page turns out not to exist; the content still says so.
   await page.goto("/admin/not-a-real-section");
