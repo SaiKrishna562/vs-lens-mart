@@ -3,7 +3,7 @@
    so row-level security still decides what each role can see. "Today" is
    India time (Asia/Kolkata), whatever the server's clock zone is. */
 import { and, asc, desc, eq, ilike, inArray, ne, or, sql, type SQL } from "drizzle-orm";
-import { appointments, branches, brands, enquiries, eyeCamps, frameImages, frames, galleryPhotos } from "../../db/schema";
+import { appointments, branches, brands, enquiries, eyeCamps, frameImages, frames, galleryPhotos, lenses } from "../../db/schema";
 import type { Tx } from "../db";
 
 const TODAY = sql`(now() at time zone 'Asia/Kolkata')::date`;
@@ -115,4 +115,32 @@ export function enquiriesList(tx: Tx, status: string) {
     topic: enquiries.topic, message: enquiries.message, frameCode: enquiries.frameCode, replyBy: enquiries.replyBy,
     status: enquiries.status, createdAt: enquiries.createdAt,
   }).from(enquiries).where(eq(enquiries.status, status as "new")).orderBy(desc(enquiries.createdAt)).limit(200);
+}
+
+/** Staff lenses list: search by brand or name; filter by type and shown / hidden. */
+export function lensesList(tx: Tx, f: { q?: string; type?: string; active?: string }) {
+  const where: SQL[] = [];
+  const q = f.q?.trim();
+  if (q) where.push(or(ilike(lenses.name, `%${q}%`), ilike(brands.name, `%${q}%`))!);
+  if (f.type) where.push(eq(lenses.type, f.type as "progressive"));
+  if (f.active === "yes" || f.active === "no") where.push(eq(lenses.isActive, f.active === "yes"));
+  return tx.select({
+    id: lenses.id, brand: brands.name, name: lenses.name, type: lenses.type, features: lenses.features, price: lenses.price,
+    isActive: lenses.isActive, photo: lenses.photoPath, updatedAt: lenses.updatedAt,
+  }).from(lenses).innerJoin(brands, eq(brands.id, lenses.brandId))
+    .where(where.length ? and(...where) : undefined).orderBy(asc(brands.name), asc(lenses.name)).limit(300);
+}
+
+/** One lens for the form, or undefined. */
+export async function lensById(tx: Tx, id: string) {
+  const [row] = await tx.select({
+    id: lenses.id, brand: brands.name, name: lenses.name, type: lenses.type, features: lenses.features, price: lenses.price,
+    isActive: lenses.isActive, photo: lenses.photoPath,
+  }).from(lenses).innerJoin(brands, eq(brands.id, lenses.brandId)).where(eq(lenses.id, id));
+  return row;
+}
+
+/** Lens brands for the form's list. */
+export async function lensBrandNames(tx: Tx) {
+  return (await tx.select({ name: brands.name }).from(brands).where(eq(brands.forLenses, true)).orderBy(asc(brands.name))).map((b) => b.name);
 }

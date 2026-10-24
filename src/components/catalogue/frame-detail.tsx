@@ -125,7 +125,7 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
             <div className="note">
               <Icon name="lens" />
               {!sun ? (
-                <div><b>Need prescription lenses?</b><p>All branded lenses are available. We fit them in store. <Link href="/lenses" prefetch={false}>See lenses</Link></p></div>
+                <div><b>Need prescription lenses?</b><p>All branded lenses are available. We fit them in store. <Link href="/lenses">See lenses</Link></p></div>
               ) : f.lens.includes("Power sunglasses") ? (
                 <div><b>Made to your prescription</b><p>Power sunglasses are made to your prescription in store. Book an eye test first if you don’t have a recent prescription. <Link href="/book-eye-test">Book an eye test</Link></p></div>
               ) : (

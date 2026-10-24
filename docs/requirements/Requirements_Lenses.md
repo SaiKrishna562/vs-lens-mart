@@ -146,3 +146,11 @@ Done when:
 | Blue-cut and photochromic stocked? | Client | Shown, tagged TODO |
 | Contact lenses, reading glasses, care products sold? | Client | Not shown |
 | Brand logos (with permission) | Client | Brand names only |
+
+## 7. Build notes (sprint 5.5 part A, 2026-10-24)
+
+- **Data:** active lenses from the `lenses` table, cached under the `content` tag; every staff save refreshes the page and the Lenses menu's brands straight away.
+- **Types and brands come from the data:** a type card, chip or brand tile appears only when an active lens has it, so blue-cut and photochromic disappear on their own if the client doesn't stock them. With no lenses at all, the types, catalogue and brand tiles are hidden; the steps, the "All branded lenses available" heading and the fitting band stay.
+- **Filters in the address:** `?type=` uses the menu's dashed names (`single-vision`, `blue-cut`); `?brand=` uses the brand's name in lower case with dashes (`kodak-lens`). Unknown values are ignored. Type cards and brand tiles are links (`/lenses?type=progressive#catalogue`), so they work before the page's script loads too.
+- **Staff (`/admin/lenses`):** list with search, type and shown / hidden filters; the form has brand (lens brands, or add a new one), name, type, up to 6 short feature tags, optional price, one optional photo, and "Show on the Lenses page". No approval step; staff hide, only an admin deletes (the photo file goes too). A hidden lens's photo stops being public at once.
+- **Shared with the next parts:** the browser photo resizing (`src/lib/client-photo.ts`) and a photo picker (`src/components/admin/photo-picker.tsx`) used by lenses now and eye camps and the gallery next.

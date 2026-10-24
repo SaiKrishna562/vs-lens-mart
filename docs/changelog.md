@@ -4,6 +4,30 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.5 (part A) · Lenses page and staff lenses
+
+- **Changed:**
+  - **`/lenses`**, built from the approved mockup:
+    - page hero; "Which lens is which?" (type cards with counts, only types that have active lenses); "How we choose your lens";
+    - the catalogue: Type and Brand chips, OR within and AND across, kept in the address so the mega menu's links land filtered; Clear;
+    - lens cards with up to 3 features, the price or "Ask for price", and Enquire (branch picker, the lens named in the WhatsApp text);
+    - brand tiles; the "Instant lens fitting" band; the CTA; the empty states.
+  - **`/admin/lenses`**, `/admin/lenses/new`, `/admin/lenses/[id]`: list with search and filters, and the lens form (brand or a new brand, name, type, feature tags, optional price, optional photo, show on the site; admin-only delete). Server actions `saveLens` and `deleteLens` refresh the `content` and `catalogue` caches.
+  - **Shared:**
+    - `src/lib/client-photo.ts` (the browser photo resizing, moved out of the frame form);
+    - `src/components/admin/photo-picker.tsx`;
+    - `src/lib/lookups.ts` (find or add a brand or colour, moved out of the frame actions; new lens brands are flagged as lens brands);
+    - `src/lib/lens-rules.ts`, `src/lib/queries/content.ts`, `src/lib/content-data.ts` (cache tag `content`).
+  - **CSS:** mockup sections 11, 14 and 15 ported into `pages.css`. Headings on navy sections now inherit the band colour too (the same fix as part 5.4 B, here for the fitting band). A shield icon was added from the mockup sprite.
+- **Why:** sprint 5.5 part A (`ROADMAP.md`, `Requirements_Lenses.md`, `Requirements_Admin.md` 7). Build decisions are in `Requirements_Lenses.md` section 7.
+- **Checked:**
+  - In the browser: `/lenses?type=progressive` lands filtered, at 1440 and 360 px, light and dark.
+  - New `lenses.spec.ts` at 3 widths: types from the data, prices or "Ask for price", Enquire text, chips and the address, menu and type-card links, nonsense ignored.
+  - New `staff-content.spec.ts`: staff add a lens with a new brand and a photo on a phone and it's on `/lenses` at once; hiding takes the photo off; staff can't delete; an admin deletes.
+  - `admin-shell.spec.ts` now uses the gallery as its "coming later" example.
+  - Full suite: 184 passed, 16 skipped (other screen sizes).
+- **Files:** `src/app/(site)/lenses/page.tsx`, `src/components/lenses/lens-catalogue.tsx`, `src/app/admin/(staff)/lenses/` (`page.tsx`, `new/page.tsx`, `[id]/page.tsx`, `actions.ts`), `src/app/admin/(staff)/[...section]/page.tsx`, `src/app/admin/(staff)/frames/actions.ts`, `src/components/admin/lens-form.tsx`, `src/components/admin/lens-form-page.tsx`, `src/components/admin/lenses-list.tsx`, `src/components/admin/photo-picker.tsx`, `src/components/admin/frame-form.tsx`, `src/components/catalogue/frame-detail.tsx`, `src/components/site/icons.tsx`, `src/lib/client-photo.ts`, `src/lib/lookups.ts`, `src/lib/lens-rules.ts`, `src/lib/queries/content.ts`, `src/lib/queries/admin.ts`, `src/lib/content-data.ts`, `src/styles/pages.css`, `playwright.config.ts`, `tests/lenses.spec.ts`, `tests/staff-content.spec.ts`, `tests/admin-shell.spec.ts`, `docs/requirements/Requirements_Lenses.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.4 (part C) · Privacy policy, retention, staff Bookings and Enquiries
 
 - **Changed:**

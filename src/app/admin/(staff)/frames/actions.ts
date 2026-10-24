@@ -9,9 +9,10 @@ import { randomUUID } from "node:crypto";
 import { and, eq, ilike, ne, sql } from "drizzle-orm";
 import { revalidatePath, updateTag } from "next/cache";
 import { brands, colours, frameImages, frames } from "@/db/schema";
-import { withRole, type Tx } from "@/lib/db";
+import { withRole } from "@/lib/db";
 import { fieldErrors, frameFields, frameSlug, intentProblems, INTENTS, type Intent } from "@/lib/frame-schema";
 import { requireStaff, type Staff } from "@/lib/session";
+import { findOrAdd } from "@/lib/lookups";
 import { deleteUpload, saveUpload, UploadError } from "@/lib/storage";
 
 export type SaveResult =
@@ -27,13 +28,6 @@ function allowed(staff: Staff, current: Status | null): Intent[] {
   if (current === "approved") return ["save"];
   if (current === "waiting") return admin ? ["approve", "sendback", "save"] : ["save"];
   return admin ? ["draft", "publish"] : ["draft", "send"]; // new, draft or sent back
-}
-
-async function findOrAdd(tx: Tx, table: typeof brands | typeof colours, name: string, userId: string) {
-  const [hit] = await tx.select({ id: table.id }).from(table).where(ilike(table.name, name));
-  if (hit) return hit.id;
-  const [row] = await tx.insert(table).values({ name, createdBy: userId, updatedBy: userId }).returning({ id: table.id });
-  return row.id;
 }
 
 export async function saveFrame(formData: FormData): Promise<SaveResult> {

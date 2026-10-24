@@ -15,7 +15,7 @@ import {
   CATEGORIES, GENDERS, LENS_COLOURS, LENS_TYPES, MATERIALS, MAX_PHOTOS, PHOTO_KINDS, SHAPES, WHERE,
   fieldErrors, frameFields, intentProblems, type Intent,
 } from "@/lib/frame-schema";
-import { MAX_UPLOAD_BYTES, UPLOAD_ERRORS } from "@/lib/upload-rules";
+import { shrink } from "@/lib/client-photo";
 import { AdminIcon } from "./admin-icons";
 
 type Kind = "front" | "side" | "closeup" | "model";
@@ -37,30 +37,10 @@ type Fields = {
   availability: "in_stock" | "sold_out"; availableAt: string; isActive: boolean;
 };
 const NEW = "__new__";
-const LONG_EDGE = 1600;
 const blank = (kind: FrameFormProps["kind"], branch: string): Fields => ({
   code: "", category: kind === "sunglasses" ? "sunglasses" : "", brand: "", model: "", gender: "", colour: "", shape: "", material: "",
   sizeLens: "", sizeBridge: "", sizeTemple: "", lensTypes: [], lensColour: "", price: "", availability: "in_stock", availableAt: branch, isActive: true,
 });
-const kb = (n: number) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`);
-
-/** Resize to at most 1600 px on the long side and convert to WebP (JPEG where WebP isn't supported). */
-async function shrink(file: File): Promise<{ blob: Blob; note: string }> {
-  if (file.size > MAX_UPLOAD_BYTES) throw new Error(UPLOAD_ERRORS.too_large);
-  let bmp: ImageBitmap;
-  try { bmp = await createImageBitmap(file); } catch { throw new Error(UPLOAD_ERRORS.not_photo); } // e.g. HEIC outside Safari
-  const scale = Math.min(1, LONG_EDGE / Math.max(bmp.width, bmp.height));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(bmp.width * scale);
-  canvas.height = Math.round(bmp.height * scale);
-  canvas.getContext("2d")!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
-  bmp.close();
-  const toBlob = (type: string) => new Promise<Blob | null>((r) => canvas.toBlob(r, type, 0.85));
-  let blob = await toBlob("image/webp");
-  if (!blob || blob.type !== "image/webp") blob = await toBlob("image/jpeg");
-  if (!blob) throw new Error(UPLOAD_ERRORS.not_photo);
-  return { blob, note: `${kb(file.size)} → ${kb(blob.size)}` };
-}
 
 export function FrameForm({ kind, role, defaultBranch, brands, colours, frame }: FrameFormProps) {
   const router = useRouter();
