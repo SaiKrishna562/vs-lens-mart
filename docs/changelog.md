@@ -4,6 +4,16 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-24 · Sprint 5.3 · CLAUDE.md brought up to date
+
+- **Changed:** `CLAUDE.md` now:
+  - gives the current status (5.1 and 5.3 done, the build order) and how to run one spec or test, `db:studio` and `next typegen`;
+  - describes the public data path (plain queries, cached wrappers, cache tags);
+  - describes the catalogue setup (filtering in the browser, the address-bar contract with the mega menu, the detail routes' 200 + `noindex` not-found, server/client helper modules, `prefetch={false}` for unbuilt pages);
+  - covers the CSS porting method, the motion components, and how the page tests work.
+- **Why:** `/init` review. These facts span several files and cost time to rediscover; the old status line still said 5.3 was next.
+- **Files:** `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-10-24 · Sprint 5.3 · Frame cards: hover zoom and fade-in on scroll
 
 - **Changed:**

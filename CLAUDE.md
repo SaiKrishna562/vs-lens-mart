@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: Phase 5 in progress. Phase 4 (Foundation) is complete as of 2026-10-23; sprint 5.1 Layout is done (2026-10-23), and next is sprint 5.3 Admin + frames (`ROADMAP.md` section 4 build order). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
+Status: Phase 5 in progress. Phase 4 (Foundation) is complete as of 2026-10-23; sprints 5.1 Layout (2026-10-23) and 5.3 Admin + frames (2026-10-24) are done. Next is 5.4 (`ROADMAP.md` section 4 build order: 5.1 → 5.3 → 5.4 → 5.5 → 5.2 → 5.6). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
 
 Commands:
 - `npm run dev`: the app at http://localhost:3000 (or the `app` config in `.claude/launch.json`)
@@ -18,9 +18,25 @@ Commands:
 - `npm run check:launch`: the pre-launch gate. Lists every DUMMY value still in use (the register in `src/lib/site-config.ts`, placeholder facts, and seed data in the database) and fails while any remain. Not part of `npm test`.
 - `npm run staff:create`: creates a staff-area account (admin or staff), or sets a new password for an existing one. You type the details; the password is hidden and stored only as a hash
 - `npm test`: the Playwright suite. It builds the app and starts its **own** production server on port 3100 (the dev server is untouched), makes throwaway accounts and rows, and removes them afterwards. Database checks run in rolled-back transactions. One worker, in order; `rate-limit.spec.ts` runs last. Run it before every commit that touches security, auth, uploads or the schema, and add a test for every new table or rule.
+- One spec or one test: `npx playwright test tests/catalogue.spec.ts --project=desktop-1440 -g "sort by price"` (still builds first). Projects: `security` (database, auth, uploads, data rules) and `phone-360` / `tablet-768` / `desktop-1440` (pages).
+- `npm run db:studio`: browse the database (Drizzle Studio).
+- `npx next typegen`: regenerates the `PageProps<"/route">` / `LayoutProps` types after adding a route, when `tsc` says the route doesn't satisfy `AppRoutes`.
 - The scripts run on plain Node 24 (TypeScript type stripping), so they use relative `.ts` imports, not `@/` aliases.
 
 **Layout (sprint 5.1):** public pages live in `src/app/(site)/` and get the shared chrome from `src/app/(site)/layout.tsx`: utility bar, nav with mega menus, phone menu, sticky bar, branch picker and footer, all in `src/components/site/`. The chrome's CSS is ported unchanged from `mockups/styles.css` into `src/styles/site-chrome.css`; edit it there. Layout data comes from `src/lib/site-data.ts` (cached, tags `branches` and `catalogue`). Admin saves that change frames, lenses or branches must call `updateTag("catalogue")` or `updateTag("branches")`. **The layout is pre-rendered at build time, so `npm run build` and `npm test` need PostgreSQL running.** Call and WhatsApp buttons use `<PickerButton>` (`branch-picker.tsx`); `<DummyTag id>` marks placeholders in development only.
+
+**Public data path (frames, menus, branches):** plain query functions in `src/lib/queries/*.ts` take a `Tx` and filter for live rows themselves (approved, active, visible) as well as relying on row-level security. Tests call them directly in rolled-back transactions. Cached wrappers in `src/lib/site-data.ts` and `src/lib/catalogue-data.ts` run them with the `public` role under `'use cache'` with tags `catalogue` / `branches`. Writing rows straight to the database does **not** show on the site until a staff save calls `updateTag`, or the server is rebuilt.
+
+**Catalogue (sprint 5.3):** components live in `src/components/catalogue/`.
+- **Listings:** `/frames` and `/sunglasses` send every live frame of the kind to `listing.tsx`, which filters, counts, sorts and pages in the browser.
+- **State:** filters live in the address bar (`useSearchParams`, written with `history.replaceState`). The listing sits inside `<Suspense>`, and its fallback is the same listing unfiltered, so the pre-rendered page shows real frames. Mega-menu links (`?for=`, `?tier=`, `?lens=`, `?brand=`) are part of this contract (`menu-links.ts`, `site-config.ts` `priceTiers`).
+- **Detail pages:** `[slug]` pages use `generateStaticParams` (it must return at least one param, so `"none"`) and `export const instant = false`. On the production server a missing frame shows `not-found.tsx` with **status 200** plus `noindex`, because the not-found page is streamed. Test the content, not the status.
+- **Text helpers:** helpers used by both server and client code live in plain modules such as `frame-text.ts`, not in a `"use client"` file. The server can't call functions exported from one.
+- **Links to unbuilt pages:** use `prefetch={false}`, or the prefetch logs 404s and fails the console-error checks in the tests.
+
+**Ported CSS:** `src/styles/*.css` (`site-chrome`, `forms`, `admin`, `catalogue`) are copied rule for rule from `mockups/styles.css`, with mockup-only selectors (`.todo`, `.mock-only`) removed, then imported in `globals.css`. When porting more, check that the comments and braces balance: a broken comment builds with only a CSS warning and silently drops rules. Additions that aren't in the mockup go in a marked "Live additions" block.
+
+**Motion:** `<Reveal>` (`src/components/site/reveal.tsx`) is the mockup's fade and slide up on scroll. Listing cards use `cards-on-scroll.ts`. Both hide only what is below the screen, only from the script, and never with reduced motion. Reuse them rather than adding an animation library.
 
 Next.js 16 differs from older versions (`middleware` is now `proxy.ts`; with Cache Components, anything that reads cookies or the session must sit behind `<Suspense>`). Staff area: `src/proxy.ts` only checks that a session cookie exists; every admin page and server action must call `requireStaff()` (`src/lib/session.ts`) and pass its role to `withRole()`. Read the matching guide in `node_modules/next/dist/docs/` before writing Next.js code (see `AGENTS.md`).
 
@@ -115,7 +131,7 @@ Page conventions:
 | Messaging | WhatsApp `wa.me` links. They work with a normal WhatsApp number, so no WhatsApp Business account is needed for launch. No WhatsApp API in the MVP. |
 | Favourites | Saved on the device only (`localStorage`), no login |
 | Maps | Google Maps embed |
-| Testing | Playwright, run at 360 / 768 / 1440 px |
+| Testing | Playwright, run at 360 / 768 / 1440 px. Page tests fail on any browser console error. They work out expected results from the database with the site's own queries (they need the seed data), and wait until React has hydrated before clicking (see `open()` / `formReady()` in the specs) |
 | Hosting | Local laptop for now (developer decision 2026-10-21). DigitalOcean later; deployment isn't planned yet |
 
 ### Data security (PostgreSQL)
