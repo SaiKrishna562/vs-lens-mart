@@ -4,6 +4,18 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-25 · Sprint 5.2 (part A) · Home page: hero and static sections
+
+- **Changed:**
+  - **`/`** is now the real homepage (the Phase 4 foundation-check page is gone): hero, quick cards, trust strip, "Welcome to the Optical Family" and Shop by category, from the signed-off `mockups/home.html`. The database sections follow in part B.
+  - **Hero:** the three-line headline with the year count computed from 1999, the two buttons only, "Since 1999 · Indresham & Patelguda". **No photo yet:** the mockup's shows AI-generated people (`DUMMY` C12, now in the register), so it never enters the app.
+  - **Hours and branch names** in the quick cards and trust strip come from the database (`hoursLine()`), never hard-coded. The founder story is `DUMMY` C1 and C3, as on About; the category tiles use icon placeholders until the client's photos arrive.
+  - **Home nav:** see-through navy over the hero with white text, more navy after scrolling, as in the signed-off mockup. Other pages keep the white light-mode bar. The rules now key on `body:has(.hero--home)` (the live site has no `data-page`), so nothing flashes; a small `HomeNav` component adds `is-past-hero` on scroll.
+  - Pause and play icons added to the icon set (from the mockup), for the quote band.
+- **Why:** sprint 5.2 (`ROADMAP.md`). Developer decisions 2026-10-25: a navy hero without a photo until the client's real one, and the mockup's see-through nav on Home.
+- **Checked:** screenshots at 1440 px (light and dark) and 360 px (no sideways scroll, no console errors, white nav text, `is-past-hero` after scrolling); `layout`, `privacy` and `ui` specs pass (38).
+- **Files:** `src/app/(site)/page.tsx`, `src/components/home/home-nav.tsx`, `src/components/site/icons.tsx`, `src/styles/pages.css`, `src/lib/site-config.ts`
+
 ## 2026-10-25 · Staff settings (part C) · Staff accounts page
 
 - **Changed:**

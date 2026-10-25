@@ -58,6 +58,7 @@ export const DUMMY = {
   D4: "Domain (share links and search-engine data use vslensmart.example)",
   D5: "YouTube, Facebook and Instagram links",
   D8: "Logo (placeholder until the client's new logo arrives)",
+  C12: "Homepage hero photo: none yet (the mockup's shows AI-generated people and never goes live)",
   C7: "Price tier names and boundaries in the menus",
   C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
   D7: "Eye test price: shown as free",

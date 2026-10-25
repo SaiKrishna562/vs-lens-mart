@@ -28,19 +28,30 @@
 
 /* Home only: semi-opaque nav bar over the hero photo, as in the design image.
    The hero slides up under the bar; the utility strip above stays solid. */
-[data-page="home"] .nav {
+/* app: the live site has no data-page attribute, so these rules key on the Home hero
+   (body:has(.hero--home)): pure CSS, so nothing flashes or jumps while loading.
+   The light-mode white menu bar (site-chrome.css) would put navy text on this navy
+   bar, so on Home the bar takes the dark-mode --nav-* roles (developer decision
+   2026-10-25, as in the signed-off mockup). */
+body:has(.hero--home) .nav {
+  --nav-ink: var(--white); --nav-ink-soft: var(--white-80); --nav-line: var(--white-08); --nav-hover: var(--white-08);
+  --nav-current: var(--gold); --nav-accent: var(--gold); --nav-focus: var(--gold);
+  --nav-search-bg: var(--navy-2); --nav-field-bg: var(--navy); --nav-field-line: var(--white-12);
+  --nav-field-ink: var(--white); --nav-field-hint: var(--white-64);
+}
+body:has(.hero--home) .nav {
   background: rgb(13 27 42 / 0.6);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   backdrop-filter: blur(12px) saturate(140%);
   transition: background-color var(--dur-menu) var(--ease-out);
 }
 /* Past the hero, over light sections: still see-through, but navy enough for white text and the gold logo */
-[data-page="home"] .nav.is-past-hero { background: rgb(13 27 42 / 0.88); }
-[data-page="home"] .hero { margin-top: calc(-1 * var(--nav-h)); }
-[data-page="home"] .hero__inner { padding-top: calc(var(--s-8) + var(--nav-h)); }
+body:has(.hero--home) .nav.is-past-hero { background: rgb(13 27 42 / 0.88); }
+body:has(.hero--home) .hero { margin-top: calc(-1 * var(--nav-h)); }
+body:has(.hero--home) .hero__inner { padding-top: calc(var(--s-8) + var(--nav-h)); }
 /* Without blur support, a bit more navy keeps the menu readable */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  [data-page="home"] .nav { background: rgb(13 27 42 / 0.85); }
+  body:has(.hero--home) .nav { background: rgb(13 27 42 / 0.85); }
 }
 .eyebrow { display: flex; gap: var(--s-3); align-items: center; letter-spacing: 0.22em; font-size: var(--fs-xs); font-weight: 600; color: var(--white-80); }
 .eyebrow span:first-child { position: relative; }
@@ -178,7 +189,7 @@
   .hero__media { -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 30%); mask-image: linear-gradient(180deg, transparent 0, #000 30%); }
   .hero::after { background: linear-gradient(180deg, rgb(13 27 42 / 0.8) 0%, rgb(13 27 42 / 0.6) 50%, rgb(13 27 42 / 0) 70%); }
   .hero__inner { min-height: 0; padding-block: var(--s-7) var(--s-6); }
-  [data-page="home"] .hero__inner { padding-top: calc(var(--s-7) + var(--nav-h)); }
+  body:has(.hero--home) .hero__inner { padding-top: calc(var(--s-7) + var(--nav-h)); }
   .hero__actions .btn { width: 100%; }
   .quick { margin-top: 0; padding-top: var(--s-5); }
   .quick__grid, .trust__list, .reviews, .branches, .services { grid-template-columns: 1fr; }
