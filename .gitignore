@@ -33,3 +33,5 @@ desktop.ini
 
 # Local photo uploads (dev data, never committed)
 uploads/
+# DUMMY C12 hero photos (AI-generated, development only, never committed or deployed)
+public/dummy/

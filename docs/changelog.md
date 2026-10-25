@@ -4,6 +4,26 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-25 · Sprint 5.2 · Home hero slideshow (DUMMY photos, development only)
+
+- **Changed:**
+  - **Home hero:** a slideshow of 5 AI-generated photos from `public/dummy/hero/`:
+    - a slow cross-fade every 6 s;
+    - a pause button and dots on a small dark pill, bottom-right;
+    - only the first photo with reduced motion;
+    - the first photo is also the hero's blurred backdrop, as in the mockup.
+  - **Development only:**
+    - the page lists the folder only outside a production build;
+    - `next.config.ts` allows `/dummy/**` images only while developing;
+    - the folder is gitignored, like `uploads/`;
+    - `check:launch` fails while it holds images;
+    - the C12 register entry describes it.
+- **Why:** the developer wants placeholder photos in the hero until the client's real ones arrive, shown as a slideshow (2026-10-25). The photos show AI-generated people, so they must never reach the live site (`CLAUDE.md` never-do). The signed-off mockup has one still photo, so the slideshow is for the client to see at the next review.
+- **Checked:**
+  - With the dev server: slides change after 6 s, pause holds, reduced motion shows one photo with no controls, no sideways scroll at 1440 and 360 px, no console errors.
+  - `home.spec.ts` checks that a production build shows no hero image, controls or backdrop photo.
+- **Files:** `src/components/home/hero-slides.tsx`, `src/app/(site)/page.tsx`, `src/styles/pages.css`, `next.config.ts`, `scripts/launch-check.ts`, `src/lib/site-config.ts`, `.gitignore`, `tests/home.spec.ts`, `docs/requirements/Requirements_HomePage.md`, `docs/dummy-data.md`
+
 ## 2026-10-25 · Sprint 5.2 (part B) · Home page: database sections (sprint 5.2 done)
 
 - **Changed:**

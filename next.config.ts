@@ -7,7 +7,11 @@ const nextConfig: NextConfig = {
     // Frame photos are optimised from /media (public photos only: the optimiser
     // asks without a login). Kept for an hour at most, so a photo removed or a
     // frame hidden stops showing soon (the optimiser cache can't be cleared).
-    localPatterns: [{ pathname: "/media/**", search: "" }],
+    // While developing, also the DUMMY C12 hero photos in public/dummy (never in production).
+    localPatterns: [
+      { pathname: "/media/**", search: "" },
+      ...(process.env.NODE_ENV === "production" ? [] : [{ pathname: "/dummy/**", search: "" }]),
+    ],
     minimumCacheTTL: 3600,
   },
   experimental: {

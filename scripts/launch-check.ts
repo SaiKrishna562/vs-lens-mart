@@ -6,7 +6,7 @@
    2. placeholder values in the shop facts (phone numbers, example.com links);
    3. the database: placeholder branch numbers, and the mockups' DUMMY frames,
       lenses, camps and testimonials that `npm run db:seed` loads, and its sample staff accounts. */
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import pg from "pg";
 import { branches, DUMMY, isDummyPhone, socials } from "../src/lib/site-config.ts";
 import { loadEnv, need } from "./env.ts";
@@ -19,6 +19,10 @@ for (const [id, what] of Object.entries(DUMMY)) problems.push(`Code: DUMMY ${id}
 // 2. Shop facts
 for (const b of branches) if (isDummyPhone(b.phone) || isDummyPhone(b.whatsapp)) problems.push(`site-config.ts: ${b.name} phone is a placeholder`);
 for (const s of socials) if (/example\.(com|test)/.test(s.url)) problems.push(`site-config.ts: ${s.name} link is a placeholder (${s.url})`);
+// DUMMY images (AI-generated, development only) must not be deployed
+if (existsSync("public/dummy") && readdirSync("public/dummy", { recursive: true }).some((f) => /\.(jpe?g|png|webp|svg)$/i.test(String(f)))) {
+  problems.push("public/dummy: DUMMY images (C12 hero photos) are still in the project. Delete the folder");
+}
 
 // 3. Database
 const seedCodes = [...readFileSync("mockups/frames-data.js", "utf8").matchAll(/\['((?:VSF|SG)-\d{4})'/g)].map((m) => m[1]);

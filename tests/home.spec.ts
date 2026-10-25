@@ -58,6 +58,9 @@ test("hero: three lines with the years worked out from 1999, exactly two buttons
   await expect(buttons.nth(1)).toHaveAttribute("href", "/book-eye-test");
   await expect(page.getByText(/try[- ]on/i)).toHaveCount(0);
   await expect(page.locator(".hero__legacy")).toContainText("Since 1999");
+  // The DUMMY C12 hero slideshow (AI-generated people) shows only while developing, never in a build
+  await expect(page.locator(".hero img, .hero__ctl")).toHaveCount(0);
+  expect(await page.locator(".hero").getAttribute("style"), "no blurred backdrop photo either").toBeNull();
   await expect(page.locator("main h2")).toHaveText([
     "Welcome to the Optical Family", "Find your frame", "Featured frames", "Every lens, checked by experts",
     "Eye camps", "What our customers say", "Our branches", "Book your eye test",

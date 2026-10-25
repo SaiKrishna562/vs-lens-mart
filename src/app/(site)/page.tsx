@@ -1,9 +1,13 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { BranchCard } from "@/components/contact/branch-card";
 import { BookDate } from "@/components/home/book-date";
 import { FeaturedFrames } from "@/components/home/featured-frames";
+import { HeroSlides } from "@/components/home/hero-slides";
 import { HomeNav } from "@/components/home/home-nav";
 import { QuoteBand } from "@/components/home/quote-band";
 import { PickerButton } from "@/components/site/branch-picker";
@@ -33,12 +37,24 @@ const CATEGORIES: [string, string, IconName][] = [
 ];
 
 /* Home (Requirements_HomePage.md), from the signed-off mockups/home.html.
-   The hero has no photo yet: the mockup's (DUMMY C12) shows AI-generated people
-   and never goes live; the client's real shop photo replaces it. The founder
+   The hero's photos are DUMMY C12 (AI-generated people): a slideshow while
+   developing, nothing in production, until the client's real shop photos arrive. The founder
    story is DUMMY (C1, C3), as on About. Category tiles wait for the client's
    product photos. Hours, branch names and numbers come from the database, and
    so do featured frames, lens brands, camps, reviews and branches: each of those
    sections is left out when it has nothing to show. */
+/** DUMMY C12: AI-generated hero photos in public/dummy/hero, shown only while
+ *  developing (never in a production build; check:launch flags the folder). */
+function dummyHeroPhotos(): string[] {
+  if (process.env.NODE_ENV === "production") return [];
+  try {
+    return readdirSync(path.join(process.cwd(), "public", "dummy", "hero"))
+      .filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort().map((f) => `/dummy/hero/${f}`);
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
   const [branches, closures, frames, lenses, camps, reviews] = await Promise.all([
     getBranches(), getClosures(), getCatalogue("frames"), getLenses(), getCamps(), getTestimonials(),
@@ -49,12 +65,15 @@ export default async function HomePage() {
   const past = camps.past.slice(0, 4);
   const names = branches.map((b) => b.name);
   const hours = hoursLine(branches);
+  const slides = dummyHeroPhotos();
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: storeJson(branches) }} />
       <HomeNav />
-      <section className="hero hero--home" aria-labelledby="hero-title">
+      <section className="hero hero--home" aria-labelledby="hero-title"
+        style={slides[0] ? ({ "--hero-img": `url(${slides[0]})` } as CSSProperties) : undefined}>
+        {slides.length > 0 && <HeroSlides srcs={slides} />}
         <div className="container hero__inner">
           <p className="eyebrow"><span>TRUST</span><i>/</i><span>CARE</span><i>/</i><span>INNOVATION</span></p>
           <h1 className="hero__title" id="hero-title">

@@ -253,7 +253,10 @@ Done when:
 
 ## 7. Build notes (sprint 5.2, 2026-10-25)
 
-- **Hero photo:** none yet. The mockup's photo shows AI-generated people (`DUMMY` C12), so it never enters the app; the hero is navy with the same text, buttons and shading. Adding the client's real photo means setting `--hero-img` on `.hero--home` and putting a `next/image` in `.hero__media` (the CSS is ready).
+- **Hero photos: a slideshow** (developer decision 2026-10-25; the signed-off mockup has one still photo, so show the client):
+  - **How it works:** the photos cross-fade every 6 s (fades only); a pause button and dots sit bottom-right; with reduced motion only the first photo shows, with no controls. Only the first photo loads straight away.
+  - **For now:** 5 AI-generated photos (`DUMMY` C12) in `public/dummy/hero/` (gitignored), shown **only while developing**. A production build shows the plain navy hero, a test checks that, and `check:launch` fails while the folder has images.
+  - **With the client's real photos:** move them to a real folder, list them in the page instead of `dummyHeroPhotos()`, and give each one alt text describing it (the dummy ones are decorative, `alt=""`).
 - **Nav on Home** (developer decision 2026-10-25): see-through navy with white text over the hero, more navy past it, as in the signed-off mockup. Other pages keep the white light-mode bar. Done in CSS with `body:has(.hero--home)`, so nothing flashes while loading.
 - **Database sections:**
   - Featured frames: the 8 newest live eyeglasses and computer glasses (`/sunglasses` has its own tile).
