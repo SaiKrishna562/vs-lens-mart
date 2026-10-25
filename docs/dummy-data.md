@@ -61,7 +61,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | C15 | About page timeline | 2010: "[Milestone]" (e.g. new testing equipment); 2016: first community eye camp. Shown between 1999 (confirmed) and 2022 (C3) | [ ] |
 | C14 | Sunglasses data | About 16 pairs: brands from C5, prices ₹999–₹8,990, lens types Polarized / UV protection / Tinted / Power sunglasses, lens colours Grey / Green / Brown / Gradient blue, codes `SG-20xx` | [ ] |
 | C13 | Frame categories | Eyeglasses · Computer glasses (Sunglasses is its own page). Frame code format `VSF-1024` | [ ] |
-| C12 | Homepage hero photo | The photo part of `docs/Premium Eyewear Visionary Hero.png` (AI-generated people), cropped to `mockups/assets/hero-dummy.jpg`. Mockups only; never live | [ ] |
+| C12 | Homepage hero photo | The photo part of `docs/Premium Eyewear Visionary Hero.png` (AI-generated people), cropped to `mockups/assets/hero-dummy.jpg`. Mockups only; never live. The app's hero shows no photo until the client's real one arrives | [ ] |
 | C11 | Photos | Grey placeholders with a label (already in `mockups/styles.css`). Internet photos only after approval, see section 6 | [ ] |
 
 ## 4. Dummy answers to the 8 (+1) contradictions

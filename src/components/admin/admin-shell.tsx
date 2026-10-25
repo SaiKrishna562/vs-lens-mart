@@ -107,7 +107,8 @@ export function AdminShell({ user, branch, branches, counts, children }: ShellPr
             <span className="adm-user__branch">{branch.name}</span>
           </span>
           <ThemeToggle />
-          <Link className="icon-btn adm-top__link" href="/" aria-label="View site"><AdminIcon name="ext" /><span>View site</span></Link>
+          {/* No prefetch: every staff page would otherwise render the public homepage (and its frames and camps) in the background */}
+          <Link className="icon-btn adm-top__link" href="/" prefetch={false} aria-label="View site"><AdminIcon name="ext" /><span>View site</span></Link>
           <SignOutButton variant="top" />
         </div>
       </header>

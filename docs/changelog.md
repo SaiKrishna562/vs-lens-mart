@@ -4,6 +4,34 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-25 · Sprint 5.2 (part B) · Home page: database sections (sprint 5.2 done)
+
+- **Changed:**
+  - **Database sections**, each left out when it has nothing to show:
+    - **Featured frames:** the 8 newest live frames in the shared card (heart, Enquire), a sideways row on phones;
+    - **Lenses and eye care:** up to 5 lens brands and the 4 services, "Free eye test" only with `DUMMY` D7;
+    - **Eye camps:** the next camp and up to 4 past ones, with cover photos once uploaded;
+    - **Reviews:** 3 testimonials, without stars (there's no rating to show);
+    - **Our branches:** the shared branch cards.
+  - **Quote band:** the 3 plan quotes change every 7 s with a fade; dots and pause; still with reduced motion.
+  - **Book band:** a plain form to `/book-eye-test?branch=…&date=…` that saves nothing.
+  - **Search-engine data:** the shop data (OpticianStore per branch) moved from Contact into `src/lib/store-data.ts` and is now on Home too.
+  - **Fix, branch picker:** when it opened near the edge of the screen, moving focus to its first link scrolled the page, and scrolling closes the picker, so it shut at once. It now focuses without scrolling, and it closes only when the page has really moved (more than 24 px) since it opened: a scroll event can arrive a frame after the tap that opened it, and phones nudge the page as the address bar hides (`branch-picker.tsx`).
+  - **Fix, staff area:** the "View site" link no longer pre-loads the homepage. Every staff page rendered the public homepage in the background, which in the tests cached throwaway frames and camps on the public pages (`admin-shell.tsx`).
+- **Why:** sprint 5.2 (`ROADMAP.md`); built after 5.5 so these sections read the real tables. Build notes: `Requirements_HomePage.md` 7.
+- **Checked:**
+  - New `home.spec.ts` (7 tests × 3 sizes):
+    - hero lines, years, buttons and the section order;
+    - quick cards and the picker; hours from the database;
+    - featured frames in the database's order, with Enquire carrying the code and the heart surviving a reload;
+    - camps, reviews and branches against the database;
+    - the book band's hand-off;
+    - the nav: see-through with white text on Home, and the white bar elsewhere in light mode;
+    - the quote band with a fake clock: changes, pause, still with reduced motion.
+  - `layout.spec.ts`: the "no favourites icon" and "no free eye test / year count" checks now look at the shared header and footer, since the homepage has frame-card hearts and the D7 services line.
+  - Screenshots at 1440 (light and dark) and 360 px: no sideways scroll, no console errors.
+- **Files:** `src/app/(site)/page.tsx`, `src/components/home/{featured-frames,quote-band,book-date}.tsx`, `src/lib/store-data.ts`, `src/app/(site)/contact/page.tsx`, `src/components/site/branch-picker.tsx`, `src/components/admin/admin-shell.tsx`, `src/styles/pages.css`, `tests/{home,layout}.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_HomePage.md`, `docs/open-questions.md`, `docs/dummy-data.md`, `CLAUDE.md`
+
 ## 2026-10-25 · Sprint 5.2 (part A) · Home page: hero and static sections
 
 - **Changed:**

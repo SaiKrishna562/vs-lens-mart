@@ -37,7 +37,8 @@ export function BranchPickerProvider({ branches, children }: { branches: Branch[
       const below = r.bottom + 8 + h <= innerHeight;
       setPos({ top: below ? r.bottom + 8 : Math.max(8, r.top - 8 - h), right: Math.max(12, Math.min(innerWidth - r.right, innerWidth - w - 12)) });
     } else setPos({});
-    const t = setTimeout(() => panel.current?.querySelector("a")?.focus(), matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 50);
+    // preventScroll: focusing a link at the screen's edge would scroll the page, and scrolling closes the picker
+    const t = setTimeout(() => panel.current?.querySelector("a")?.focus({ preventScroll: true }), matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 50);
     return () => clearTimeout(t);
   }, [state]);
 
@@ -49,7 +50,10 @@ export function BranchPickerProvider({ branches, children }: { branches: Branch[
       const t = e.target as Node;
       if (!panel.current?.contains(t) && !state.anchor.contains(t)) close();
     };
-    const onScroll = () => { if (!state.bottom) close(); };
+    // Only a real move closes it: a scroll event can arrive just after the tap that opened it
+    // (scroll events are sent a frame late), and phones nudge the page as the address bar hides.
+    const y0 = scrollY;
+    const onScroll = () => { if (!state.bottom && Math.abs(scrollY - y0) > 24) close(); };
     document.addEventListener("keydown", onKey, true);
     document.addEventListener("click", onClick);
     addEventListener("scroll", onScroll, { passive: true });

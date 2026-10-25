@@ -250,3 +250,20 @@ Done when:
 | Google Business Profile, so Google reviews can replace the dummy reviews | Client | `DUMMY` C8 |
 | Eye camp details and photos | Client | `DUMMY` C9 |
 | Patelguda number; social media links | Client | `DUMMY` D2, D5 |
+
+## 7. Build notes (sprint 5.2, 2026-10-25)
+
+- **Hero photo:** none yet. The mockup's photo shows AI-generated people (`DUMMY` C12), so it never enters the app; the hero is navy with the same text, buttons and shading. Adding the client's real photo means setting `--hero-img` on `.hero--home` and putting a `next/image` in `.hero__media` (the CSS is ready).
+- **Nav on Home** (developer decision 2026-10-25): see-through navy with white text over the hero, more navy past it, as in the signed-off mockup. Other pages keep the white light-mode bar. Done in CSS with `body:has(.hero--home)`, so nothing flashes while loading.
+- **Database sections:**
+  - Featured frames: the 8 newest live eyeglasses and computer glasses (`/sunglasses` has its own tile).
+  - Lens brands: up to 5, from the lenses staff add.
+  - Eye camps: the next camp and up to 4 past ones, with their cover photo when one is uploaded.
+  - Reviews: the first 3 testimonials, shown **without stars**, because the table has no rating and none is invented.
+  - Branches: the same branch cards as Contact and About.
+  - Each section is left out when it has nothing to show.
+- **Shared facts:** hours and branch names in the quick cards and trust strip come from the database (`hoursLine()`), never hard-coded.
+- **Placeholders:** the founder story is `DUMMY` C1 and C3, as on About; category tiles and the welcome photo use icon placeholders until the client's photos arrive.
+- **Book band:** a plain form that opens `/book-eye-test?branch=…&date=…`; it saves nothing. The date box starts from today in India.
+- **Quote band:** changes every 7 seconds with a fade; dots and pause; still, with no pause button, when reduced motion is on. Screen readers hear it only when the visitor picks a quote.
+- **Found while testing:** the branch picker moved focus to its first link, which could scroll the page and so close the picker straight away. It now moves focus without scrolling.

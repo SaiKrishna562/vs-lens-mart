@@ -7,9 +7,9 @@ import { PickerButton } from "@/components/site/branch-picker";
 import { Icon } from "@/components/site/icons";
 import { Reveal } from "@/components/site/reveal";
 import { hoursLine } from "@/components/site/site-chrome";
-import type { Branch } from "@/lib/queries/site";
-import { replyTime, shopEmail, site, time12 } from "@/lib/site-config";
+import { replyTime, shopEmail, time12 } from "@/lib/site-config";
 import { getBranches, getClosures } from "@/lib/site-data";
+import { storeData } from "@/lib/store-data";
 
 export const metadata: Metadata = {
   title: { absolute: "Contact | VS Lens Mart, Indresham and Patelguda" },
@@ -20,18 +20,6 @@ export const metadata: Metadata = {
 /* Contact (Requirements_Contact.md), from mockups/contact.html: hero, quick
    actions, both branches with maps, the enquiry form, FAQ and the book band.
    Every shop fact comes from the branches table. */
-
-const DAY_CODES: Record<string, string> = { Mon: "Mo", Tue: "Tu", Wed: "We", Thu: "Th", Fri: "Fr", Sat: "Sa", Sun: "Su" };
-/** OpticianStore data per branch for search engines; a placeholder phone is left out. */
-function storeData(branches: Branch[]) {
-  return branches.map((b) => ({
-    "@context": "https://schema.org", "@type": "OpticianStore", name: `${site.name}, ${b.name}`,
-    address: { "@type": "PostalAddress", streetAddress: b.address, addressRegion: "Telangana", addressCountry: "IN" },
-    ...(b.dummy ? {} : { telephone: `+91${b.phone}` }),
-    openingHours: `${b.openDays.map((d) => DAY_CODES[d]).join(",")} ${b.opens}-${b.closes}`.replace("Mo,Tu,We,Th,Fr,Sa,Su", "Mo-Su"),
-    url: `${site.url}/contact#${b.slug}`,
-  }));
-}
 
 export default async function ContactPage() {
   const [branches, closures] = await Promise.all([getBranches(), getClosures()]);

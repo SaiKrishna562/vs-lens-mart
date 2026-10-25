@@ -23,7 +23,8 @@ test("8 menu items in the client's order, Home marked on the home page, no cart 
   await expect(page.locator(".acc > li > :first-child")).toHaveText(ORDER);
   await expect(page.locator('.menu > li > a.menu__link[aria-current="page"]')).toHaveText("Home");
   await expect(page.locator(".nav .brand")).toHaveAttribute("href", "/");
-  await expect(page.locator('[aria-label*="cart" i], [aria-label*="account" i], [aria-label*="favourite" i]')).toHaveCount(0);
+  // Never cart, account or favourites icons in the header (hearts belong on frame cards)
+  await expect(page.locator('.site-header :is([aria-label*="cart" i], [aria-label*="account" i], [aria-label*="favourite" i])')).toHaveCount(0);
   await expect(page.locator(".utility__cta a")).toHaveAttribute("href", "/book-eye-test");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), "sideways scroll").toBe(0);
 });
@@ -34,8 +35,11 @@ test("shop facts come from the database, with Since 1999 and no year count", asy
   await expect(page.locator(".u-hours")).toHaveText(/Open 7 days, 9 AM–9:30 PM/);
   await expect(page.locator(".footer")).toContainText("Plot No 30/Part Block-B");
   await expect(page.locator(".footer")).toContainText("Falcon One Shopping Plaza");
-  await expect(page.locator("body")).not.toContainText(/\b2[57] years\b/);
-  await expect(page.locator("body")).not.toContainText(/free eye test/i); // DUMMY D7
+  // The shared header and footer: never a hard-coded year count, never the DUMMY D7 "free" claim
+  for (const part of [".site-header", ".footer"]) {
+    await expect(page.locator(part)).not.toContainText(/\b2[57] years\b/i);
+    await expect(page.locator(part)).not.toContainText(/free eye test/i);
+  }
   await expect(page.locator(".dummy-tag"), "DUMMY tags never show in a production build").toHaveCount(0);
 });
 

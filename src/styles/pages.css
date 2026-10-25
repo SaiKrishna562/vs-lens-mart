@@ -649,3 +649,9 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   @media (max-width: 767px) { .gallery-grid .gp-tile:first-child { grid-row: auto; grid-column: span 2; aspect-ratio: 16 / 9; } }
   .branch__map iframe { display: block; width: 100%; aspect-ratio: 16 / 7; border: 0; border-bottom: 1px dashed var(--brass-40); }
 }
+
+/* Live additions: Home eye camps (the mockup only had placeholders). A past camp's
+   cover photo fills the same 3:2 box as the placeholder. */
+.camp-past__img { position: relative; display: block; aspect-ratio: 3 / 2; border-radius: var(--r-md); overflow: hidden; }
+.camp-past__img img { object-fit: cover; }
+.camp-past__img .ph { position: absolute; inset: 0; display: grid; place-items: center; }

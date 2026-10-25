@@ -10,7 +10,7 @@ Everything still open here has a placeholder in `docs/dummy-data.md`, so work ca
 |---|---|---|
 | Customer enquiry email address | Pending | Not covered by the form. |
 | White menu bar in light mode? | **To confirm** | Developer proposal 2026-10-23: the main menu bar is white with navy text in light mode (navy in dark mode, utility strip stays navy). The client approved a navy bar on 2026-10-21. Show both and ask. |
-| Shop, staff, frame and eye camp photos | Pending | Client will photograph and upload frames (Q32, Q33). Who provides shop/staff photos is blank (Q144); hero photo or video "Not sure" (Q11). |
+| Shop, staff, frame and eye camp photos | Pending | Client will photograph and upload frames (Q32, Q33). Who provides shop/staff photos is blank (Q144); hero photo or video "Not sure" (Q11). Until a real hero photo arrives (with everyone's consent), the homepage hero has no photo; the category tiles and welcome photo also wait for photos. |
 | Founding story and founder details (1999) | Pending | Not covered by the form. |
 | "Vision of 25 years" vs 27 years (or "Since 1999") | **Partly answered** | "Since 1999" prominent: Yes (Q12). Highlight the 25/27 years: "Not sure" (Q13). Keep computing years in code. |
 | Opening time: 9:00 AM or 9:30 AM? | **Answered** | 9:00 AM–9:30 PM, both branches (Q90), matching the WhatsApp answer. Holidays the same for both branches: "Not sure" (Q91). |
