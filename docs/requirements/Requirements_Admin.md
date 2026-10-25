@@ -53,7 +53,7 @@ Two roles from the start (`CLAUDE.md`). Approval needs one person to upload and 
 ## 3. Sign-in and accounts
 
 - **Sign in:** `/admin/login` with email and password (Better Auth). The page has no link from the public site, and `/admin` is `noindex` and blocked in `robots.txt`.
-- **Accounts:** only an admin creates them (name, email, role, home branch). There's no public sign-up. Until the Staff accounts page exists (sprint 5.3), accounts are created on the laptop with `npm run staff:create`, which also sets a new password for an existing account. Invite links need email sending, which isn't in the MVP.
+- **Accounts:** only an admin creates them (name, email, role, home branch) at `/admin/staff` (built 2026-10-25; see section 15). There's no public sign-up. `npm run staff:create` still works on the laptop, for the very first admin or if every admin is locked out. Invite links need email sending, which isn't in the MVP.
 - **Leaving staff** (Q142 blank): an admin **disables** the account; it can't sign in, and the content it added stays.
 - **Forgotten password:** an admin sets a new temporary password (no email sending in the MVP).
 - **Sessions:** signed out after 12 hours without use (`DUMMY` C22). "Sign out" is always in the menu.
@@ -246,3 +246,17 @@ Done when:
 - **Staff** see the list read-only; the database refuses a staff change as well.
 - **When changes appear:** at once (cache tag `branches`): the booking form shows "Closed" for that day and Contact shows the next closed day.
 - **Real days:** still a question for the client (Q91, `docs/open-questions.md`); the seed's Diwali day is `DUMMY` D3.
+
+## 15. Build notes: Staff accounts (2026-10-25; not mocked up)
+
+- **`/admin/staff`, admin only.** Staff who open it see "Only an admin can manage staff accounts" and no accounts; the sidebar shows Settings to admins only.
+- **List:** every account with its name, email, role, home branch, "Switched off" and "Sample, can't sign in" badges, and a Manage link. On phones the role column folds into the badges.
+- **Add an account:** name, email, role, home branch, and a password typed twice (at least 10 characters). It's stored only as a hash and never shown again; the admin tells the person in person.
+- **Manage (`?id=`):**
+  - change the name, role or home branch;
+  - set a new password for a forgotten one, which signs that person out on every device (an admin changing their own is signed out too and signs in again);
+  - switch off or back on: switched off means signed out at once and unable to sign in, while what they added keeps their name;
+  - delete, for sample accounts only. Real accounts are switched off instead.
+- **Safety rules (on the server):** nobody changes their own role, switches themselves off or deletes themselves; at least one admin who can sign in always remains; the `.example` sample domain can't be used for a real account. Every action checks for an admin first.
+- **How:** all account work goes through `src/lib/staff-admin.ts`, on the login tables' own connection (`vslm_auth`). The website's database user can't read them.
+- **Sample accounts (`DUMMY` C22):** `npm run db:seed` adds "Admin (sample)" and "Staff 1–4 · Indresham / Patelguda" on `@vslensmart.example` with no password, so nobody can sign in with them; real accounts are never touched. `npm run check:launch` lists any still there. Once the client names the staff (Q102, Q103), the admin adds the real accounts and deletes the samples.

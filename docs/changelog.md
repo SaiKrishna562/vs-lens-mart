@@ -4,6 +4,24 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-10-25 · Staff settings (part C) · Staff accounts page
+
+- **Changed:**
+  - **`/admin/staff`** (admin only; not mocked up): every account with role, home branch and badges; an "Add a staff account" form (password typed twice, stored only as a hash); and Manage for each account: name, role and branch, a new password (signs that person out everywhere), switch off or on, and delete for samples only.
+  - **Safety rules** on the server: nobody changes their own role, switches themselves off or deletes themselves; an admin who can sign in always remains; real accounts can't use the sample domain.
+  - **Sample staff (`DUMMY` C22):** `npm run db:seed` adds 1 sample admin and 4 sample staff on `@vslensmart.example` with no password, so nobody can sign in with them. `check:launch` lists them, and C22 is in the DUMMY register.
+  - Staff see "Only an admin can manage staff accounts" and no accounts.
+  - The "coming later" page is gone; an unknown staff-area address still shows "not found" inside the staff area.
+  - Email and password boxes now have the form styling (they had none in the staff area).
+- **Why:** the developer's decision (2026-10-24): a working page with sample accounts until the client names the staff (Q102, Q103). Build notes: `Requirements_Admin.md` 15.
+- **Checked:**
+  - `staff-settings.spec.ts`, 3 new tests (7 pass):
+    - staff are refused and see no accounts; the form's password minimum is Better Auth's;
+    - the admin adds an account that can sign in, a new password signs it out, switching off ends the session and blocks sign-in, switching on again; real accounts have no Delete;
+    - an admin can't change their own role or switch themselves off; a sample can't sign in, and deleting a sample works (the test puts it back).
+  - Browser screenshots at 360 px (light) and 1440 px (light and dark): no sideways scroll, no console errors. Phones drop the role column so long emails don't run under Manage.
+- **Files:** `src/lib/staff-rules.ts`, `src/lib/staff-admin.ts`, `src/app/admin/(staff)/staff/{page.tsx,actions.ts}`, `src/components/admin/{staff-admin,staff-forms}.tsx`, `src/app/admin/(staff)/[...section]/page.tsx`, `src/styles/admin.css`, `src/lib/site-config.ts`, `scripts/{db-seed,launch-check}.ts`, `tests/{staff-settings,admin-shell}.spec.ts`, `docs/requirements/Requirements_Admin.md`, `docs/dummy-data.md`, `CLAUDE.md`
+
 ## 2026-10-24 · Staff settings (part B) · Branch holidays page
 
 - **Changed:**

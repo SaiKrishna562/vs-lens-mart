@@ -62,6 +62,7 @@ export const DUMMY = {
   C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
   D7: "Eye test price: shown as free",
   D9: "Retention: bookings and messages deleted after 1 year (RETENTION_DAYS)",
+  C22: "Staff accounts: sample staff (no password, …@vslensmart.example) and sign-out after 12 hours (auth-options.ts)",
   C23: "Privacy contact: \"the shop owner\", replies within 30 days; legal owner's name",
   C21: "Enquiry reply time: within a day",
   C19: "Eye camps: what's offered and what to bring (src/lib/camp-rules.ts)",

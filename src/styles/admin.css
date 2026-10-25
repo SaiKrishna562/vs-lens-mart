@@ -177,8 +177,8 @@
 .br-forms .fsec { display: grid; gap: var(--s-1); }
 .br-forms textarea { min-height: 116px; }
 .br-forms .fsec__title { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); margin-bottom: var(--s-2); }
-.ffield input[type="time"], .ffield input[type="url"] { width: 100%; min-height: var(--btn-h); padding: 10px var(--s-4); border-radius: var(--r-sm); border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; }
-.ffield input[type="time"]:focus, .ffield input[type="url"]:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent; }
+.ffield input[type="time"], .ffield input[type="url"], .ffield input[type="email"], .ffield input[type="password"] { width: 100%; min-height: var(--btn-h); padding: 10px var(--s-4); border-radius: var(--r-sm); border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: inherit; }
+.ffield input[type="time"]:focus, .ffield input[type="url"]:focus, .ffield input[type="email"]:focus, .ffield input[type="password"]:focus { outline: 2px solid var(--focus); outline-offset: 1px; border-color: transparent; }
 .ffield input[readonly], .ffield textarea[readonly] { background: var(--bg); color: var(--text-muted); }
 .br-forms .factions { grid-column: 1 / -1; margin-inline: 0; border-radius: var(--r-md); }
 .adm-readonly { padding: var(--s-3) var(--s-4); border-radius: var(--r-sm); border-left: 4px solid var(--gold); background: var(--gold-16); font-size: var(--fs-sm); margin-bottom: var(--s-4); max-width: 72rem; }
@@ -251,4 +251,17 @@
   @media (max-width: 767px) {
     .bk-row .bk-row__ctl { grid-column: 2 / -1; }
   }
+}
+
+/* Live additions: Staff accounts (not mocked up). One account's settings hold three
+   small forms, so their buttons sit in the panel, not in a sticky bar. Long email
+   addresses wrap instead of running under the Manage button on phones. */
+.st-manage .factions { position: static; margin-inline: 0; padding: var(--s-3) 0 0; background: none; border-top: 0; box-shadow: none; }
+.st-manage .factions--start { justify-content: flex-start; }
+.st-list .bk-row__who { overflow-wrap: anywhere; }
+.st-list .bk-row__who .adm-badge { margin-top: 2px; }
+@media (max-width: 767px) {
+  /* The role is in the badges, so phones drop that column and give the room to the email */
+  .st-list .bk-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .st-list .bk-row__time { display: none; }
 }

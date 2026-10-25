@@ -5,11 +5,15 @@
      (mockups/frames-data.js, mockups/camps-data.js, mockups/admin.js; docs/dummy-data.md C4, C5, C13, C14, C19, C22)
    - Testimonials: DUMMY C8
    - Lenses: the lens catalogue of mockups/lenses.html (DUMMY C6 brands, C16 lenses)
+   - Sample staff accounts (DUMMY C22): 1 admin and 4 staff on @vslensmart.example with no
+     password, so nobody can sign in with them. Real login accounts are never touched.
    Everything except the branch facts is DUMMY and must never reach the live site.
    Runs as vslm_owner with app.role = admin (row-level security is forced even for the owner). */
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
+import { betterAuth } from "better-auth";
 import pg from "pg";
+import { authOptions } from "../src/lib/auth-options.ts";
 import { branches as branchSeed } from "../src/lib/site-config.ts";
 import { loadEnv, need } from "./env.ts";
 
@@ -144,4 +148,32 @@ async function main() {
   }
 }
 
-main().catch((e) => { console.error(e); process.exitCode = 1; });
+/* Sample staff (DUMMY C22), named by role and branch only. Added if missing,
+   through the login tables' own connection (vslm_auth). No password: they can't
+   sign in. The admin deletes them at /admin/staff once real accounts exist. */
+const SAMPLE_STAFF = [
+  ["sample-admin", "Admin (sample)", "admin", "indresham"],
+  ["sample-staff-1", "Staff 1 · Indresham", "staff", "indresham"],
+  ["sample-staff-2", "Staff 2 · Indresham", "staff", "indresham"],
+  ["sample-staff-3", "Staff 3 · Patelguda", "staff", "patelguda"],
+  ["sample-staff-4", "Staff 4 · Patelguda", "staff", "patelguda"],
+] as const;
+
+async function seedSampleStaff() {
+  const pool = new pg.Pool({ connectionString: need("DATABASE_URL_AUTH") });
+  try {
+    const ctx = await betterAuth(authOptions(pool)).$context;
+    let added = 0;
+    for (const [local, name, role, branch] of SAMPLE_STAFF) {
+      const email = `${local}@vslensmart.example`;
+      if (await ctx.internalAdapter.findUserByEmail(email)) continue;
+      await ctx.internalAdapter.createUser({ email, name, emailVerified: true, role, branch }, { method: "admin" });
+      added++;
+    }
+    console.log(`Sample staff accounts (DUMMY C22, can't sign in): ${added} added, ${SAMPLE_STAFF.length - added} already there.`);
+  } finally {
+    await pool.end();
+  }
+}
+
+main().then(seedSampleStaff).catch((e) => { console.error(e); process.exitCode = 1; });

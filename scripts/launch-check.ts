@@ -5,7 +5,7 @@
    1. the DUMMY register in src/lib/site-config.ts (code-level placeholders);
    2. placeholder values in the shop facts (phone numbers, example.com links);
    3. the database: placeholder branch numbers, and the mockups' DUMMY frames,
-      lenses, camps and testimonials that `npm run db:seed` loads. */
+      lenses, camps and testimonials that `npm run db:seed` loads, and its sample staff accounts. */
 import { readFileSync } from "node:fs";
 import pg from "pg";
 import { branches, DUMMY, isDummyPhone, socials } from "../src/lib/site-config.ts";
@@ -39,6 +39,12 @@ for (const [label, sql, v] of checks) {
   if (count) problems.push(`${label}: ${count}`);
 }
 await client.end();
+// Sample staff accounts live in the login tables, reachable only as vslm_auth
+const authClient = new pg.Client({ connectionString: need("DATABASE_URL_AUTH") });
+await authClient.connect();
+const samples = Number((await authClient.query(`select count(*) n from "user" where email like '%@vslensmart.example'`)).rows[0].n);
+await authClient.end();
+if (samples) problems.push(`Database: sample staff accounts (C22), delete them at /admin/staff: ${samples}`);
 
 if (problems.length) {
   console.log(`Not ready to launch: ${problems.length} placeholder item(s) left.\n`);
