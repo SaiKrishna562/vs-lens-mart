@@ -2,10 +2,13 @@
    from the signed-off mockup. Server-rendered; nav.tsx shows and hides them.
    Brands and "from ₹" prices come from the database (approved, active rows).
    A column with nothing to show is left out, so the menu never says "₹0".
-   Photo boxes stay as placeholders until the client sends real photos
-   (no stock photos, no generated people). The eye test is not called "free"
+   Photo boxes stay as placeholders until the client sends real photos (no
+   stock photos, no generated people); while developing, the Shop for tiles
+   show the DUMMY C24 photos (src/lib/dummy-photos.ts), never in a build. The eye test is not called "free"
    until the client confirms (DUMMY D7). */
+import Image from "next/image";
 import Link from "next/link";
+import { dummyPhoto, shopForPhoto } from "@/lib/dummy-photos";
 import type { MenuData, PriceLink } from "@/lib/queries/site";
 import { priceTiersDummy } from "@/lib/site-config";
 import { DummyTag } from "./dummy-tag";
@@ -45,12 +48,13 @@ function Col({ title, href, children }: { title: string; href: string; children:
   );
 }
 
-function Tiles({ items }: { items: L[] }) {
+function Tiles({ items }: { items: (L & { photo?: string | null })[] }) {
   return (
     <div className="tiles">
       {items.map((t) => (
         <Link key={t.href} className="tile" href={t.href} prefetch={false}>
-          <div className="ph" aria-hidden="true" />
+          {t.photo ? <div className="tile__img"><Image src={t.photo} alt="" fill sizes="120px" /></div>
+            : <div className="ph" aria-hidden="true" />}
           <span>{t.label}</span>
         </Link>
       ))}
@@ -74,7 +78,7 @@ export function FramesPanel({ menu }: { menu: MenuData }) {
   return (
     <div className="container mega__inner">
       <div className="mega__grid" style={cols("1.5fr", "1fr", brands && "1fr", prices && "1.1fr")}>
-        <Col title="Shop for" href="/frames"><Tiles items={shopFor("/frames")} /></Col>
+        <Col title="Shop for" href="/frames"><Tiles items={shopFor("/frames").map((l) => ({ ...l, photo: shopForPhoto(l.label, "frames") }))} /></Col>
         <Col title="Shape" href="/frames"><List items={frameShapes} /></Col>
         {brands && (
           <Col title="Brands" href="/frames">
@@ -99,7 +103,7 @@ export function SunglassesPanel({ menu }: { menu: MenuData }) {
   return (
     <div className="container mega__inner">
       <div className="mega__grid" style={cols("1.5fr", "1fr", "1fr", prices && "1.1fr")}>
-        <Col title="Shop for" href="/sunglasses"><Tiles items={shopFor("/sunglasses")} /></Col>
+        <Col title="Shop for" href="/sunglasses"><Tiles items={shopFor("/sunglasses").map((l) => ({ ...l, photo: shopForPhoto(l.label, "sunglasses") }))} /></Col>
         <Col title="Lens type" href="/sunglasses"><List items={sunglassLensTypes} /></Col>
         <Col title="Shape" href="/sunglasses"><List items={sunglassShapes} /></Col>
         {prices && (
@@ -135,11 +139,12 @@ export function LensesPanel({ menu }: { menu: MenuData }) {
   );
 }
 
-const careCards: { href: string; icon: IconName; title: string; text: string }[] = [
+/** `photo`: the card's DUMMY C24 photo in public/dummy/naiv, shown only while developing. */
+const careCards: { href: string; icon: IconName; title: string; text: string; photo: string }[] = [
   // Not "free" until the client confirms (DUMMY D7)
-  { href: "/book-eye-test", icon: "eye", title: "Book an eye test", text: "Pick a branch, date and time. To reschedule, call or WhatsApp the branch." },
-  { href: "/contact#branches", icon: "store", title: "Our branches", text: "Indresham and Patelguda, open 7 days." },
-  { href: "/eye-camps", icon: "camp", title: "Eye camps", text: "Upcoming camps near you, and photos from past ones." },
+  { href: "/book-eye-test", icon: "eye", title: "Book an eye test", text: "Pick a branch, date and time. To reschedule, call or WhatsApp the branch.", photo: "Book-an-eyetest" },
+  { href: "/contact#branches", icon: "store", title: "Our branches", text: "Indresham and Patelguda, open 7 days.", photo: "our-branches" },
+  { href: "/eye-camps", icon: "camp", title: "Eye camps", text: "Upcoming camps near you, and photos from past ones.", photo: "eye-camps" },
 ];
 
 export function EyeCarePanel() {
@@ -151,14 +156,18 @@ export function EyeCarePanel() {
           <p className="card__text" style={{ marginTop: 8 }}>At both branches.</p>
         </Col>
         <div className="cards">
-          {careCards.map((c) => (
+          {careCards.map((c) => {
+            const photo = dummyPhoto("naiv", c.photo);
+            return (
             <Link key={c.href} className="card" href={c.href} prefetch={false}>
-              {/* Photo placeholder until the client's photos arrive */}
-              <div className="ph" aria-hidden="true"><Icon name={c.icon} className="icon icon--lg" /></div>
+              {/* Photo placeholder until the client's photos arrive (a DUMMY photo while developing) */}
+              {photo ? <div className="card__img"><Image src={photo} alt="" fill sizes="260px" /></div>
+                : <div className="ph" aria-hidden="true"><Icon name={c.icon} className="icon icon--lg" /></div>}
               <span className="card__title">{c.title} <Icon name="arrow" /></span>
               <span className="card__text">{c.text}</span>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </div>
       <Foot note="" href="/eye-care" label="Eye care tips and FAQ" />

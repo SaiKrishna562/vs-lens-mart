@@ -60,6 +60,9 @@ test("hero: three lines with the years worked out from 1999, exactly two buttons
   await expect(page.locator(".hero__legacy")).toContainText("Since 1999");
   // The DUMMY C12 hero slideshow (AI-generated people) shows only while developing, never in a build
   await expect(page.locator(".hero img, .hero__ctl")).toHaveCount(0);
+  // Nor the DUMMY C24 photos (homepage tiles, the mega menus' Shop for tiles and Eye care cards)
+  await expect(page.locator(".cat__img, .tile__img, .card__img")).toHaveCount(0);
+  await expect(page.locator(".cat .ph")).toHaveCount(4);
   expect(await page.locator(".hero").getAttribute("style"), "no blurred backdrop photo either").toBeNull();
   await expect(page.locator("main h2")).toHaveText([
     "Welcome to the Optical Family", "Find your frame", "Featured frames", "Every lens, checked by experts",

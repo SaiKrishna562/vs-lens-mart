@@ -661,6 +661,13 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
    none with reduced motion. The controls sit bottom-right, clear of the quick cards. */
 .hero__slide { opacity: 0; transition: opacity 1.2s var(--ease-out); object-fit: cover; object-position: 40% 30%; }
 .hero__slide.is-on { opacity: 1; }
+/* Closer to the headline than the mockup's 38%: the photo starts at 30% with a shorter fade,
+   and each photo is shifted right so less of its own dark edge shows (developer request 2026-10-25). */
+.hero--home .hero__media { inset: 0 0 0 30%; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16%); mask-image: linear-gradient(90deg, transparent 0, #000 16%); }
+.hero--home .hero__slide { object-position: 72% 30%; }
+@media (max-width: 1179px) {
+  .hero--home .hero__media { inset: 0 0 0 24%; }
+}
 .hero__ctl { position: absolute; z-index: 2; right: var(--gutter); bottom: calc(var(--s-7) + var(--s-3)); display: flex; align-items: center; gap: var(--s-1); }
 .hero__ctl { padding-inline: var(--s-2); border-radius: var(--r-pill); background: rgb(13 27 42 / 0.55); }
 .hero__ctl .quote__dot::before { background: var(--white-64); }
@@ -671,4 +678,20 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
 }
 @media (prefers-reduced-motion: reduce) {
   .hero__slide { transition: none; }
+}
+
+/* Live additions: category photos (DUMMY C24 while developing), in the same box as the
+   placeholder: 4:5 on the homepage, 3:4 in the mega menus (site-chrome.css .tile).
+   The photo fills the box (next/image fill needs the positioned box). The Eye care
+   menu's cards get the same treatment at 16:10. */
+.cat__img, .tile__img, .card__img { position: relative; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface); }
+.cat__img { aspect-ratio: 4 / 5; }
+.tile__img { aspect-ratio: 3 / 4; border-radius: var(--r-sm); }
+.card__img { aspect-ratio: 16 / 10; border-radius: var(--r-sm); } /* the Eye care menu's cards (site-chrome.css .card) */
+.cat__img img, .tile__img img, .card__img img { object-fit: cover; object-position: 50% 30%; transition: transform var(--dur-menu) var(--ease-out); }
+.cat:hover .cat__img img, .tile:hover .tile__img img, .card:hover .card__img img { transform: scale(1.04); }
+.tile:hover .tile__img, .card:hover .card__img { border-color: var(--accent-ink); }
+@media (prefers-reduced-motion: reduce) {
+  .cat__img img, .tile__img img, .card__img img { transition: none; }
+  .cat:hover .cat__img img, .tile:hover .tile__img img, .card:hover .card__img img { transform: none; }
 }

@@ -4,6 +4,35 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-09 · Phase 5 · CLAUDE.md review
+
+- **Changed:** `CLAUDE.md` now lists the `rate-limit` test project and says new spec files must be added to the regex in `playwright.config.ts`; adds `npx tsc --noEmit`; explains the dev-only `public/dummy/` photos and `src/lib/dummy-photos.ts`; corrects the Stack table (Framer Motion was never installed; motion is `<Reveal>` and `cards-on-scroll.ts`); notes the dev-server CSS cache workaround.
+- **Why:** a `/init` review against the code found these gaps and one wrong fact.
+- **Files:** `CLAUDE.md`, `docs/changelog.md`
+
+## 2026-10-25 · Sprint 5.2 · Category photos in the menus and on Home (DUMMY C24, development only)
+
+- **Changed:**
+  - **Desktop mega menus:** the Frames and Sunglasses "Shop for" tiles (Men, Women, Kids) show AI-generated portraits from `public/dummy/naiv/`, named by slot (`men-frames.png`, `kid-sunglasses.png` and so on). The phone menu has text links only, as in the mockup.
+  - **Desktop Eye care menu:** its three cards show `Book-an-eyetest.png`, `our-branches.png` and `eye-camps.png` (16:10, the placeholder's shape). The "Our branches" photo is an invented shop front, not the real branch.
+  - **Homepage "Find your frame":** Men, Women and Kids use the frames portraits, and Sunglasses uses `woman-sunglasses.png`. The photos fill the same 4:5 box as the placeholder, with a slight zoom on hover (none with reduced motion).
+  - **Development only, like the hero (C12):**
+    - a new shared helper, `src/lib/dummy-photos.ts`, which the hero slideshow now uses too;
+    - a new placeholder id, C24, in `docs/dummy-data.md` and the DUMMY register;
+    - `check:launch` names both C12 and C24 for `public/dummy`.
+    - Production builds keep the icon placeholders, and `home.spec.ts` checks that.
+- **Why:** the developer's placeholder photos until the client sends real product and category photos (2026-10-25). They show AI-generated people, so they never go live.
+- **Checked:** both mega menus and the homepage tiles at 1440 and 360 px; no sideways scroll, no console errors or warnings.
+- **Found while checking:** the dev server kept serving an older `pages.css` after an edit made outside the editor (its cache missed the change, even across a restart). Saving the file again through the editor fixed it. If a style change doesn't show, re-save the file.
+- **Files:** `src/lib/dummy-photos.ts`, `src/components/site/mega-panels.tsx`, `src/app/(site)/page.tsx`, `src/styles/pages.css`, `src/lib/site-config.ts`, `scripts/launch-check.ts`, `tests/home.spec.ts`, `docs/dummy-data.md`
+
+## 2026-10-25 · Sprint 5.2 · Home hero: photo closer to the headline
+
+- **Changed:** on Home, the hero photo starts 30% across (the mockup's 38%; 24% below 1180 px), with a shorter left fade, and each photo is shifted right (`object-position: 72% 30%`) so less of its own dark edge shows. The navy shade behind the text is unchanged, so the headline stays readable.
+- **Why:** the developer found the gap between the text and the photo too wide (2026-10-25). At 1920 px the person started about 350 px after the headline.
+- **Checked:** screenshots at 1920, 1440 and 1180 px with photos 1, 3 and 5; phones are unchanged (the photo sits below the text there).
+- **Files:** `src/styles/pages.css`
+
 ## 2026-10-25 · Sprint 5.2 · Home hero slideshow (DUMMY photos, development only)
 
 - **Changed:**

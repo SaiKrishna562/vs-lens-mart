@@ -1,5 +1,3 @@
-import { readdirSync } from "node:fs";
-import path from "node:path";
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -19,6 +17,7 @@ import { hoursLine } from "@/components/site/site-chrome";
 import { getCatalogue } from "@/lib/catalogue-data";
 import { longDate, timeRange } from "@/lib/camp-rules";
 import { getCamps, getLenses, getTestimonials } from "@/lib/content-data";
+import { dummyPhoto, dummyPhotos, shopForPhoto } from "@/lib/dummy-photos";
 import { EYE_TEST_FREE, site } from "@/lib/site-config";
 import { getBranches, getClosures } from "@/lib/site-data";
 import { storeJson } from "@/lib/store-data";
@@ -29,11 +28,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-const CATEGORIES: [string, string, IconName][] = [
-  ["Men", "/frames?for=men", "glasses"],
-  ["Women", "/frames?for=women", "glasses"],
-  ["Kids", "/frames?for=kids", "glasses"],
-  ["Sunglasses", "/sunglasses", "sun"],
+/** Label, link, placeholder icon, and its DUMMY C24 photo while developing. */
+const categories = (): [string, string, IconName, string | null][] => [
+  ["Men", "/frames?for=men", "glasses", shopForPhoto("Men", "frames")],
+  ["Women", "/frames?for=women", "glasses", shopForPhoto("Women", "frames")],
+  ["Kids", "/frames?for=kids", "glasses", shopForPhoto("Kids", "frames")],
+  ["Sunglasses", "/sunglasses", "sun", dummyPhoto("naiv", "woman-sunglasses")],
 ];
 
 /* Home (Requirements_HomePage.md), from the signed-off mockups/home.html.
@@ -43,18 +43,6 @@ const CATEGORIES: [string, string, IconName][] = [
    product photos. Hours, branch names and numbers come from the database, and
    so do featured frames, lens brands, camps, reviews and branches: each of those
    sections is left out when it has nothing to show. */
-/** DUMMY C12: AI-generated hero photos in public/dummy/hero, shown only while
- *  developing (never in a production build; check:launch flags the folder). */
-function dummyHeroPhotos(): string[] {
-  if (process.env.NODE_ENV === "production") return [];
-  try {
-    return readdirSync(path.join(process.cwd(), "public", "dummy", "hero"))
-      .filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort().map((f) => `/dummy/hero/${f}`);
-  } catch {
-    return [];
-  }
-}
-
 export default async function HomePage() {
   const [branches, closures, frames, lenses, camps, reviews] = await Promise.all([
     getBranches(), getClosures(), getCatalogue("frames"), getLenses(), getCamps(), getTestimonials(),
@@ -65,7 +53,7 @@ export default async function HomePage() {
   const past = camps.past.slice(0, 4);
   const names = branches.map((b) => b.name);
   const hours = hoursLine(branches);
-  const slides = dummyHeroPhotos();
+  const slides = dummyPhotos("hero"); // DUMMY C12, development only
 
   return (
     <>
@@ -138,9 +126,10 @@ export default async function HomePage() {
             <h2 className="section__title" id="cats-title">Find your frame</h2>
           </div></div>
           <div className="cats">
-            {CATEGORIES.map(([label, href, icon]) => (
+            {categories().map(([label, href, icon, photo]) => (
               <Link className="cat" key={label} href={href}>
-                <div className="ph" aria-hidden="true"><Icon name={icon} className="icon icon--lg" /></div>
+                {photo ? <div className="cat__img"><Image src={photo} alt="" fill sizes="(min-width: 768px) 25vw, 50vw" /></div>
+                  : <div className="ph" aria-hidden="true"><Icon name={icon} className="icon icon--lg" /></div>}
                 <span className="cat__name">{label} <Icon name="arrow" /></span>
               </Link>
             ))}

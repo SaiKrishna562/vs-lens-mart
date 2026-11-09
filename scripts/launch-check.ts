@@ -21,7 +21,7 @@ for (const b of branches) if (isDummyPhone(b.phone) || isDummyPhone(b.whatsapp))
 for (const s of socials) if (/example\.(com|test)/.test(s.url)) problems.push(`site-config.ts: ${s.name} link is a placeholder (${s.url})`);
 // DUMMY images (AI-generated, development only) must not be deployed
 if (existsSync("public/dummy") && readdirSync("public/dummy", { recursive: true }).some((f) => /\.(jpe?g|png|webp|svg)$/i.test(String(f)))) {
-  problems.push("public/dummy: DUMMY images (C12 hero photos) are still in the project. Delete the folder");
+  problems.push("public/dummy: DUMMY images (C12 hero, C24 category photos) are still in the project. Delete the folder");
 }
 
 // 3. Database

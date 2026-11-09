@@ -58,6 +58,7 @@ export const DUMMY = {
   D4: "Domain (share links and search-engine data use vslensmart.example)",
   D5: "YouTube, Facebook and Instagram links",
   D8: "Logo (placeholder until the client's new logo arrives)",
+  C24: "Menu and homepage photos (Men / Women / Kids frames and sunglasses; Eye care menu cards): AI-generated, public/dummy/naiv, development only",
   C12: "Homepage hero photos: AI-generated slideshow in public/dummy/hero, development only (never in a production build)",
   C7: "Price tier names and boundaries in the menus",
   C18: "Booking rules: 20-minute slots, 2 per slot, 2 hours' notice, 30 days ahead (src/lib/booking-rules.ts)",
