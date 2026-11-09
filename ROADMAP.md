@@ -37,7 +37,7 @@ Sources: `CLAUDE.md`, `docs/requirements/Requirements_Navigation.md`, `docs/clie
 | Google Analytics | Needs a consent banner and a privacy policy update first. |
 | Google reviews on the site | The client has no Google Business Profile yet. Use manual testimonials until then; recommend the client creates one (it helps local search). |
 | Email alerts for bookings and enquiries | Waiting on the client's enquiry email address. |
-| Virtual try-on | Research first: MediaPipe face tracking or a paid SDK, a QR code per frame, an in-store screen. No "Try-on" button anywhere until it exists. |
+| Virtual try-on | Now Phase 6, after launch (section 8). |
 
 ## 3. Before the sprints: Foundation (Phase 4), complete 2026-10-23
 
@@ -102,7 +102,7 @@ Client inputs block **launch**, not building. Until they arrive, use the `DUMMY`
 | Frame data | Men / women / kids / sunglasses filters | Client's fields and filters; availability separate from `is_active`; "Available at" a branch | Client form Q20, Q24, Q25, Q27, Q39. Real stock counts wait for the store system |
 | Favourites | Not planned; "never wishlist" | Device-only, no login | Client wants it (Q28); no accounts in the MVP |
 | Eye care menu | Contact lenses, reading glasses, care products | The client's 4 services | Client listed its services (Q92) and never mentioned the others |
-| Hero CTAs | Two buttons | Still two; WhatsApp us / Visit store as quick cards; no Try-on button | Client listed 5 CTAs (Q9); try-on doesn't exist yet |
+| Hero CTAs | Two buttons | Still two; WhatsApp us / Visit store as quick cards; no Try-on button | Client listed 5 CTAs (Q9). Try-on (Phase 6, section 8) starts from frame pages, not the hero, unless the client asks |
 | Store management system | Customer and prescription records, reminders, orders as separate later modules | One later phase (section 7) | Client's form asks for a full counter system (Q51–135); it's a second project |
 
 ## 7. Later phase: Store management system
@@ -116,3 +116,19 @@ Starts only after the website launches. It needs its own requirements, schema, r
 - **Billing:** Cash / UPI, no GST (Q129–135).
 - **Staff:** 5+ accounts, admin vs staff permissions, audit log (Q102–112).
 - **Automatic WhatsApp messages:** appointment and order confirmation, ready for pickup, eye-check reminders. Needs WhatsApp Business and an API provider (Q81–87).
+
+## 8. Phase 6: Virtual try-on (after launch)
+
+Moved out of "Later modules" on 2026-11-09 (developer decision), after a working prototype showed a frame lined up on an uploaded photo in the browser. Full details: `docs/requirements/Requirements_TryOn.md`.
+
+- **When:** after sprint 5.6 Polish. It may be built while the launch still waits on client details, but behind the `TRYON_ENABLED` switch (off by default), so it never holds up the launch and adds nothing to the launch pages' size or Lighthouse scores.
+- **Before 6.1:** the client sees a mockup of the customer screens and answers Q40 (what they expect) and Q48 ("Both").
+- **Face tracking:** MediaPipe Face Landmarker, self-hosted in `public/tryon/` (one library for photo now and live camera later). The customer's photo never leaves the device.
+
+| Release | Features | Done when | Effort |
+|---|---|---|---|
+| 6.1 Try-on (photo) | Staff try-on switch per frame, front-view picture clean-up (background, arm tips, lens line) and upload; "Try it on" panel on frame detail with sliders, hold to compare and save image | Staff prepare a frame on a phone, and a customer sees it on their own photo on Android, iPhone and desktop, with no photo leaving the device | 4–6 days |
+| 6.2 Listing "on you" | After one photo, a switch shows each try-on frame's card on the customer's face while scrolling | 24 cards draw smoothly on a mid-range phone; other frames unchanged | 3–4 days |
+| 6.3 Share and compare | Share through the phone's share sheet (WhatsApp), save-then-WhatsApp on desktop; two looks side by side | The image reaches WhatsApp on a phone | 1–2 days |
+| 6.4 QR codes | A printable QR label per try-on frame that opens its try-on | A printed code opens the frame with try-on open. Needs the real domain (Q156) | 1 day |
+| 6.5 Live camera | Try-on on the live camera, switching frames with it open | Works on Android and iPhone; needs answers to Q43 and Q50 first | 3–5 days |

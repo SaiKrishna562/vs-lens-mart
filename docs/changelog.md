@@ -4,6 +4,16 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-09 · Phase 6 · Virtual try-on planned (docs only)
+
+- **Changed:**
+  - **Scope:** virtual try-on moves from "Later modules" to a new Phase 6 after launch (`ROADMAP.md` section 8), in five releases: 6.1 photo try-on and the staff try-on picture, 6.2 listing "on you", 6.3 share and compare, 6.4 QR codes, 6.5 live camera.
+  - **New requirements:** `Requirements_TryOn.md` (draft): customer panel, listing switch, staff clean-up of a front-view photo, QR labels, data rules, privacy, acceptance criteria and open items.
+  - **Other docs:** Frames (a try-on button only on try-on frames once switched on), Admin (try-on section on the frame form), Privacy (a try-on row), `CLAUDE.md` (status, hero rule, routes), `docs/open-questions.md` (Q40–50 decision and new questions), `docs/dummy-data.md` (new C25 for sample try-on pictures, not in use yet).
+  - **Unchanged:** the hero keeps its two buttons, and the tests that check for no try-on stay until 6.1 changes the code.
+- **Why:** the developer built a working in-browser prototype (eye detection, frame overlay, sliders, compare, save) and approved the plan on 2026-11-09. It's built behind `TRYON_ENABLED` (off by default), so it never holds up the launch. MediaPipe Face Landmarker replaces the prototype's face-api.js so the same code can later run on the live camera.
+- **Files:** `docs/requirements/Requirements_TryOn.md`, `ROADMAP.md`, `CLAUDE.md`, `docs/requirements/Requirements_Frames.md`, `docs/requirements/Requirements_Admin.md`, `docs/requirements/Requirements_Privacy.md`, `docs/open-questions.md`, `docs/dummy-data.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-11-09 · Phase 5 · CLAUDE.md review
 
 - **Changed:** `CLAUDE.md` now lists the `rate-limit` test project and says new spec files must be added to the regex in `playwright.config.ts`; adds `npx tsc --noEmit`; explains the dev-only `public/dummy/` photos and `src/lib/dummy-photos.ts`; corrects the Stack table (Framer Motion was never installed; motion is `<Reveal>` and `cards-on-scroll.ts`); notes the dev-server CSS cache workaround.

@@ -60,7 +60,7 @@ Decided by the developer and applied to `CLAUDE.md`, `ROADMAP.md` and `Requireme
 | **Google reviews** | Q150–152 | Manual testimonials for now. **Recommend the client creates a Google Business Profile** (helps local search). |
 | **Google Analytics** | Q155 | **Later**; needs a consent banner and a privacy policy update first. |
 | **Data retention** | Q63, Q139, Q140 | `DUMMY` period on `/privacy` (`docs/dummy-data.md` D9; store-system records X7); client to confirm. |
-| **Virtual try-on details** | Q41–49 | Later module, unchanged. Q40 "what do you expect" is "Not sure". |
+| **Virtual try-on details** | Q40–50 | **Phase 6, after launch** (decision 2026-11-09; `ROADMAP.md` section 8, `Requirements_TryOn.md`). Photo try-on on selected frames, listing "on you", WhatsApp share, QR codes, then live camera. Never holds up the launch. |
 | **Eye camp details**: number of participants; registration "Not sure" | Q99, Q100 | Fits 5.5; record in `Requirements_EyeCamps.md`. |
 
 ## 4. Still unanswered
@@ -76,5 +76,6 @@ Blank in the form:
 - **Content:** who writes the text, provides photos and testimonials (Q143–145); permission to publish customer photos, "Will confirm later" (Q146).
 - **Google/social:** search keywords (Q149); the actual YouTube, Facebook and Instagram links (Q153).
 - **Domain and maintenance:** who owns the accounts, who pays, maintenance expectations (Q158–160).
+- **Virtual try-on (Phase 6):** what the client expects (Q40 "Not sure"), shown with a try-on mockup; what "Both" means in Q48 (photo and live camera?); which frames get try-on and who photographs them from the front; switching frames with the camera open (Q43) and an in-store screen (Q50); QR label size and placement; the domain for the QR codes (Q156).
 
 "Other" was ticked without details in Q35, Q85, Q100, Q104, Q105, Q131 and Q153. Ask what each "Other" means.

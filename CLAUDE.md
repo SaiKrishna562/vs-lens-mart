@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Website for **VS Lens Mart**, a family-run optical shop (since 1999) with two branches (Indresham and Patelguda). Brand tone: a trusted family shop, premium quality at affordable prices ("Welcome to the Optical Family"). Customers browse and then enquire on WhatsApp or visit a branch. **There is no online checkout.**
 
-Status: Phase 5 in progress. Phase 4 (Foundation) is complete as of 2026-10-23; sprints 5.1 Layout (2026-10-23), 5.3 Admin + frames, 5.4 Booking + contact and 5.5 Content modules (2026-10-24) are done, and so are the staff settings pages (Branches, Branch holidays, Staff accounts) and 5.2 Home (2026-10-25). Next and last is 5.6 Polish (`ROADMAP.md` section 4 build order: 5.1 → 5.3 → 5.4 → 5.5 → 5.2 → 5.6). Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
+Status: Phase 5 in progress. Phase 4 (Foundation) is complete as of 2026-10-23; sprints 5.1 Layout (2026-10-23), 5.3 Admin + frames, 5.4 Booking + contact and 5.5 Content modules (2026-10-24) are done, and so are the staff settings pages (Branches, Branch holidays, Staff accounts) and 5.2 Home (2026-10-25). Next and last is 5.6 Polish (`ROADMAP.md` section 4 build order: 5.1 → 5.3 → 5.4 → 5.5 → 5.2 → 5.6). After it comes Phase 6, virtual try-on (`ROADMAP.md` section 8, `docs/requirements/Requirements_TryOn.md`; plan approved 2026-11-09): built behind `TRYON_ENABLED` (off by default) so it never holds up the launch. Phase 3 (HTML mockups) was signed off by the client on 2026-10-21 in a Google Meet review; the mockups in `mockups/` are the approved design. Missing client details stay `DUMMY` until they arrive and must be replaced before launch. The Next.js app (16.4, App Router, Cache Components on) lives at the repo root; `mockups/` stays as the reference design.
 
 Commands:
 - `npm run dev`: the app at http://localhost:3000 (or the `app` config in `.claude/launch.json`)
@@ -193,7 +193,7 @@ From the client's form (Q20, Q27, Q34, Q37, Q39). It applies to sunglasses too (
 - A headline with a white line, a gold line and a white line.
 - A gold "Explore our frames" button and an outline "Book an eye test" button. Only these two.
 - "WhatsApp us" and "Visit store" go in quick cards below the hero.
-- There is no "Virtual try-on" button until the try-on module exists.
+- There is no "Virtual try-on" button in the hero. Try-on (Phase 6) starts from frame pages and the listings, only for frames with try-on switched on, and only when `TRYON_ENABLED` is on.
 - A navy gradient overlay behind any text on photos.
 
 Use "Since 1999" and compute the years in code. Never hard-code "25 years".
@@ -220,6 +220,7 @@ On the right are the light/dark toggle, Search and WhatsApp icons. There are nev
 - `/lenses`, `/eye-care`, `/book-eye-test`, `/eye-camps`
 - `/gallery`: its own page, linked from About and the footer, not from the top menu
 - `/contact`, `/privacy`, `/admin`
+- Try-on (Phase 6) adds no route: a panel on frame detail pages (`?tryon=1` opens it) and a listing switch (`?onme=1`)
 
 Every page shares the utility bar, the nav, and a footer with:
 - both branch addresses, hours and phone numbers;

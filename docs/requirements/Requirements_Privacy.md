@@ -51,6 +51,7 @@ VS Lens Mart, an optical shop with branches in Indresham and Patelguda (addresse
 | You send a message on the contact page | Name, mobile number, branch, topic, your message, how you'd like us to reply, the frame code if you came from a frame, the time you agreed | To reply to you |
 | You message or call us on WhatsApp or phone | What you choose to send us | To reply. WhatsApp is run by Meta under its own terms |
 | You save favourites or choose light / dark mode | Nothing is sent to us. They're saved only in your own browser (`vslm-favourites`, `vslm-theme`) | So the site remembers your choices on that device |
+| You use virtual try-on (Phase 6, `#tryon`; only once try-on is switched on) | Nothing is sent to us. Your photo is processed in your own browser and kept only until you close the tab or tap "Remove my photo" (`vslm-tryon`). Images you save or share are yours | So you can see frames on your face |
 | Photos of people in our gallery or eye-camp pages | Only with that person's written permission | To show our shop and our community work |
 
 **We don't collect:** passwords or accounts (customers don't log in), payment details, prescriptions, your email address, or your location. There's no advertising and no visitor tracking on the site today.

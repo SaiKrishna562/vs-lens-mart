@@ -126,6 +126,7 @@ Sunglasses use the same form with `category = sunglasses` (and the lens type and
 - **Storage:** the `frames` uploads folder via `src/lib/storage.ts`, path `frames/<frame id>/<random>.webp`. Uploads only for signed-in staff; files are public only once the frame is approved and visible.
 - **Serving:** photos are shown through `/media/<path>`. It serves a file only if its database row is visible to the person asking (the lookup runs with their role), so drafts and hidden photos are 404 for the public and visible to signed-in staff. Public photos are cached for an hour; staff previews aren't cached. Any other path is a 404.
 - **Guidance on screen:** "Plain light background, whole frame in view, no reflections. Product-only photos unless the person gave written permission."
+- **Try-on picture (Phase 6):** a separate "Try-on" section on this form, with an on / off switch and one front-view photo that is cleaned up in the browser before upload. It isn't one of the 5 photos. See `Requirements_TryOn.md` section 6.
 - **Removing** a photo asks "Remove this photo?" and can be undone until saving.
 
 ### 6.3 Saving and approval

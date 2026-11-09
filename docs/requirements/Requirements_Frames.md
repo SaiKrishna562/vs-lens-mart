@@ -123,7 +123,7 @@ The slug is made from brand + model + code, e.g. `/frames/ray-ban-rb5154-clubmas
 
 - **Sold out:** the Enquire text becomes "Ask about similar frames"; the frame stays visible (Q39).
 - **Share on WhatsApp:** opens `https://wa.me/?text=<frame name + page link>`, so the customer chooses the contact. It doesn't go to the shop's number.
-- **No "Virtual try-on" button** until the try-on module exists.
+- **Try-on (Phase 6):** a "Try it on" button appears only on a live frame whose try-on is switched on, and only when the site's `TRYON_ENABLED` switch is on. Until then, and on every other frame, there's no try-on button. Details: `Requirements_TryOn.md`.
 - **Missing frame** (wrong slug, or a draft frame): a 404 page with "This frame isn't available" and links to `/frames`.
 - **SEO:**
   - Title: "Ray-Ban RB5154 Clubmaster · ₹6,490 | VS Lens Mart".
@@ -156,7 +156,7 @@ Done when:
 7. **Detail page:**
    - It shows every field in section 4, the gallery (up to 5 photos), both WhatsApp actions, favourite and "Book an eye test".
    - A draft or unknown frame gives a 404.
-   - There's no try-on button.
+   - There's no try-on button, except on try-on frames once Phase 6 is switched on (`Requirements_TryOn.md`).
 8. **Empty states:** no results and no frames each show the right message from 3.6.
 9. **Mobile (360 px):** 2-column grid; the filter panel opens and closes, applies with "Show n frames" and closes with Esc; no horizontal page scroll; content isn't hidden by the sticky bar.
 10. **Live site:** no `DUMMY` values; no stock or generated people; no prices that don't come from the database.

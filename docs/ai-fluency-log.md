@@ -486,6 +486,26 @@ Claude built the Eye camps pages and the staff camp form from the signed-off moc
 
 ---
 
+## Planning Try-On From a Prototype: Phase 6 planning, 2026-11-09
+
+### Delegation
+
+Claude was asked to plan how the developer's virtual try-on prototype (a single HTML page) moves into the app, to say whether it belongs before or after launch, and to change only the documents.
+
+### Discernment
+
+- **Timing:** Claude recommended after sprint 5.6, behind an off-by-default switch, because try-on needs new client input (front-view photos, Q40, a domain for QR codes) and several MB of face models would disturb the 5.6 Lighthouse checks.
+- **What not to port:** the prototype loaded its face library from a CDN, shipped the models as base64 text, and offered invented SVG frames and customer-uploaded frames. Claude proposed self-hosting, real frames only, and staff-only frame uploads.
+- **Gaps the prototype didn't show:** a `wa.me` link can't carry an image (share sheet on phones instead); a QR code needs the real domain; a shared listing link must never show another person's face; the photo must stay on the device and be removable.
+- **Developer decision:** MediaPipe Face Landmarker instead of face-api.js, so the live camera (6.5) doesn't mean writing the face detection twice.
+
+### Diligence
+
+- Every claim was checked against `docs/client-answers.md` (Q40–50), the frames schema, the upload rules and the existing requirements before writing. The two tests that check for "no try-on" were left in place until the code changes.
+- **Lesson:** a working prototype answers "can it be done?", not "what should ship". Check it against the project's privacy, hosting and design rules before porting it.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.
