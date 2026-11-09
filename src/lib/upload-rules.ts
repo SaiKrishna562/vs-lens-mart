@@ -15,6 +15,7 @@ export const UPLOAD_ERRORS = {
   empty: "This photo is empty. Take or choose it again.",
   too_large: "This photo is too large (max 10 MB).",
   not_photo: "This file isn't a photo. Use JPG, PNG or WebP.",
+  not_transparent: "The try-on picture must be a see-through PNG. Clean it up on this page, then save.",
 } as const;
 export type UploadErrorCode = keyof typeof UPLOAD_ERRORS;
 
@@ -52,3 +53,24 @@ export function parseStoredPath(p: string): { bucket: Bucket; ext: ImageType["ex
 }
 
 export const MIME_BY_EXT: Record<ImageType["ext"], string> = { jpg: "image/jpeg", png: "image/png", webp: "image/webp" };
+
+/**
+ * Try-on pictures (Requirements_TryOn.md 6) must be PNGs with transparency,
+ * or the background would cover the customer's face: colour type 4 or 6
+ * (grey or colour with alpha) in the IHDR chunk, or a tRNS chunk before the
+ * image data.
+ */
+export function isTransparentPng(bytes: Uint8Array): boolean {
+  if (detectImageType(bytes)?.ext !== "png" || bytes.length < 33) return false;
+  const colourType = bytes[25];
+  if (colourType === 4 || colourType === 6) return true;
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  for (let i = 8; i + 8 <= bytes.length; ) {
+    const len = view.getUint32(i);
+    const type = String.fromCharCode(bytes[i + 4], bytes[i + 5], bytes[i + 6], bytes[i + 7]);
+    if (type === "tRNS") return true;
+    if (type === "IDAT" || type === "IEND") return false;
+    i += 12 + len;
+  }
+  return false;
+}

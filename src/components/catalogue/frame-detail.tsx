@@ -13,6 +13,8 @@ import { getBranches } from "@/lib/site-data";
 import { CardRow, FavButton } from "./fav-button";
 import { enquiryText, photoAlt } from "./frame-text";
 import { Gallery } from "./gallery";
+import { TryOn, type TryonFrame } from "@/components/tryon/tryon-panel";
+import { tryonEnabled } from "@/lib/tryon";
 
 /* /frames/[slug] and /sunglasses/[slug] (Requirements_Frames.md 4,
    Requirements_Sunglasses.md 4), ported from mockups/frame-detail.html. Only
@@ -24,6 +26,11 @@ const K = {
 } as const;
 
 /** Up to 4 live frames with the same shape (sunglasses: or a lens type) or brand; in stock first. */
+/** What the try-on panel needs about a frame (only called for frames with try-on on). */
+function tryonFrame(f: CatalogueItem): TryonFrame {
+  return { code: f.code, brand: f.brand, model: f.model, href: f.href, enquiry: enquiryText(f), tryon: f.tryon! };
+}
+
 function related(f: CatalogueItem, pool: CatalogueItem[]) {
   const close = (x: CatalogueItem) => x.shape === f.shape || x.lens.some((l) => f.lens.includes(l));
   return pool
@@ -84,7 +91,13 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
         </nav>
 
         <div className="pdp">
-          <Gallery photos={f.photos} name={name} alt={photoAlt(f)} sold={f.sold} />
+          <div className="pdp__media">
+            <Gallery photos={f.photos} name={name} alt={photoAlt(f)} sold={f.sold} />
+            {/* Virtual try-on (Phase 6): only for a frame with try-on on, and only when the site switch is on */}
+            {tryonEnabled() && f.tryon && (
+              <TryOn frame={tryonFrame(f)} others={pool.filter((x) => x.tryon && x.code !== f.code).map(tryonFrame)} />
+            )}
+          </div>
 
           <div className="pinfo">
             <p className="caps pinfo__brand">{f.brand}</p>

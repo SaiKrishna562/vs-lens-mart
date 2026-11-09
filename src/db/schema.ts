@@ -9,7 +9,7 @@
    ========================================================================== */
 import { sql } from "drizzle-orm";
 import {
-  boolean, check, date, index, integer, pgEnum, pgTable, smallint, text, time, timestamp, unique, uuid,
+  boolean, check, date, index, integer, pgEnum, pgTable, real, smallint, text, time, timestamp, unique, uuid,
 } from "drizzle-orm/pg-core";
 
 /* ---------- Enums ---------- */
@@ -101,9 +101,19 @@ export const frames = pgTable("frames", {
   isActive: boolean("is_active").notNull().default(true),
   approvedBy: text("approved_by"),
   approvedAt: timestamp("approved_at", { withTimezone: true }),
+  /* Virtual try-on (Phase 6, Requirements_TryOn.md 6 and 8): a see-through
+     front-view picture, and where its lens centres are, as fractions of the
+     picture's width (left, right) and height. Staff set them on the frame form. */
+  tryonEnabled: boolean("tryon_enabled").notNull().default(false),
+  tryonPath: text("tryon_path"),
+  tryonLensLeft: real("tryon_lens_left").notNull().default(0.27),
+  tryonLensRight: real("tryon_lens_right").notNull().default(0.73),
+  tryonLensY: real("tryon_lens_y").notNull().default(0.48),
   ...audit,
 }, (t) => [
   check("frames_price", sql`${t.price} between 1 and 100000`),
+  check("frames_tryon_needs_picture", sql`not ${t.tryonEnabled} or ${t.tryonPath} is not null`),
+  check("frames_tryon_lenses", sql`${t.tryonLensLeft} > 0 and ${t.tryonLensLeft} < ${t.tryonLensRight} and ${t.tryonLensRight} < 1 and ${t.tryonLensY} > 0 and ${t.tryonLensY} < 1`),
   index("frames_listing").on(t.category, t.status, t.isActive),
 ]);
 

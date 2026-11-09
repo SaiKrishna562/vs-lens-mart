@@ -28,6 +28,8 @@ export type CatalogueItem = {
   lens: string[]; // sunglasses only
   lensColour: string | null;
   photo: string | null; // the cover's stored path
+  /** Virtual try-on picture and lens centres (fractions), only while try-on is on for this frame */
+  tryon: { path: string; left: number; right: number; y: number } | null;
 };
 
 export type FrameDetail = CatalogueItem & { photos: { path: string; kind: string }[] };
@@ -46,6 +48,8 @@ const columns = {
   sizeLens: frames.sizeLens, sizeBridge: frames.sizeBridge, sizeTemple: frames.sizeTemple, price: frames.price,
   availability: frames.availability, availableAt: frames.availableAt, lensTypes: frames.lensTypes, lensColour: frames.lensColour,
   photo: cover,
+  tryonEnabled: frames.tryonEnabled, tryonPath: frames.tryonPath,
+  tryonLensLeft: frames.tryonLensLeft, tryonLensRight: frames.tryonLensRight, tryonLensY: frames.tryonLensY,
 };
 
 const base = (tx: Tx) =>
@@ -64,6 +68,7 @@ function toItem(r: Row): CatalogueItem {
     size: sizes.every((s) => s != null) ? sizes.join("-") : null,
     price: r.price, sold: r.availability === "sold_out", where: WHERE[r.availableAt] ?? r.availableAt,
     lens: r.lensTypes ?? [], lensColour: r.lensColour, photo: r.photo,
+    tryon: r.tryonEnabled && r.tryonPath ? { path: r.tryonPath, left: r.tryonLensLeft, right: r.tryonLensRight, y: r.tryonLensY } : null,
   };
 }
 

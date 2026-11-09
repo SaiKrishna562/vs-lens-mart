@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Static HTML mockups (Phase 3), not app code
     "mockups/**",
+    // MediaPipe's WebAssembly runtime, copied from node_modules (scripts/tryon-assets.ts)
+    "public/tryon/wasm/**",
   ]),
 ]);
 

@@ -1,3 +1,4 @@
+import { tryonEnabled } from "@/lib/tryon";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PolicyContents } from "@/components/privacy/contents";
@@ -72,6 +73,9 @@ export default async function PrivacyPage() {
                         <tr><th scope="row">You send us a message</th><td data-label="What we collect">Your name, mobile number, your area or address if you add it, branch, topic, message, how you&apos;d like us to reply, the frame code if you came from a frame, and when you agreed</td><td data-label="Why">To reply to you</td></tr>
                         <tr><th scope="row">You WhatsApp or call us</th><td data-label="What we collect">Whatever you choose to send us</td><td data-label="Why">To reply. WhatsApp is run by Meta under its own terms</td></tr>
                         <tr><th scope="row">You save favourites or pick light or dark mode</th><td data-label="What we collect">Nothing is sent to us. Your choices are saved only in your own browser (<code>vslm-favourites</code>, <code>vslm-theme</code>)</td><td data-label="Why">So the site remembers them on that device. Clear your browser data to remove them</td></tr>
+                        {tryonEnabled() && (
+                          <tr id="tryon"><th scope="row">You use virtual try-on</th><td data-label="What we collect">Nothing is sent to us. Your photo or selfie is processed in your own browser and kept only until you close the tab or tap &ldquo;Remove my photo&rdquo; (<code>vslm-tryon</code>). Images you save or share are yours</td><td data-label="Why">So you can see frames on your own face</td></tr>
+                        )}
                         <tr><th scope="row">Photos of people on our gallery and eye-camp pages</th><td data-label="What we collect">Photos only with that person&apos;s written permission</td><td data-label="Why">To show our shops and our community work</td></tr>
                       </tbody>
                     </table>

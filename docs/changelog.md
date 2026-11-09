@@ -4,6 +4,22 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-10 · Phase 6 release 6.1 · Virtual try-on demo (branch `feature/virtual-try-on`)
+
+- **Changed:**
+  - **Rollback point:** tag `before-tryon` on `465724e` (the site after sprint 5.6), and all try-on work on the branch `feature/virtual-try-on`. If the client declines, `main` is left as it is.
+  - **Customer:** "Try it on" on the photo of frames with try-on. A panel offers "Take a selfie" (camera inside the panel, oval guide with instructions such as "Move a little closer", and a 3-2-1 countdown that takes the photo itself) or "Choose a photo". The result is cropped to the face; hold to compare, Adjust fit (size, up / down, tilt), other try-on frames in a strip, Save image (with a VS Lens Mart strip), Enquire on WhatsApp, Use another photo, Remove my photo. The photo stays in the browser tab only.
+  - **Staff:** a "Try-on picture" section on an existing frame's edit page: choose a front-view photo on white; the background is removed, arm tips trimmed, picture cropped and lens centres found automatically, all in the browser; then the try-on switch and Save.
+  - **Data and rules:** five new `frames` columns (migration `0001`) with database checks; `/media` serves try-on pictures to the public only for live frames with try-on on, and only while `TRYON_ENABLED` is on; uploads must be see-through PNGs.
+  - **Face tracking:** MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.2.2, Apache 2.0) and Google's model file (3.76 MB), both downloaded with the developer's approval and served from this site. The runtime is copied by `scripts/tryon-assets.ts` (not committed).
+  - **Privacy page:** a try-on row while the switch is on.
+  - **Site switch:** `TRYON_ENABLED` (`.env.example`; set to true in the developer's `.env.local` for the demo and in the test server).
+- **Why:** the developer wants to show the client a working try-on for approval (Q40–50), better than a large optical chain's (screenshots reviewed 2026-11-09): photo or selfie, a guide that helps, adjustable and comparable results, and a way to enquire.
+- **Checked:** screenshots of the button, the start screen (360 and 1440 px) and the camera screen; the staff editor at 360 and 1440 px. Found and fixed: the panel sat in the top-left corner on desktop (the base styles reset the dialog's centring), the editor's checkerboard used a colour outside the tokens, and two functions were named like React hooks.
+- **Tests:** new `tests/tryon.spec.ts` (staff picture, `/media` rules, Try it on only where switched on, the panel, face tracking loading from this site with no outside requests, the camera guide with Chromium's fake camera) and `tests/tryon-rules.spec.ts` (see-through PNG check, database checks). Full suite: 299 passed, 18 skipped.
+- **Not verified yet:** the frame drawn on a real face (no consented test photo); the developer is to try it with their own selfie and real frame photos before the client demo. The camera on a phone needs `https://`.
+- **Files:** `src/components/tryon/` (new), `src/components/admin/tryon-editor.tsx`, `src/app/admin/(staff)/frames/tryon-actions.ts`, `src/components/admin/frame-form-page.tsx`, `src/components/catalogue/frame-detail.tsx`, `src/lib/queries/catalogue.ts`, `src/lib/tryon.ts`, `src/lib/upload-rules.ts`, `src/app/media/[...path]/route.ts`, `src/app/(site)/privacy/page.tsx`, `src/db/schema.ts`, `db/migrations/0001_workable_shiva.sql`, `db/migrations/meta/`, `scripts/tryon-assets.ts`, `public/tryon/face_landmarker.task`, `src/styles/pages.css`, `src/styles/admin.css`, `package.json`, `package-lock.json`, `.gitignore`, `.env.example`, `eslint.config.mjs`, `playwright.config.ts`, `tests/tryon.spec.ts`, `tests/tryon-rules.spec.ts`, `docs/requirements/Requirements_TryOn.md`, `docs/dummy-data.md`, `CLAUDE.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
 ## 2026-11-09 · Sprint 5.6 part D · Loading states, Add frame button, Lighthouse
 
 - **Changed:**

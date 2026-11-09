@@ -583,6 +583,26 @@ Claude fixed the staff Add frame button, added staff loading states, and ran Lig
 
 ---
 
+## A Demo the Client Can Say No To: Phase 6 release 6.1, 2026-11-10
+
+### Delegation
+
+Claude built a working try-on demo for client approval, taking cues from a large optical chain's try-on screenshots the developer liked.
+
+### Discernment
+
+- **Undo first:** before any try-on code, Claude tagged the current site (`before-tryon`) and moved the work to its own branch, so a "no" from the client costs nothing.
+- **Asked about every download, and about a picture's origin:** the npm package and the model file were approved with their sizes and sources. The sample frame picture in the prototype looked like a shop's product photo, so Claude asked where it came from instead of using it; the demo uses the developer's own photos of real frames.
+- **Inspired by, not copied from:** the screenshots shaped the flow (button on the photo, camera with a guide); the screens use VS Lens Mart's own design and words.
+- **Honest about what wasn't tested:** the tests prove the model loads, the camera starts and a photo without a face is handled, but not the frame on a real face. Claude first wrote that it had been "checked by hand", noticed it hadn't, and corrected the notes.
+
+### Diligence
+
+- Screenshots at phone and desktop sizes found a dialog stuck in the corner; full suite 299 passed.
+- **Lesson:** write down what was checked, and what wasn't, in the same place, before someone relies on it.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

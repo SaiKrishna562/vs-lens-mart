@@ -35,3 +35,5 @@ desktop.ini
 uploads/
 # DUMMY C12 hero photos (AI-generated, development only, never committed or deployed)
 public/dummy/
+# Try-on: MediaPipe's WebAssembly runtime, copied from node_modules by scripts/tryon-assets.ts
+public/tryon/wasm/

@@ -288,3 +288,18 @@
   .adm-loading__bar, .adm-loading__row { animation: adm-loading 1.2s ease-in-out infinite alternate; }
 }
 @keyframes adm-loading { from { opacity: 1; } to { opacity: 0.45; } }
+
+/* Live additions: the try-on picture editor on a frame's edit page (Phase 6,
+   Requirements_TryOn.md 6). Not mocked up; built from the form's own parts. */
+.tryon-edit { margin-top: var(--s-5); }
+.tryon-edit__off { margin-bottom: var(--s-3); }
+.tryon-edit__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s-5); margin-top: var(--s-4); align-items: start; }
+.tryon-edit__preview canvas { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r-md); }
+.tryon-edit__controls input[type="range"] { width: 100%; accent-color: var(--accent-ink); min-height: var(--tap); }
+.tryon-edit__pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+.tryon-edit__lens { border: 0; padding: 0; margin: 0 0 var(--s-4); }
+.tryon-edit__lens legend { font-weight: 600; font-size: var(--fs-sm); color: var(--heading); margin-bottom: var(--s-2); }
+.tryon-edit__actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); }
+@media (max-width: 767px) {
+  .tryon-edit__grid, .tryon-edit__pair { grid-template-columns: 1fr; }
+}

@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/tryon-assets.ts",
     "dev": "next dev",
+    "prebuild": "node scripts/tryon-assets.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -18,6 +20,7 @@
     "check:launch": "node scripts/launch-check.ts"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "^1.2.2",
     "better-auth": "^1.7.12",
     "drizzle-orm": "^0.45.4",
     "next": "16.4.2",

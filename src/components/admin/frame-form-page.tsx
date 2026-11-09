@@ -8,7 +8,9 @@ import { workingBranch } from "@/lib/admin-branch";
 import { withRole } from "@/lib/db";
 import { requireStaff } from "@/lib/session";
 import { staffNames } from "@/lib/staff-directory";
+import { tryonEnabled } from "@/lib/tryon";
 import { FrameForm, type FrameFormProps } from "./frame-form";
+import { TryonEditor } from "./tryon-editor";
 
 export async function FrameFormPage({ kind, code }: { kind: "frames" | "sunglasses"; code?: string }) {
   const staff = await requireStaff();
@@ -44,7 +46,9 @@ export async function FrameFormPage({ kind, code }: { kind: "frames" | "sunglass
       photos: data.frame.imgs.map((i) => ({ id: i.id, path: i.path, kind: i.kind, consent: i.consent })),
     };
   }
+  const r = data.frame?.frame;
   return (
+    <>
     <FrameForm
       // A new key per frame, so moving between frames starts with a fresh form
       key={frame?.id ?? `new-${kind}`}
@@ -55,5 +59,16 @@ export async function FrameFormPage({ kind, code }: { kind: "frames" | "sunglass
       colours={data.colourList}
       frame={frame}
     />
+    {/* Try-on (Phase 6): saved on its own, so only for a frame that already exists */}
+    {r && (
+      <TryonEditor
+        key={`tryon-${r.id}`}
+        frameId={r.id}
+        noun={isSun ? "pair of sunglasses" : "frame"}
+        siteOn={tryonEnabled()}
+        initial={{ enabled: r.tryonEnabled, path: r.tryonPath, lensLeft: r.tryonLensLeft, lensRight: r.tryonLensRight, lensY: r.tryonLensY }}
+      />
+    )}
+    </>
   );
 }

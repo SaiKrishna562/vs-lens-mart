@@ -1,6 +1,6 @@
 # Requirements: Virtual try-on
 
-Status: **Draft, 2026-11-09.** The developer approved the plan; the client has not yet seen a try-on screen. A mockup of the customer screens goes to the client before the 6.1 customer UI is built.
+Status: **Draft, 2026-11-09.** The developer approved the plan; the client has not yet seen a try-on screen. **Instead of a static mockup, the client is shown a working demo of release 6.1** (developer decision 2026-11-09), built on the git branch `feature/virtual-try-on` behind `TRYON_ENABLED`. If the client declines, `main` stays at the tag `before-tryon` and the branch is not merged.
 Routes: no new page. Try-on opens as a panel on `/frames/[slug]` and `/sunglasses/[slug]` (and from `?tryon=1` on those addresses), and as a switch on `/frames` and `/sunglasses`. Staff work on the existing frame form (`/admin/frames/new`, `/admin/frames/[id]`).
 Phase: 6, after launch (`ROADMAP.md` section 8). Built behind a site switch that is off by default, so it never holds up the launch.
 Sources: `docs/client-answers.md` form Q9 (Virtual Try-On listed as a CTA), Q40–50 (try-on), Q32–37 (frame photos, staff upload, approval); `ROADMAP.md` section 8; `Requirements_Frames.md`, `Requirements_Admin.md`, `Requirements_Privacy.md`; the developer's working prototype (`vto image/index.html`, outside the repo, 2026-11-09).
@@ -56,10 +56,13 @@ What the client asked for:
 A dialog over the detail page (full screen on phones):
 
 1. **Notice, before any photo:** "Your photo stays on this device. It isn't uploaded or saved by VS Lens Mart." with a link to `/privacy#tryon`.
-2. **Choose a photo:** "Take a selfie" (opens the camera app on phones) and "Choose a photo". Tips: face the camera, glasses off, good light.
+2. **Choose a photo:** "Take a selfie" and "Choose a photo".
+   - **Take a selfie** opens the camera inside the panel (with the browser's permission prompt), mirrored like a mirror, with an oval face guide. While the camera is on, the face is tracked and a line under the guide says what to do: "Move closer", "Move back", "Centre your face", "Hold still". When the face fits, a 3-second countdown takes the photo by itself; "Take photo" also works at any time. The camera turns off as soon as the photo is taken or the panel closes. If the camera isn't allowed or there is none, the panel says so and offers "Choose a photo".
+   - **Choose a photo** opens the file picker (on phones, the photo library or camera app).
+   - Tips beside both: face a light, glasses off, hair behind your ears.
 3. **Detecting:** the face models download the first time (progress shown; several MB, measured in 6.1, then cached by the browser). Messages for: no face found, more than one face (uses the largest and says so), photo too small, models failed to load (with "Try again").
-4. **Result:** the frame drawn on the photo, lined up with the eyes and tilted with the head.
-5. **Controls:** Size, Up / down and Tilt sliders, and Reset. "Hold to compare" shows the photo without the frame while pressed.
+4. **Result:** the frame drawn on the photo, lined up with the eyes and tilted with the head. The view is cropped to the face (head and shoulders), not the whole room, so the frame is big enough to judge.
+5. **Controls:** "Hold to compare" (the photo without the frame while pressed), and "Adjust fit", which opens Size, Up / down and Tilt sliders with Reset. The sliders stay folded away unless needed.
 6. **Other frames:** a strip of other try-on frames of the same kind (frames or sunglasses), so the customer can switch without uploading again.
 7. **Actions:** "Save image" (6.1), "Share" (6.3), "Enquire on WhatsApp" about this frame (same branch picker and message as the detail page), "Use another photo", "Remove my photo".
 8. **Preview note:** "Preview only. Size and fit may look different in person. Try it on at a branch." No medical or fitting claims.
@@ -85,6 +88,15 @@ A dialog over the detail page (full screen on phones):
 
 - "Save this look" keeps up to 4 looks (frame + slider values, not extra copies of the photo) for this tab.
 - "Compare" shows two looks side by side (stacked on phones), each with the frame name and a link to its page.
+
+### 4.7 Compared with the try-on customers may know (2026-11-09)
+
+The developer reviewed a large optical chain's try-on (screenshots, not kept in the repo). It starts from a "Try on" button on the product photo, asks for a live-camera photo with an on-screen guide, and shows one result with "Create new". This module keeps that simple start and improves on it, in VS Lens Mart's own design (navy, gold, cream; no copied wording, images or branding):
+- a photo can also be chosen, not only taken with the camera;
+- the guide tells the customer what to fix and takes the photo by itself;
+- the result is cropped to the face and can be adjusted, compared with and without, and switched to other frames without a new photo;
+- the result leads somewhere: save, share, or enquire on WhatsApp about that frame;
+- the photo never leaves the device, and the panel says so.
 
 ## 5. Listing "on you" (6.2)
 
@@ -159,7 +171,17 @@ Done when:
 11. Playwright tests at 360, 768 and 1440 px, with no console errors; detection tests use a test photo of a person who agreed to it, kept out of git.
 12. **Live site:** no `DUMMY` C25 pictures; real front-view photos only.
 
-## 12. Open items
+## 12. Build notes (release 6.1 demo, 2026-11-10, branch `feature/virtual-try-on`)
+
+- **Face tracking:** `@mediapipe/tasks-vision` 1.2.2 (npm, Apache 2.0) and Google's `face_landmarker.task` model (3.76 MB, committed in `public/tryon/`). The WebAssembly runtime (about 29 MB, 4.1 MB compressed) is copied from `node_modules` to `public/tryon/wasm/` (gitignored) by `scripts/tryon-assets.ts` before `npm run dev` and `npm run build`. A customer's first try-on downloads about 8 MB, then the browser caches it. Nothing loads until the panel opens.
+- **Data:** `frames.tryon_enabled`, `tryon_path` and the lens centres (`tryon_lens_left`, `tryon_lens_right`, `tryon_lens_y`), migration `0001`, with checks: no try-on without a picture, and lens centres inside the picture in the right order. `/media` serves a try-on picture to the public only for a live frame with try-on on, and only while `TRYON_ENABLED` is on.
+- **Staff:** a "Try-on picture" section under the frame form on an existing frame's edit page (`src/components/admin/tryon-editor.tsx`, action `frames/tryon-actions.ts`). The lens centres are found automatically (the see-through middle of each rim) and can be moved. The server re-checks the upload is a see-through PNG (`isTransparentPng`).
+- **Customer:** "Try it on" on the frame photo (`src/components/tryon/`). The selfie is taken in the panel with an oval guide that counts down 3-2-1 by itself; the photo is mirrored as the customer saw it. Results: cropped to the face, hold to compare, Adjust fit (size, up / down, tilt), other try-on frames in a strip, Save image (with a VS Lens Mart strip), Enquire on WhatsApp, Use another photo, Remove my photo.
+- **Camera on phones:** browsers only allow the camera on `https://` or `localhost`. On the laptop it works; opening the laptop's address from a phone on Wi-Fi (`http://192.168…`) won't allow the camera, so "Choose a photo" is offered instead. Showing the selfie on a phone needs the site on `https://` (a deployment or a secure tunnel).
+- **Not yet tested by the computer:** the frame drawn on a real face, because the tests have no consented face photo. **Still to check by hand** with the developer's own selfie before the client demo (2026-11-10: not done yet).
+- **Privacy page:** a "You use virtual try-on" row (`#tryon`) appears only while `TRYON_ENABLED` is on.
+
+## 13. Open items
 
 | Item | Owner | Until then |
 |---|---|---|

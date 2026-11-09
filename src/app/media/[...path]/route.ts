@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { withRole } from "@/lib/db";
 import { getStaff } from "@/lib/session";
+import { tryonEnabled } from "@/lib/tryon";
 import { readUpload } from "@/lib/storage";
 import { MIME_BY_EXT, parseStoredPath } from "@/lib/upload-rules";
 
@@ -17,9 +18,14 @@ export async function GET(_request: Request, { params }: RouteContext<"/media/[.
   if (!parseStoredPath(stored)) return notFound();
 
   const staff = await getStaff();
+  // Try-on pictures (Requirements_TryOn.md 8): staff see them while editing; the
+  // public only when the frame's try-on is on and the site switch is on (and,
+  // through row-level security, only for approved, active frames)
+  const tryon = staff ? sql`true` : tryonEnabled() ? sql`tryon_enabled` : sql`false`;
   const visible = await withRole(staff?.role ?? "public", async (tx) => {
     const r = await tx.execute<{ ok: boolean }>(sql`
       select exists (select 1 from frame_images where path = ${stored})
+          or exists (select 1 from frames where tryon_path = ${stored} and ${tryon})
           or exists (select 1 from camp_photos where path = ${stored})
           or exists (select 1 from gallery_photos where path = ${stored})
           or exists (select 1 from lenses where photo_path = ${stored}) as ok`);
