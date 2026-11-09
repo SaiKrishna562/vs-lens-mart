@@ -92,5 +92,6 @@ test("camp detail: upcoming shows what's offered and what to bring; past shows p
 
   page.removeAllListeners("console"); // in development the browser logs the 404 response itself
   await page.goto("/eye-camps/no-such-camp");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("This camp isn't available");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("This camp isn’t available.");
+  await expect(page.getByRole("navigation", { name: "Where to next" }).getByRole("link").first()).toHaveAttribute("href", "/eye-camps");
 });

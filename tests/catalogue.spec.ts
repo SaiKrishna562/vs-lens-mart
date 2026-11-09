@@ -209,9 +209,9 @@ test("a draft, a frame under the wrong page, or an unknown address shows the not
   await c.end();
   const frames = await live("frames");
   const paths = [
-    ["/frames/no-such-frame-vsf-0000", "This frame isn’t available"],
-    ...(draft ? [[`/frames/${draft}`, "This frame isn’t available"]] : []),
-    ...(frames[0] ? [[`/sunglasses/${frames[0].href.split("/").pop()}`, "These sunglasses aren’t available"]] : []),
+    ["/frames/no-such-frame-vsf-0000", "This frame isn’t available."],
+    ...(draft ? [[`/frames/${draft}`, "This frame isn’t available."]] : []),
+    ...(frames[0] ? [[`/sunglasses/${frames[0].href.split("/").pop()}`, "These sunglasses aren’t available."]] : []),
   ];
   // The production server streams the not-found page (status 200), so check what it shows and that search engines skip it
   page.removeAllListeners("console"); // in development the browser logs the 404 response itself
@@ -221,5 +221,5 @@ test("a draft, a frame under the wrong page, or an unknown address shows the not
     expect(await page.locator('meta[name="robots"][content*="noindex"]').count(), p).toBeGreaterThan(0);
     await expect(page.locator(".pinfo"), p).toHaveCount(0);
   }
-  await expect(page.getByRole("link", { name: "Browse sunglasses" })).toHaveAttribute("href", "/sunglasses");
+  await expect(page.getByRole("link", { name: /^See all sunglasses/ })).toHaveAttribute("href", "/sunglasses");
 });

@@ -105,16 +105,3 @@ export async function CampDetailPage({ slug }: { slug: string }) {
     </>
   );
 }
-
-export function CampNotFound() {
-  return (
-    <div className="container">
-      <section className="notfound">
-        <Icon name="camp" />
-        <h1>This camp isn&apos;t available</h1>
-        <p>It may have been removed. See all our eye camps instead.</p>
-        <div className="empty__actions"><Link className="btn btn--primary" href="/eye-camps">All eye camps</Link></div>
-      </section>
-    </div>
-  );
-}

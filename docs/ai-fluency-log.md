@@ -506,6 +506,25 @@ Claude was asked to plan how the developer's virtual try-on prototype (a single 
 
 ---
 
+## A 404 Page That Lives Outside Its Layout: Sprint 5.6 part A, 2026-11-09
+
+### Delegation
+
+Claude built the site-wide 404 and error pages from the signed-off mockup and `Requirements_NotFound.md`.
+
+### Discernment
+
+- **Read the framework docs first:** the Next.js 16 guide showed that the root not-found page renders outside the `(site)` layout, so it would have had no header or footer. Claude moved the chrome into one shared component used by both, instead of copying it.
+- **Checked a warning before blaming the change:** a "script tag" console warning appeared on frame 404s. Claude re-ran the same check on the last commit (changes set aside, then restored) and found it was already there, so it wasn't fixed as part of this work.
+- **What can't be tested automatically was checked by hand:** the error page needs a page that fails, which a production build shouldn't contain. It was checked in development with a temporary failing page, removed straight after, and recorded as such.
+
+### Diligence
+
+- Screenshots at 360 and 1440 px in light and dark mode; `npm test`: 257 passed, 16 skipped.
+- **Lesson:** "is this new?" is answered by checking the old version, not by guessing.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

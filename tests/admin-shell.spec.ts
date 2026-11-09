@@ -91,5 +91,8 @@ test("unknown staff pages show not found", async ({ page }) => {
   // The staff shell streams in after the sign-in check, so the status line is already
   // sent (200) when a page turns out not to exist; the content still says so.
   await page.goto("/admin/not-a-real-section");
-  await expect(page.getByText("This page could not be found.")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Page not found");
+  await expect(page.getByRole("link", { name: "Back to the dashboard" })).toHaveAttribute("href", "/admin");
+  await expect(page.locator(".adm-top"), "inside the staff shell, not the public page").toBeVisible();
+  await expect(page.locator(".site-header")).toHaveCount(0);
 });

@@ -52,7 +52,14 @@ Done when:
 4. A page error shows "Something went wrong" with Try again, WhatsApp and Call, returns 500, and shows no technical details.
 5. Both pages are `noindex`, readable in light and dark mode, keyboard-accessible, with no horizontal scroll and no console errors.
 
-## 6. Open items
+## 6. Build notes (sprint 5.6 part A, 2026-11-09)
+
+- **Status codes:** an address that matches no page returns a real **404** (tested). A missing frame, sunglasses or camp address shows its hint but returns **200** with `noindex`, because those pages start streaming before they know the item is missing (Next.js 16; see `CLAUDE.md` "Detail pages"). Search engines still skip them.
+- **Error page:** `(site)/error.tsx` inside the normal layout. Its "Visit a branch" card says "Addresses, hours and maps" (it can't read the branches table from the browser). It can't be triggered on purpose in a production build, so it was checked by hand in development with a page made to fail, then removed; the error message never showed on the page.
+- **Root layout failure** (`global-error.tsx`): a plain page with Try again and Back to home only, without the header, footer, WhatsApp or Call (they need the branches table, which may be what failed).
+- **Search:** the 404 search form already sends to `/search`, which arrives in sprint 5.6 part B.
+
+## 7. Open items
 
 | Item | Owner | Mockup uses |
 |---|---|---|

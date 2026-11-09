@@ -4,6 +4,19 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-09 · Sprint 5.6 part A · Page not found and error pages
+
+- **Changed:**
+  - **Site-wide 404:** any unknown address now shows the signed-off 404 page (message, search, four cards, "Ask us on WhatsApp" with the missing address, "Back to home") inside the normal header, footer and sticky bar, with HTTP 404 and `noindex`. Before, it showed the plain Next.js page.
+  - **Hints:** missing frame, sunglasses and camp addresses use the same page with their own heading and first card ("See all frames" and so on). The old smaller "not available" boxes are gone.
+  - **Error pages:** "Something went wrong on our side." with Try again, Call and WhatsApp (`(site)/error.tsx`), and a plain last-resort page (`global-error.tsx`).
+  - **Staff area:** unknown `/admin/...` addresses now show "Page not found" inside the staff shell with a link to the dashboard, instead of the public page.
+  - **Layout:** the site chrome moved into `SiteFrame` so the root 404 page can use it. The 404 styles are mockup section 19, ported unchanged.
+- **Why:** sprint 5.6 (`ROADMAP.md`), `Requirements_NotFound.md`.
+- **Checked:** 360 and 1440 px in light and dark mode, no sideways scroll; the error page with a temporary failing page in development (removed); `npm test` 257 passed, 16 skipped. A new spec, `tests/not-found.spec.ts`, runs at all three sizes; the frame, camp and staff not-found tests were updated to the new wording.
+- **Known:** missing frame and camp addresses still return status 200 with `noindex` (streamed, as before). The 404 search goes to `/search`, built in part B. The development server logs a "script tag" warning on frame and camp 404s; it was there before this change.
+- **Files:** `src/app/not-found.tsx`, `src/app/global-error.tsx`, `src/app/(site)/error.tsx`, `src/app/(site)/layout.tsx`, `src/app/(site)/frames/[slug]/not-found.tsx`, `src/app/(site)/sunglasses/[slug]/not-found.tsx`, `src/app/(site)/eye-camps/[slug]/not-found.tsx`, `src/app/admin/(staff)/not-found.tsx`, `src/components/site/site-frame.tsx`, `src/components/site/not-found-view.tsx`, `src/components/site/not-found-page.tsx`, `src/components/site/not-found-help.tsx`, `src/components/catalogue/frame-detail.tsx`, `src/components/camps/camp-detail.tsx`, `src/styles/pages.css`, `tests/not-found.spec.ts`, `tests/catalogue.spec.ts`, `tests/eye-camps.spec.ts`, `tests/admin-shell.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_NotFound.md`, `CLAUDE.md`, `docs/ai-fluency-log.md`
+
 ## 2026-11-09 · Phase 6 · Virtual try-on planned (docs only)
 
 - **Changed:**

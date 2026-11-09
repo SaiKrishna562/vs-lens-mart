@@ -157,21 +157,3 @@ export async function FrameDetailPage({ kind, slug }: { kind: Kind; slug: string
     </>
   );
 }
-
-/** The 404 for a frame that isn't on the site (draft, hidden, removed or a wrong address). */
-export function FrameNotFound({ kind }: { kind: Kind }) {
-  const k = K[kind];
-  return (
-    <div className="container">
-      <section className="notfound">
-        <Icon name="glasses" />
-        <h1>{kind === "sunglasses" ? "These sunglasses aren’t available" : "This frame isn’t available"}</h1>
-        <p>It may have been sold or removed. Browse our current {k.many}, or ask us on WhatsApp.</p>
-        <div className="empty__actions">
-          <Link className="btn btn--primary" href={k.path}>Browse {k.many}</Link>
-          <PickerButton kind="whatsapp" className="btn btn--outline-dark">Ask on WhatsApp</PickerButton>
-        </div>
-      </section>
-    </div>
-  );
-}
