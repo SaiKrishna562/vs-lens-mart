@@ -484,7 +484,7 @@
 /* Footer (mockup section 7) */
 .footer { background: var(--navy); color: var(--white-80); padding-block: var(--s-8) var(--s-6); font-size: var(--fs-sm); }
 .footer__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--s-6); }
-.footer h3 { font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--brass); margin-bottom: var(--s-3); }
+.footer h2, .footer h3 { font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--brass); margin-bottom: var(--s-3); }
 .footer a { color: var(--white-80); text-decoration: none; }
 .footer a:hover { color: var(--gold); text-decoration: underline; }
 .footer li + li { margin-top: var(--s-2); }

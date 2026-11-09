@@ -115,7 +115,7 @@ export async function SiteFooter() {
           </div>
           {branches.map((b) => (
             <div key={b.slug}>
-              <h3>{b.name}</h3>
+              <h2>{b.name}</h2>
               <address>{b.address}</address>
               <ul style={{ marginTop: 12 }}>
                 <li>{b.dummy ? <>{shown(b)} <DummyTag id="D2" /></> : <a href={tel(b.phone)}>{b.phone}</a>}</li>
@@ -124,7 +124,7 @@ export async function SiteFooter() {
             </div>
           ))}
           <div>
-            <h3>Quick links</h3>
+            <h2>Quick links</h2>
             <ul>
               {QUICK_LINKS.map(([label, href]) => <li key={href}><Link href={href} prefetch={false}>{label}</Link></li>)}
             </ul>

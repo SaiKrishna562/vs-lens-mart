@@ -1,3 +1,4 @@
+import { AdminLoading } from "@/components/admin/admin-loading";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CampFormPage } from "@/components/admin/camp-form-page";
@@ -6,7 +7,7 @@ export const metadata: Metadata = { title: "Edit eye camp" };
 
 export default function Page({ params }: PageProps<"/admin/eye-camps/[slug]">) {
   return (
-    <Suspense fallback={<p className="text-muted">Loading…</p>}>
+    <Suspense fallback={<AdminLoading />}>
       <Camp params={params} />
     </Suspense>
   );

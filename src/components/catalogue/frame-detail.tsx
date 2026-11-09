@@ -53,10 +53,13 @@ export async function frameMetadata(kind: Kind, slug: string): Promise<Metadata>
   const name = `${f.brand} ${f.model}`;
   const title = `${name} · ${rupees(f.price)}`;
   const description = `${name}, ${f.colour.toLowerCase()} ${f.shape.toLowerCase()} ${kind === "sunglasses" ? "sunglasses" : "frame"}, ${rupees(f.price)} at VS Lens Mart. ${f.sold ? "Sold out." : `Available at ${f.where.toLowerCase()}.`}`;
-  const image = f.photos[0] ? `/media/${f.photos[0].path}` : undefined;
+  // This openGraph replaces the site's, so a frame with no photo yet names the site-wide image itself
+  const image = f.photos[0]
+    ? { url: `/media/${f.photos[0].path}`, alt: photoAlt(f) }
+    : { url: "/opengraph-image", width: 1200, height: 630, alt: `${site.name}, family opticians since ${site.since}` };
   return {
     title, description, alternates: { canonical: f.href },
-    openGraph: { title, description, url: f.href, type: "website", ...(image ? { images: [{ url: image, alt: photoAlt(f) }] } : {}) },
+    openGraph: { title, description, url: f.href, type: "website", images: [image] },
   };
 }
 

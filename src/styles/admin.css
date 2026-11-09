@@ -265,3 +265,26 @@
   .st-list .bk-row { grid-template-columns: minmax(0, 1fr) auto; }
   .st-list .bk-row__time { display: none; }
 }
+
+/* Live additions: the floating Add frame button (sprint 5.6 part D). The mockup
+   hid it on every form with a sticky Save bar (admin.js set .has-form); the app
+   only did so on frame forms, so on camps, lenses, gallery, holidays and
+   branches it sat on top of Save. Any page with the sticky bar now hides it.
+   Pages without one keep it, with room below the content to scroll clear. */
+@media (max-width: 1023px) {
+  .adm-body:has(.factions) .adm-fab { display: none; }
+  .adm-body:has(.factions) .adm-main { padding-bottom: 0; }
+}
+
+/* Live additions: staff pages' loading state (sprint 5.6 part D, AdminLoading).
+   Bars in the line colour, so they suit light and dark mode; a slow fade
+   while waiting, none with reduced motion. */
+.adm-loading { display: grid; gap: var(--s-3); max-width: 48rem; }
+.adm-loading__bar, .adm-loading__row { display: block; border-radius: var(--r-sm); background: var(--line); }
+.adm-loading__bar--title { width: min(16rem, 70%); height: 2.25rem; }
+.adm-loading__bar--text { width: min(28rem, 90%); height: 1rem; margin-bottom: var(--s-3); }
+.adm-loading__row { height: 3.5rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .adm-loading__bar, .adm-loading__row { animation: adm-loading 1.2s ease-in-out infinite alternate; }
+}
+@keyframes adm-loading { from { opacity: 1; } to { opacity: 0.45; } }

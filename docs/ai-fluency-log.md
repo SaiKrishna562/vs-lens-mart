@@ -525,6 +525,64 @@ Claude built the site-wide 404 and error pages from the signed-off mockup and `R
 
 ---
 
+## Search, and a Gap in the Signed-off Design: Sprint 5.6 part B, 2026-11-09
+
+### Delegation
+
+Claude wrote the search requirements, waited for approval, then built `/search` with its tests.
+
+### Discernment
+
+- **A matching rule with a trap:** letting every word match anywhere inside a field would make "rb 5154" find RB5154, but also make "men" find "women". Claude limited "match anywhere" to words with a digit (codes and model numbers).
+- **Didn't redesign without asking:** the signed-off design hides the search icon on phones, so phone visitors can't reach search except from the 404 page. Claude flagged it as a client question instead of adding an icon.
+- **Screenshots over numbers:** the no-results buttons had turned into large circles. The page passed every check except a look at it, because a shared style made one icon 96 px wide.
+
+### Diligence
+
+- Browser checks at 360 and 1440 px in both modes; full suite, then the search spec again after the fixes.
+- **Lesson:** the new tests found a real bug ("Searching…" never went away for common words only) on their first run. A test that fails first is doing its job; fix the cause, not the test.
+
+---
+
+## Asking Again When the Facts Changed: Sprint 5.6 part C, 2026-11-09
+
+### Delegation
+
+Claude added the sitemap, the site-wide share image and the alt-text and title checks.
+
+### Discernment
+
+- **An approval covers what was described, not what turned up:** the developer approved downloading the font "from Google's repository". There, only a variable font existed, which the image tool can't draw in bold. The static file was in the designer's repository instead. Claude stopped and asked again, naming the new source, file and size, rather than treating the first yes as covering a different host.
+- **Checked what a shared link really shows:** the share image worked on most pages, but frame pages showed none. A page's own share settings replace the site's, and the seed frames have no photos. Found by reading the page's tags, not by assuming the site image applies everywhere.
+- **An audit that changed nothing is still a result:** every empty alt text was checked in context and was correct, so it was recorded rather than "fixed".
+
+### Diligence
+
+- The image was viewed, the tags read on several pages, and a new test checks the sitemap against the database.
+- **Lesson:** approval is for the specific thing described. When the details change, ask again.
+
+---
+
+## Measuring Twice Before Fixing: Sprint 5.6 part D, 2026-11-09
+
+### Delegation
+
+Claude fixed the staff Add frame button, added staff loading states, and ran Lighthouse on the production build.
+
+### Discernment
+
+- **A dead rule, not a missing one:** the stylesheet already hid the button on forms (`.has-form`), but nothing set that class in the app. Claude hid it wherever the sticky Save bar exists instead, so new forms are covered automatically.
+- **Didn't chase a noisy number:** Home's blocking time of 3.1 s looked alarming. Two more runs gave about 1 s, the same as Frames, so it was the laptop being busy, not the page.
+- **Fixed code, asked about colours:** heading order and a missing role were bugs and were fixed. The contrast failures come from signed-off colours and the unconfirmed white menu bar, so they went to the open questions.
+- **Removed a test that couldn't fail:** a loading-state test passed whether or not the placeholder worked. Claude deleted it and said so, rather than counting it as coverage.
+
+### Diligence
+
+- Lighthouse before and after on the production build; full suite 288 passed.
+- **Lesson:** measure more than once before acting on a performance number, and make sure a test can fail before trusting that it passes.
+
+---
+
 ## AI Output Review Principles
 
 During the project, AI output is treated as a draft or implementation aid rather than automatically accepted as fact.

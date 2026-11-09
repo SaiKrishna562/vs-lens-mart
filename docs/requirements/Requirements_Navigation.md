@@ -74,7 +74,7 @@ Order changed by the client on 2026-10-21: Home and About first.
 | Icon | Behaviour |
 |---|---|
 | Light / dark toggle | A moon icon (in light mode) or sun icon (in dark mode). It switches the whole site between light and dark mode. Until the visitor chooses, it follows the device setting; the choice is saved on the device and applies on every page. It uses `aria-pressed` and the title "Switch to dark/light mode". Visible on desktop and mobile. Added 2026-10-10 (developer request) |
-| Search | Opens site search across frames, sunglasses and lenses. **TODO (dev):** decide the search behaviour, for example an overlay with results from the frames and lenses tables. |
+| Search | Opens the search panel; submitting it opens `/search?q=...`, a results page across frames, sunglasses and lenses (`Requirements_Search.md`, sprint 5.6). |
 | WhatsApp | Opens a small branch chooser (Indresham / Patelguda). Each opens `https://wa.me/91<number>` for that branch in a new tab. It replaces the shopping bag. *Proposal for client review.* |
 
 - `wa.me` links work with a normal WhatsApp number, so they can go live before the client sets up WhatsApp Business (Q83). WhatsApp Business is only needed later, for automatic messages.
@@ -222,7 +222,16 @@ Done when:
 | Is the eye test free? | Client |
 | Real photos for Men/Women/Kids tiles and Eye care cards | Client |
 | Branch picker for Call / WhatsApp (proposal) | Client to approve |
-| Search behaviour | Developer: the panel is built; results page in sprint 5.6 |
+| Search behaviour | Developer: decided 2026-11-09, `Requirements_Search.md` (results page, sprint 5.6 part B) |
 | Utility bar on mobile | Decided 2026-10-23: a shortened strip ("Since 1999 · Open 7 days, 9 AM–9:30 PM") as in the mockup; calls and booking move to the sticky bar |
 
 Answered on 2026-10-09: opening time (9:00 AM–9:30 PM), separate numbers per branch (9550685417 = Indresham), "Since 1999" shown prominently.
+
+## 11. Search engines (sprint 5.6 part C, added 2026-11-09)
+
+Not in the original plan; added in sprint 5.6 so search engines find every page the menus lead to.
+
+- **`/sitemap.xml`:** the public pages (Home, About, Frames, Sunglasses, Lenses, Eye care, Book an eye test, Eye camps, Gallery, Contact, Privacy), every live frame and pair of sunglasses, and every visible eye camp. Never the staff area, search results, not-found pages or photo addresses. It updates with the pages: a staff save that changes the catalogue or camps changes it too.
+- **`/robots.txt`:** keeps crawlers out of `/admin` and `/api/`, and gives the sitemap's address. Search results stay crawlable so their `noindex` is seen.
+- **Share images:** a frame's share image is its first photo (`Requirements_Frames.md`). Every other page shares one site-wide image in the brand colours with the name "VS Lens Mart" and "Since 1999" in the heading font. It has no logo until the new logo is approved (`DUMMY` D8).
+- Both use the site's address, `DUMMY` D4 until the domain is bought; `npm run check:launch` already lists it.

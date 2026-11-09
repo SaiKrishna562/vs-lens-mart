@@ -1,3 +1,4 @@
+import { AdminLoading } from "@/components/admin/admin-loading";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -19,7 +20,7 @@ export const metadata: Metadata = { title: { absolute: "Dashboard | VS Lens Mart
    is read with the signed-in role, so row-level security decides what shows. */
 export default function Dashboard() {
   return (
-    <Suspense fallback={<p className="text-muted">Loading…</p>}>
+    <Suspense fallback={<AdminLoading />}>
       <DashboardContent />
     </Suspense>
   );

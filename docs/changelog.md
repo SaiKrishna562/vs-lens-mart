@@ -4,6 +4,52 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-09 · Sprint 5.6 part D · Loading states, Add frame button, Lighthouse
+
+- **Changed:**
+  - **Add frame button (phones and tablets):** it no longer covers a form's sticky Save bar. The mockup hid it on every form with that bar; the app only did so on frame forms, so on camps, lenses, gallery, holidays and branches it sat on top of Save. Any staff page with the bar now hides it (`admin.css` live addition); lists keep it.
+  - **Staff loading state:** the 20 staff pages that showed a bare "Loading…" now show `AdminLoading`, the shape of a heading and list rows that fades gently (none with reduced motion), announced as "Loading…". Public pages needed nothing: they already pre-draw their real content.
+  - **Accessibility fixes from Lighthouse:** the footer's column titles are now `h2` (they were `h3` with no `h2` before them on the booking page); the listing's active-filter chips have `role="group"` for their label.
+- **Lighthouse** (version 12 through `npx`, not installed; production build, this laptop; Home, Frames, a frame, Lenses, Contact, Book):
+  - Best practices 100 and SEO 100 on every page, mobile and desktop.
+  - Accessibility 92–100 before, 96–100 after. What's left is colour contrast, which needs a colour decision (`docs/open-questions.md`): the gold "VS" on the unconfirmed white menu bar (1.58 to 1), and small brass labels on cream (2.24 to 1).
+  - Performance: desktop 83–99; mobile about 55–77, varying a lot between runs on a busy laptop (Home's blocking time measured 3.1 s once, then about 1 s twice, the same as Frames). The steady issue is that the largest text appears at about 4 s on a simulated slow phone, likely the five web-font files (Inter in four weights plus Plus Jakarta Sans). Not changed: fewer font weights is a design choice.
+- **Why:** sprint 5.6 (`ROADMAP.md`): loading states, Lighthouse checks; the Add frame button was a known issue.
+- **Tests:** `admin-shell.spec.ts` checks the button is hidden on the camp, lens and frame forms and shown on lists (360 and 768 px). A first loading-state test was removed because it couldn't fail. The footer change broke one search test that looked for "the" level-2 heading anywhere; it now looks inside the main content. Full suite: 288 passed, 18 skipped, none failed.
+- **Files:** `src/components/admin/admin-loading.tsx`, 20 pages under `src/app/admin/(staff)/`, `src/styles/admin.css`, `src/components/site/site-chrome.tsx`, `src/styles/site-chrome.css`, `src/components/catalogue/listing.tsx`, `tests/admin-shell.spec.ts`, `tests/search.spec.ts`, `.claude/launch.json` (a `prod` preview on port 3200 for Lighthouse), `docs/open-questions.md`, `CLAUDE.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
+## 2026-11-09 · Sprint 5.6 part C · Sitemap, share image, alt text and titles
+
+- **Changed:**
+  - **`/sitemap.xml`** (new): the 11 public pages, every live frame and pair of sunglasses, and every visible eye camp (64 addresses with the seed data). Never the staff area, search results or not-found pages. Built from the same cached lists as the pages, so staff saves update it.
+  - **`/robots.txt`:** now gives the sitemap's address (still keeps crawlers out of `/admin` and `/api/`).
+  - **Site-wide share image** (`src/app/opengraph-image.tsx`, new): navy with "Since 1999", "VS Lens Mart" (VS in gold), "Welcome to the Optical Family" and the branch names from the branches table, 1200 × 630, drawn once at build time. No logo until the new one is approved (`DUMMY` D8).
+  - **Font file:** `src/assets/fonts/PlusJakartaSans-ExtraBold.ttf` and its `OFL.txt` (SIL Open Font License), from `github.com/tokotype/PlusJakartaSans` at the commit Google Fonts uses (128,888 bytes; downloaded with the developer's approval). Google's own copy is a variable font, which `next/og` can't draw in ExtraBold.
+  - **Frame pages without a photo** shared no image at all, because a page's own share settings replace the site's. They now fall back to the site-wide image (`frameMetadata`); frames with photos still share their first photo.
+  - **Checked, no change needed:** every public page has a title, description and canonical address; every image's alt text is right (the empty ones are inside links or buttons that already say what they are, or beside their caption).
+- **Why:** sprint 5.6 (`ROADMAP.md`); rules added as `Requirements_Navigation.md` section 11 (sitemap and share images weren't in the requirements).
+- **Tests:** new `tests/seo.spec.ts` (security project): the sitemap matches the database and lists nothing private; `robots.txt`; the share image is a 1200 × 630 PNG on the main pages and frames use the right image. Full suite for parts B and C: 283 passed, 17 skipped, but one staff-accounts test timed out on a slow run (25 minutes, with other work alongside). Run again: 286 passed, 17 skipped, none failed.
+- **Files:** `src/app/sitemap.ts`, `src/app/robots.ts`, `src/app/opengraph-image.tsx`, `src/assets/fonts/PlusJakartaSans-ExtraBold.ttf`, `src/assets/fonts/OFL.txt`, `src/components/catalogue/frame-detail.tsx`, `tests/seo.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_Navigation.md`, `CLAUDE.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
+## 2026-11-09 · Sprint 5.6 part B · Search results page
+
+- **Changed:**
+  - **New page `/search?q=`:** results across live frames, sunglasses and lenses, in groups with counts, using the listings' frame cards (hearts, Sold out, Enquire) and the lens cards (each lens links to `/lenses` filtered by brand and type). Up to 24 per group, then a note to add a word.
+  - **Matching** (`src/lib/search.ts`): every word must match; case, spaces and hyphens in codes don't matter; an exact frame code comes first, then brand or model matches. It searches the cached lists the site already loads, so the words never reach the database and aren't stored.
+  - **Messages:** empty search, common words only, and no results (with "Ask us on WhatsApp", the words in the message). The page is `noindex`.
+  - The header search panel and the 404 search box, which already sent to `/search`, now land on results.
+- **Why:** sprint 5.6 basic search; `Requirements_Search.md` (approved by the developer 2026-11-09).
+- **Checked:** 360 and 1440 px in light and dark mode. Two problems found and fixed on the way: the search field and cards made the page scroll sideways on phones (the grids now fit the screen, and phones get the listings' two-column grid), and a large WhatsApp icon stretched the no-results buttons (removed, as in the listings' own empty state). HTML typed into the search shows as text.
+- **Tests:** new `tests/search.spec.ts` at all three sizes (expected results from the database). It caught a bug: a search of only common words kept saying "Searching…". Fixed. Full suite before that fix: 273 passed, 17 skipped; the search spec after it: 26 passed, 1 skipped (the header search at 360 px, where there's no icon).
+- **Open:** the signed-off design has no search icon on phones (below 768 px), so phone visitors can only reach search from the 404 page. Added to `Requirements_Search.md` open items for the client.
+- **Files:** `src/lib/search.ts`, `src/app/(site)/search/page.tsx`, `src/components/search/search-client.tsx`, `src/styles/pages.css`, `tests/search.spec.ts`, `playwright.config.ts`, `docs/requirements/Requirements_Search.md`, `docs/ai-fluency-log.md`, `docs/changelog.md`
+
+## 2026-11-09 · Sprint 5.6 part B · Search requirements (docs only)
+
+- **Changed:** new `docs/requirements/Requirements_Search.md` (draft): a `/search?q=` results page across live frames, sunglasses and lenses, grouped with counts; whole-word matching that ignores case and the spaces or hyphens in frame codes; exact frame code first; empty, small-words and no-results messages; `noindex`. `Requirements_Navigation.md` now points to it instead of the "TODO (dev)".
+- **Why:** sprint 5.6 "basic search" (`ROADMAP.md`); the header and 404 search forms already send to `/search`. Requirements come before code (`CLAUDE.md` working rules).
+- **Files:** `docs/requirements/Requirements_Search.md`, `docs/requirements/Requirements_Navigation.md`, `docs/changelog.md`
+
 ## 2026-11-09 · Sprint 5.6 part A · Page not found and error pages
 
 - **Changed:**

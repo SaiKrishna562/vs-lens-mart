@@ -274,7 +274,7 @@ function ListingView({ kind, items, title, intro, search: url }: Props & { searc
             <button className="btn btn--outline-dark filters-btn" type="button" aria-controls="filters" aria-expanded={panelOpen} ref={openBtn} onClick={() => setPanel(true)}>
               <Icon name="adjust" className="icon icon--sm" />Filters {chips.length ? `(${chips.length})` : ""}
             </button>
-            <div className="toolbar__chips" aria-label="Active filters">
+            <div className="toolbar__chips" role="group" aria-label="Active filters">
               {chips.map((c) => (
                 <button className="active-chip" type="button" key={`${c.key}|${c.v}`} aria-label={`Remove filter: ${c.text}`}
                   onClick={() => (c.key === "stock" ? set({ stock: false }) : setSel(c.key, state.sel[c.key].filter((x) => x !== c.v)))}>

@@ -1,3 +1,4 @@
+import { AdminLoading } from "@/components/admin/admin-loading";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LensFormPage } from "@/components/admin/lens-form-page";
@@ -6,7 +7,7 @@ export const metadata: Metadata = { title: "Edit lens" };
 
 export default function Page({ params }: PageProps<"/admin/lenses/[id]">) {
   return (
-    <Suspense fallback={<p className="text-muted">Loading…</p>}>
+    <Suspense fallback={<AdminLoading />}>
       <Lens params={params} />
     </Suspense>
   );

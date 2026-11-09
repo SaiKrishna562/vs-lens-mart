@@ -96,3 +96,18 @@ test("unknown staff pages show not found", async ({ page }) => {
   await expect(page.locator(".adm-top"), "inside the staff shell, not the public page").toBeVisible();
   await expect(page.locator(".site-header")).toHaveCount(0);
 });
+
+test("phones and tablets: Add frame floats on lists, but never over a form's Save bar", async ({ page }) => {
+  test.skip(isDesktop(page), "the floating button is for screens under 1024 px");
+  await signInUI(page, "staff");
+  const fab = page.locator(".adm-fab");
+  await expect(fab, "dashboard").toBeVisible();
+  for (const path of ["/admin/eye-camps/new", "/admin/lenses/new", "/admin/frames/new"]) {
+    await page.goto(path);
+    await expect(page.locator(".factions").first(), path).toBeVisible();
+    await expect(fab, path).toBeHidden();
+  }
+  await page.goto("/admin/eye-camps");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(fab, "camps list").toBeVisible();
+});

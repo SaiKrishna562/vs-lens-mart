@@ -721,3 +721,24 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
   .cat__img img, .tile__img img, .card__img img { transition: none; }
   .cat:hover .cat__img img, .tile:hover .tile__img img, .card:hover .card__img img { transform: none; }
 }
+
+/* ==========================================================================
+   Live additions: search results (sprint 5.6 part B). No mockup; built from
+   the listing's page head, frame cards, lens cards and empty state.
+   Spec: docs/requirements/Requirements_Search.md
+   Not in a layer, so the phone grid below can override catalogue.css's swipe row.
+   ========================================================================== */
+.search-page { padding-bottom: var(--s-8); }
+/* minmax(0, 1fr): one column as wide as the screen, not as wide as the search field or cards want */
+.search-page .page-head { justify-items: start; grid-template-columns: minmax(0, 1fr); }
+.search-page__count { min-height: 1.5em; font-size: var(--fs-sm); }
+.search-group { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); margin-top: var(--s-6); }
+.search-group h2 { display: flex; align-items: baseline; gap: var(--s-2); font-size: clamp(1.375rem, 1.5vw + 1rem, 1.75rem); color: var(--heading); }
+.search-group .results-foot { margin-top: var(--s-2); }
+.search-page__empty { margin-top: var(--s-2); }
+.lcard h3 a { color: inherit; }
+.lcard h3 a:hover { text-decoration: underline; }
+/* On phones, two columns like the listings (catalogue.css .listing .frames-row), not the related-frames swipe row */
+@media (max-width: 767px) {
+  .search-page .frames-row { grid-template-columns: repeat(2, 1fr); grid-auto-flow: row; grid-auto-columns: auto; overflow: visible; scroll-snap-type: none; gap: var(--s-4) var(--s-3); padding-bottom: 0; }
+}

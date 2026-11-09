@@ -27,11 +27,11 @@ export default defineConfig({
   globalTeardown: "./tests/global-teardown.ts",
   use: { baseURL: BASE, trace: "retain-on-failure" },
   projects: [
-    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|booking-rules|booking-race|staff-lists|staff-content|staff-settings|frame-form)\.spec\.ts/ },
+    { name: "security", testMatch: /(db-security|admin-auth|uploads|menu-data|catalogue-query|booking-rules|booking-race|staff-lists|staff-content|staff-settings|frame-form|seo)\.spec\.ts/ },
     // Layout checks at the CLAUDE.md test widths
-    { name: "phone-360", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
-    { name: "tablet-768", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
-    { name: "desktop-1440", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
+    { name: "phone-360", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found|search)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 780 } } },
+    { name: "tablet-768", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found|search)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 } } },
+    { name: "desktop-1440", testMatch: /(ui|layout|admin-shell|catalogue|booking|contact|privacy|lenses|eye-camps|gallery|about-eye-care|home|not-found|search)\.spec\.ts/, use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
     // Last, because it uses up the sign-in limit for a minute
     { name: "rate-limit", testMatch: /rate-limit\.spec\.ts/, dependencies: ["security", "phone-360", "tablet-768", "desktop-1440"] },
   ],
