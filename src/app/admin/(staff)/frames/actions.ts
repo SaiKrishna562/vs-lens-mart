@@ -16,7 +16,7 @@ import { findOrAdd } from "@/lib/lookups";
 import { deleteUpload, saveUpload, UploadError } from "@/lib/storage";
 
 export type SaveResult =
-  | { ok: true; code: string; status: string; message: string }
+  | { ok: true; id: string; code: string; status: string; message: string }
   | { ok: false; errors: Record<string, string> };
 
 type Status = "draft" | "waiting" | "sent_back" | "approved";
@@ -125,7 +125,7 @@ export async function saveFrame(formData: FormData): Promise<SaveResult> {
       sent_back: "Sent back with your note. They'll see it on their dashboard.",
       approved: "It's on the site now.",
     }[result.status];
-    return { ok: true, code: f.code, status: result.status, message };
+    return { ok: true, id: result.id, code: f.code, status: result.status, message };
   } catch (e) {
     for (const p of uploaded) await deleteUpload(staff, p);
     if (e instanceof UploadError) return { ok: false, errors: { photos: e.message } };

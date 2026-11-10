@@ -22,6 +22,7 @@ export function FrameCard({ f, saved, onToggle, eager = false }: {
       <Link className="fcard__media" href={f.href} aria-label={name}>
         <FramePhoto path={f.photo} alt={photoAlt(f)} sizes="(min-width: 1180px) 300px, (min-width: 768px) 33vw, 50vw" priority={eager} />
         {f.sold && <span className="fcard__badge">Sold out</span>}
+        {f.tryon && <span className="fcard__tryon"><Icon name="glasses" className="icon" />Try-on</span>}
       </Link>
       <button className="fcard__fav" type="button" aria-pressed={saved} aria-label={`Save ${name} to favourites`} onClick={() => onToggle(f.code)}>
         <Icon name="heart" />

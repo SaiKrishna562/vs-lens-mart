@@ -748,9 +748,13 @@ main [id] { scroll-margin-top: calc(var(--utility-h) + var(--nav-h) + var(--s-4)
    No mockup: shown to the client as a working demo. Design tokens only.
    ========================================================================== */
 .pdp__media { position: relative; }
-.tryon-cta { position: absolute; top: var(--s-3); right: var(--s-3); z-index: 3; display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--tap); padding: 0 var(--s-4); border-radius: var(--r-pill); background: var(--navy); color: var(--cream); font-weight: 700; box-shadow: var(--shadow-panel); }
-.tryon-cta .icon { width: 30px; height: auto; color: var(--gold); stroke-width: 1.6; }
-.tryon-cta:hover { background: var(--navy-2); }
+/* Gold like the primary buttons, so it stands out on the photo in light and dark mode */
+.tryon-cta { position: absolute; top: var(--s-3); right: var(--s-3); z-index: 3; display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--tap); padding: 0 var(--s-4); border-radius: var(--r-pill); background: var(--gold); color: var(--navy); font-weight: 700; box-shadow: var(--shadow-panel); }
+.tryon-cta .icon { width: 30px; height: auto; color: var(--navy); stroke-width: 1.8; }
+.tryon-cta:hover { background: var(--brass); }
+/* Frame cards: which frames have try-on (bottom-left of the photo, clear of Sold out and the heart) */
+.fcard__tryon { position: absolute; left: var(--s-3); bottom: var(--s-3); display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: var(--r-pill); background: var(--gold); color: var(--navy); font-size: var(--fs-xs); font-weight: 600; }
+.fcard__media .fcard__tryon .icon { width: 20px; height: auto; color: var(--navy); stroke-width: 1.8; }
 .tryon-cta:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 .tryon { width: min(1040px, 96vw); max-height: 94dvh; margin: auto; padding: 0; border: 0; border-radius: var(--r-md); background: var(--surface); color: var(--text); box-shadow: var(--shadow-panel); overflow: auto; }

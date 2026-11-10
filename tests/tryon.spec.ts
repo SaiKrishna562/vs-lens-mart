@@ -3,6 +3,8 @@
    A frame is made for these tests and removed after; its try-on picture is
    drawn in the browser (a dark frame on white, like a real front-view photo). */
 import { expect, test, type Page } from "@playwright/test";
+import { rmSync } from "node:fs";
+import path from "node:path";
 import { isTransparentPng } from "../src/lib/upload-rules";
 import { accounts, connect } from "./helpers";
 
@@ -39,7 +41,8 @@ async function signIn(page: Page) {
   await expect(page.getByRole("heading", { name: /^Good (morning|afternoon|evening)/ })).toBeVisible();
 }
 
-/** A front-view photo as a phone would take it: a dark frame with arms, on white. */
+/** A front-view photo as a phone would take it: a dark frame on white, with the side arms
+    showing through the clear lenses and a grey shadow under each lens. */
 async function framePhoto(page: Page): Promise<Buffer> {
   const b64 = await page.evaluate(() => {
     const c = document.createElement("canvas");
@@ -50,7 +53,13 @@ async function framePhoto(page: Page): Promise<Buffer> {
     g.beginPath(); g.roundRect(150, 110, 290, 210, 70); g.stroke();
     g.beginPath(); g.roundRect(560, 110, 290, 210, 70); g.stroke();
     g.beginPath(); g.moveTo(440, 170); g.quadraticCurveTo(500, 130, 560, 170); g.stroke();
+    // A double bridge: a bar over the nose bridge, shutting in a gap that isn't a lens
+    g.lineWidth = 12; g.beginPath(); g.moveTo(380, 112); g.quadraticCurveTo(500, 70, 620, 112); g.stroke(); g.lineWidth = 22;
     g.lineWidth = 16; g.beginPath(); g.moveTo(40, 150); g.lineTo(150, 160); g.moveTo(850, 160); g.lineTo(960, 150); g.stroke();
+    // Arms seen through the lenses, from the hinges down towards the middle
+    g.lineWidth = 12; g.beginPath(); g.moveTo(170, 140); g.quadraticCurveTo(230, 210, 260, 290); g.moveTo(830, 140); g.quadraticCurveTo(770, 210, 740, 290); g.stroke();
+    // Shadows under the lenses, apart from the frame
+    g.strokeStyle = "#c4c4c4"; g.lineWidth = 6; g.beginPath(); g.moveTo(170, 360); g.lineTo(420, 360); g.moveTo(580, 360); g.lineTo(830, 360); g.stroke();
     return c.toDataURL("image/jpeg", 0.92).split(",")[1];
   });
   return Buffer.from(b64, "base64");
@@ -75,13 +84,48 @@ test("staff: a front-view photo becomes a see-through try-on picture, served to 
   await signIn(page);
   await page.goto(`/admin/frames/${fixture.code}`);
   await editorReady(page);
+  // The Photos section points to the try-on section, which is further down the page
+  const hint = page.getByRole("link", { name: "add a try-on picture below" });
+  await expect(hint).toHaveAttribute("href", "#sec-tryon");
+  await page.locator(".tryon-hint").screenshot({ path: testInfo.outputPath("tryon-hint.png") });
+  await hint.click();
   const sec = page.locator(".tryon-edit");
-  await expect(sec.getByRole("heading", { name: "Try-on picture" })).toBeVisible();
-  const toggle = sec.getByRole("switch");
+  await expect(sec.getByRole("heading", { name: "Try-on picture" })).toBeInViewport();
+  const toggle = sec.getByRole("switch", { name: /Try-on for this/ });
   await expect(toggle, "no picture yet").toBeDisabled();
 
   await sec.locator("input[type=file]").setInputFiles({ name: "front.jpg", mimeType: "image/jpeg", buffer: await framePhoto(page) });
-  await expect(sec.getByRole("img", { name: /Try-on picture of this frame/ })).toBeVisible();
+  const pic = sec.getByRole("img", { name: /Try-on picture of this frame/ });
+  await expect(pic).toBeVisible();
+
+  // The two clean-up switches start on; each one visibly changes the picture
+  const arms = sec.getByRole("switch", { name: /Remove arms seen through the lenses/ });
+  const shadows = sec.getByRole("switch", { name: /Remove shadows/ });
+  await expect(arms).toBeChecked();
+  await expect(shadows).toBeChecked();
+  const measure = () => pic.evaluate((c: HTMLCanvasElement) => {
+    // Dark pixels in the middle band (inside the lenses) and around the bridge, and the picture's height
+    const d = c.getContext("2d")!.getImageData(0, 0, c.width, c.height).data;
+    const count = (x0: number, x1: number, y0: number, y1: number) => {
+      let n = 0;
+      for (let y = Math.floor(c.height * y0); y < c.height * y1; y++) for (let x = Math.floor(c.width * x0); x < c.width * x1; x++) {
+        const i = (y * c.width + x) * 4;
+        if (d[i] < 90 && d[i + 1] < 90 && d[i + 2] < 90) n++;
+      }
+      return n / (c.width * c.height);
+    };
+    return { dark: count(0.15, 0.85, 0.3, 0.8), bridge: count(0.4, 0.6, 0, 0.45), h: c.height / c.width };
+  });
+  const both = await measure();
+  await arms.uncheck();
+  const armsOff = await measure();
+  expect(armsOff.dark, "arms off: more frame inside the lenses").toBeGreaterThan(both.dark * 1.05);
+  expect(both.bridge, "removing the arms keeps the double bridge").toBeGreaterThan(armsOff.bridge * 0.9);
+  await arms.check();
+  await shadows.uncheck();
+  expect((await measure()).h, "shadows off: the shadow makes the picture taller").toBeGreaterThan(both.h * 1.03);
+  await shadows.check();
+
   await sec.getByLabel(/Trim left arm/).fill("10");
   await sec.getByLabel(/Trim right arm/).fill("10");
   await sec.screenshot({ path: testInfo.outputPath("tryon-editor.png") });
@@ -96,6 +140,14 @@ test("staff: a front-view photo becomes a see-through try-on picture, served to 
   expect(staffGet.status()).toBe(200);
   expect(isTransparentPng(new Uint8Array(await staffGet.body())), "the saved picture is see-through").toBe(true);
   expect((await request.get(`/media/${row.tryon_path}`)).status(), "public, try-on on").toBe(200);
+
+  // A saved picture can go back through the clean-up, with its switches
+  await page.reload();
+  await editorReady(page);
+  await expect(sec.getByRole("switch", { name: /Remove arms/ })).toHaveCount(0);
+  await sec.getByRole("button", { name: "Clean up this picture again" }).click();
+  await expect(sec.getByRole("switch", { name: /Remove arms/ })).toBeChecked();
+  await sec.getByRole("button", { name: "Cancel" }).click();
 
   // Try-on off: the public no longer gets the picture; staff still do
   await toggle.uncheck();
@@ -132,7 +184,7 @@ test("customer: Try it on appears only on frames with try-on, opens the panel, l
   const sec = page.locator(".tryon-edit");
   await sec.locator("input[type=file]").setInputFiles({ name: "front.jpg", mimeType: "image/jpeg", buffer: await framePhoto(page) });
   await expect(sec.getByRole("img", { name: /Try-on picture of this frame/ })).toBeVisible();
-  await sec.getByRole("switch").check();
+  await sec.getByRole("switch", { name: /Try-on for this/ }).check();
   await sec.getByRole("button", { name: "Save try-on" }).click();
   await expect(sec.getByText("Saved. Try-on is on for this frame.")).toBeVisible();
   await page.context().clearCookies(); // the customer isn't signed in
@@ -164,8 +216,9 @@ test("customer: Try it on appears only on frames with try-on, opens the panel, l
 
   // The camera: the preview and the guide, then Back
   await panel.getByRole("button", { name: "Try the camera again" }).click();
-  await expect(panel.getByLabel("Camera preview")).toBeVisible();
-  await expect(panel.getByRole("status")).toHaveText(/fit your face in the oval|Getting the camera ready|Starting the camera/);
+  // Starting a camera can take a while on a busy computer
+  await expect(panel.getByLabel("Camera preview")).toBeVisible({ timeout: 15_000 });
+  await expect(panel.getByRole("status")).toHaveText(/fit your face in the oval|Getting the camera ready|Starting the camera/, { timeout: 15_000 });
   await page.screenshot({ path: testInfo.outputPath("tryon-camera.png") });
   await panel.getByRole("button", { name: "Back" }).click();
   await expect(panel.getByRole("button", { name: "Take a selfie" })).toBeVisible();
@@ -174,6 +227,71 @@ test("customer: Try it on appears only on frames with try-on, opens the panel, l
   await expect(panel).toBeHidden();
   expect(errors, "no page errors").toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), "sideways scroll").toBe(0);
+});
+
+/* Add frame page: try-on is optional and saves with the new frame */
+const newCodes: string[] = [];
+test.afterAll(async () => {
+  if (!newCodes.length) return;
+  const c = await connect("owner");
+  await c.query("select set_config('app.role', 'admin', false)");
+  const rows = (await c.query("select id, tryon_path from frames where code = any($1)", [newCodes])).rows as { id: string; tryon_path: string | null }[];
+  await c.query("delete from frames where code = any($1)", [newCodes]);
+  await c.end();
+  for (const r of rows) rmSync(path.join("uploads", "frames", r.id), { recursive: true, force: true });
+});
+
+async function addFrame(page: Page, code: string) {
+  await page.goto("/admin/frames/new");
+  await page.waitForFunction(() => ["[data-testid=photo-input]", ".tryon-edit input[type=file]"]
+    .every((s) => Object.keys(document.querySelector(s) ?? {}).some((k) => k.startsWith("__react"))));
+  await page.getByLabel("Frame code").fill(code);
+  await page.getByLabel("Category").selectOption("eyeglasses");
+  await page.getByLabel("Brand").selectOption({ index: 1 });
+  await page.getByLabel("Model").fill(`E2E Tryon New ${code}`);
+  await page.getByText("Unisex", { exact: true }).click();
+  await page.getByLabel("Colour").selectOption({ index: 1 });
+  await page.getByLabel("Shape").selectOption("Round");
+  await page.getByLabel("Price", { exact: true }).fill("2450");
+}
+
+test("staff: a try-on picture added on the Add frame page is saved with the new frame", async ({ page }, testInfo) => {
+  await signIn(page);
+  const code = `QN${testInfo.project.name.slice(0, 1).toUpperCase()}-${10000 + Math.floor(Math.random() * 9e4)}`; // the form's format, e.g. QNP-12345
+  newCodes.push(code);
+  await addFrame(page, code);
+  await expect(page.locator(".tryon-hint")).toContainText("optional; it's saved with the frame");
+  const sec = page.locator(".tryon-edit");
+  await expect(sec).toContainText("Optional. It's saved with the frame");
+  await expect(sec.getByRole("button", { name: "Save try-on" }), "no separate Save here").toHaveCount(0);
+  await sec.locator("input[type=file]").setInputFiles({ name: "front.jpg", mimeType: "image/jpeg", buffer: await framePhoto(page) });
+  await expect(sec.getByRole("img", { name: /Try-on picture of this frame/ })).toBeVisible();
+  await expect(sec.getByRole("switch", { name: /Try-on for this/ }), "a first picture switches try-on on").toBeChecked();
+  await page.getByRole("button", { name: "Save as draft" }).click();
+  await expect(page.getByRole("heading", { name: "Saved as draft" })).toBeVisible();
+  await expect(page.getByText("Its try-on picture is saved, and try-on is on.")).toBeVisible();
+
+  const c = await connect("owner");
+  await c.query("select set_config('app.role', 'admin', false)");
+  const row = (await c.query("select id, status, tryon_enabled, tryon_path from frames where code = $1", [code])).rows[0];
+  await c.end();
+  expect(row.status).toBe("draft");
+  expect(row.tryon_enabled).toBe(true);
+  expect(row.tryon_path).toMatch(new RegExp(`^frames/${row.id}/[0-9a-f-]{36}\\.png$`));
+  expect(isTransparentPng(new Uint8Array(await (await page.request.get(`/media/${row.tryon_path}`)).body()))).toBe(true);
+});
+
+test("staff: try-on is optional on the Add frame page; it can be added later on the edit page", async ({ page }, testInfo) => {
+  await signIn(page);
+  const code = `QO${testInfo.project.name.slice(0, 1).toUpperCase()}-${10000 + Math.floor(Math.random() * 9e4)}`;
+  newCodes.push(code);
+  await addFrame(page, code);
+  await page.getByRole("button", { name: "Save as draft" }).click();
+  await expect(page.getByRole("heading", { name: "Saved as draft" })).toBeVisible();
+  await expect(page.getByText(/try-on/i)).toHaveCount(0);
+  // Later, on its edit page
+  await page.goto(`/admin/frames/${code}`);
+  await expect(page.locator(".tryon-edit").getByRole("button", { name: "Choose a front-view photo" })).toBeVisible();
 });
 
 test("customer: a frame without try-on has no Try it on button", async ({ page }) => {

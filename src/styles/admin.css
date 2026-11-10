@@ -303,3 +303,10 @@
 @media (max-width: 767px) {
   .tryon-edit__grid, .tryon-edit__pair { grid-template-columns: 1fr; }
 }
+/* The pointer from the Photos section to the try-on section (Phase 6) */
+.tryon-hint { margin-top: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-md); border: 1px dashed var(--brass); font-size: var(--fs-sm); color: var(--text); }
+.tryon-hint b { color: var(--heading); }
+.tryon-hint a { color: var(--heading); font-weight: 600; text-decoration: underline; text-decoration-color: var(--brass); }
+#sec-tryon { scroll-margin-top: calc(var(--adm-top-h) + var(--s-4)); }
+.tryon-edit__switches { display: grid; gap: var(--s-2); margin-bottom: var(--s-4); }
+.tryon-edit__pick { display: flex; flex-wrap: wrap; gap: var(--s-2); }

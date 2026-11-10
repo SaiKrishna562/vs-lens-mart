@@ -54,6 +54,7 @@ export async function FrameFormPage({ kind, code }: { kind: "frames" | "sunglass
       key={frame?.id ?? `new-${kind}`}
       kind={kind}
       role={staff.role}
+      tryonSiteOn={tryonEnabled()}
       defaultBranch={branch}
       brands={data.brandList}
       colours={data.colourList}

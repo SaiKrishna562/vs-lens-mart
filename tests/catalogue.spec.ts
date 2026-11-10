@@ -196,7 +196,8 @@ test("frame detail: every field, both WhatsApp actions, search-engine data", asy
   const share = await page.getByRole("link", { name: "Share this frame on WhatsApp" }).getAttribute("href");
   expect(share).toMatch(/^https:\/\/wa\.me\/\?text=/); // the customer picks the contact; not the shop's number
   expect(decodeURIComponent(share!)).toContain(`${f.brand} ${f.model}, ${rupees(f.price)}`);
-  await expect(page.getByText(/try-on/i)).toHaveCount(0);
+  // "Try it on" only on a frame with try-on switched on (Phase 6; the test server runs with TRYON_ENABLED)
+  await expect(page.getByRole("button", { name: "Try it on" })).toHaveCount(f.tryon ? 1 : 0);
   const ld = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
   expect(ld).toMatchObject({ "@type": "Product", sku: f.code, offers: { price: f.price, priceCurrency: "INR" } });
   expect(await noScroll(page), "sideways scroll").toBe(0);

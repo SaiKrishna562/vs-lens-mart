@@ -56,7 +56,8 @@ test("hero: three lines with the years worked out from 1999, exactly two buttons
   await expect(buttons).toHaveText(["Explore our frames", "Book an eye test"]);
   await expect(buttons.nth(0)).toHaveAttribute("href", "/frames");
   await expect(buttons.nth(1)).toHaveAttribute("href", "/book-eye-test");
-  await expect(page.getByText(/try[- ]on/i)).toHaveCount(0);
+  // No try-on in the hero (Requirements_HomePage.md); frame cards further down may carry a "Try-on" label (Phase 6)
+  await expect(page.locator(".hero").getByText(/try[- ]on/i)).toHaveCount(0);
   await expect(page.locator(".hero__legacy")).toContainText("Since 1999");
   // The DUMMY C12 hero slideshow (AI-generated people) shows only while developing, never in a build
   await expect(page.locator(".hero img, .hero__ctl")).toHaveCount(0);

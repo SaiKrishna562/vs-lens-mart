@@ -107,13 +107,18 @@ The developer reviewed a large optical chain's try-on (screenshots, not kept in 
 
 ## 6. Staff: try-on picture (6.1)
 
-On the frame form, a new "Try-on" section:
+On the frame form, a "Try-on picture" section, optional on both pages:
+
+- **Add frame:** under Photos. It has no Save of its own: the picture is saved right after the new frame (Send for approval, Save as draft or Save and publish). If the frame saves but the picture doesn't, the frame is kept and the message says to add the picture from the edit page.
+- **Edit page:** under the whole form, with its own Save try-on and Remove picture, so try-on can be added or changed any time. A link in the Photos section jumps to it.
+- Choosing a first picture switches try-on on; staff can switch it off before saving.
+
 
 | Field | Notes |
 |---|---|
 | Try-on on / off | Off by default. Can't be turned on without a try-on picture |
 | Front-view photo | One photo of the frame straight from the front, arms folded or open, on a plain white background. Separate from the 5 product photos |
-| Clean-up | Done in the staff member's browser before upload: background removal with a strength slider; left and right trim sliders to cut off the arm tips; a crop to the frame |
+| Clean-up | Done in the staff member's browser before upload: background removal with a strength slider; two switches, both on for a new photo: **Remove arms seen through the lenses** (clears whatever shows inside each lens opening, for clear lenses) and **Remove shadows** (fades pale grey and drops pieces not joined to the frame; off for very shiny frames that lose highlights); left and right trim sliders to cut off the arm tips; a crop to the frame |
 | Lens line | The staff member drags a marker to the height of the lens centres; the left and right lens centres are found from the cleaned picture and can be adjusted |
 | Preview | The cleaned picture on a sample face (`DUMMY` C25 sample until a consented staff photo is provided), with the same drawing as the customer panel |
 

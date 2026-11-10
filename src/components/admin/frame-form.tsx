@@ -17,12 +17,15 @@ import {
 } from "@/lib/frame-schema";
 import { shrink } from "@/lib/client-photo";
 import { AdminIcon } from "./admin-icons";
+import { NO_TRYON, TryonEditor, type TryonSaver } from "./tryon-editor";
 
 type Kind = "front" | "side" | "closeup" | "model";
 type Photo = { key: string; url: string; kind: Kind; consent: boolean; file?: Blob; note?: string };
 export type FrameFormProps = {
   kind: "frames" | "sunglasses";
   role: "admin" | "staff";
+  /** Virtual try-on is switched on for the website (TRYON_ENABLED) */
+  tryonSiteOn: boolean;
   defaultBranch: string;
   brands: string[];
   colours: string[];
@@ -42,7 +45,9 @@ const blank = (kind: FrameFormProps["kind"], branch: string): Fields => ({
   sizeLens: "", sizeBridge: "", sizeTemple: "", lensTypes: [], lensColour: "", price: "", availability: "in_stock", availableAt: branch, isActive: true,
 });
 
-export function FrameForm({ kind, role, defaultBranch, brands, colours, frame }: FrameFormProps) {
+export function FrameForm({ kind, role, tryonSiteOn, defaultBranch, brands, colours, frame }: FrameFormProps) {
+  // Add frame page: an optional try-on picture, saved right after the new frame
+  const tryonSaver = useRef<TryonSaver | null>(null);
   const router = useRouter();
   const admin = role === "admin";
   const sun = kind === "sunglasses";
@@ -166,7 +171,14 @@ export function FrameForm({ kind, role, defaultBranch, brands, colours, frame }:
       if (!r.ok) { setErrors(r.errors); requestAnimationFrame(() => summary.current?.focus()); return; }
       dirty.current = false;
       try { localStorage.removeItem(draftKey); } catch { /* ignore */ }
-      setDone(r);
+      // The frame is saved whatever happens to its try-on picture
+      let tryonNote = "";
+      if (!frame && tryonSaver.current) {
+        const t = await tryonSaver.current(r.id).catch(() => ({ ok: false as const, error: "" }));
+        if (t?.ok) tryonNote = t.enabled ? " Its try-on picture is saved, and try-on is on." : " Its try-on picture is saved; try-on is off.";
+        else if (t) tryonNote = ` The try-on picture didn't save${t.error ? ` (${t.error})` : ""}. Add it from the ${noun}'s edit page.`;
+      }
+      setDone({ ...r, message: r.message + tryonNote });
       router.refresh();
     } catch {
       setErrors({ form: "Couldn't save. Check your connection and try again." });
@@ -275,7 +287,14 @@ export function FrameForm({ kind, role, defaultBranch, brands, colours, frame }:
             {photoNote && <p className="photo-status" aria-live="polite">{photoNote}</p>}
             {(photoError || err("photos")) && <span className="ferr" role="alert">{photoError || err("photos")}</span>}
             <p className="photo-tip">Plain light background, whole {noun} in view, no reflections. Product-only photos unless the person gave written permission. The first photo is the cover.</p>
+            {/* Virtual try-on (Phase 6): its own section under this form, once the frame exists */}
+            <p className="tryon-hint">
+              <b>Virtual try-on:</b>{" "}
+              <a href="#sec-tryon">add a try-on picture below</a> (optional{frame ? "" : `; it's saved with the ${noun}`}).
+            </p>
           </section>
+
+          {!frame && <TryonEditor frameId={null} initial={NO_TRYON} siteOn={tryonSiteOn} noun={sun ? "pair of sunglasses" : "frame"} saverRef={tryonSaver} />}
 
           {/* ---------- Basics ---------- */}
           <section className="fsec" aria-labelledby="sec-basics">

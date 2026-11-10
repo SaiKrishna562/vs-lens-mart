@@ -4,6 +4,49 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-10 · Phase 6 release 6.1 · Tests updated for frames with try-on
+
+- **Changed:** two older checks assumed no frame had try-on. `home.spec.ts` now checks there's no try-on in the **hero** (frame cards lower down may show the "Try-on" label); `catalogue.spec.ts` now expects the "Try it on" button exactly when the frame has try-on switched on.
+- **Why:** once the developer switched try-on on for two real frames (GDH-3816, DCV-1565), these checks failed although the site was right (`Requirements_HomePage.md`, `Requirements_Frames.md`).
+- **Also found:** one full run was cut off when the laptop went to sleep (`ERR_NETWORK_IO_SUSPENDED`), leaving a second throwaway "E2E admin" account that tripped a staff-accounts test on the next run; the next run's clean-up removed it. Full suite: 305 passed, 18 skipped.
+- **Files:** `tests/home.spec.ts`, `tests/catalogue.spec.ts`, `docs/changelog.md`
+
+## 2026-11-10 · Phase 6 release 6.1 · Arm removal fixed for double-bridge frames; easier to see
+
+- **Changed:**
+  - **Arm removal:** on a double-bridge frame (a bar over the nose bridge) it also erased the bridge and the inner rims: the gap under the bar was counted as part of the lens. Now an enclosed see-through piece counts as lens only if 90% of it lies within the main lens opening's area. Checked on the developer's two saved pictures (GDH-3816, double bridge, and DCV-1565): arms gone, bridge and rims intact.
+  - **Clean up this picture again:** a saved try-on picture can be loaded back into the editor, so the arms and shadows switches and the trims apply to it without finding the original photo. Before, the switches only appeared after choosing a new photo.
+  - **Visibility:** "Try it on" on the frame photo is now gold (the navy button was hard to see in dark mode), and frame cards on the Frames and Sunglasses listings show a gold "Try-on" label. With `TRYON_ENABLED` off, the catalogue no longer passes any try-on data to pages.
+- **Why:** the developer reported the arms weren't removed, no switches showed, and try-on was hard to find (2026-11-10). Their GDH-3816 picture, saved after the switches existed, still had its arms; on that frame the switch had erased the bridge too.
+- **Found while checking:** the development server logs a "crypto.getRandomValues() while prerendering" warning from the staff layout's sign-in check on the frame pages; the pages still load (200). Not changed here.
+- **Tests:** the test photo now has a double bridge; `tryon.spec.ts` checks arm removal keeps it, and that a saved picture can be cleaned again. The customer test now allows 15 s for the camera to start on a busy computer (it timed out once under load; passed 4 of 4 when repeated).
+- **Files:** `src/components/admin/tryon-editor.tsx`, `src/components/catalogue/frame-card.tsx`, `src/lib/catalogue-data.ts`, `src/styles/pages.css`, `src/styles/admin.css`, `tests/tryon.spec.ts`, `docs/changelog.md`
+
+## 2026-11-10 · Phase 6 release 6.1 · Try-on picture on the Add frame page
+
+- **Changed:** the "Try-on picture" section now also appears on the Add frame (and Add sunglasses) page, under Photos. It's optional and has no Save of its own: the frame form saves the picture right after the new frame, with the new frame's ID. Staff and admins can still add or change try-on later on the edit page (unchanged, with its own Save). Choosing a first picture switches try-on on. The frame save now returns the frame's ID (`SaveResult`).
+- **Why:** the developer asked to add try-on while uploading a frame, without having to save and reopen it (2026-11-10), and to keep it optional.
+- **Safety:** the frame is saved first; if its try-on picture then fails, the frame is kept and the message says to add the picture from the edit page.
+- **Tests:** `tryon.spec.ts`: a frame added with a try-on picture is saved with it (draft, try-on on, see-through PNG); a frame added without one saves normally and the edit page still offers try-on. A test code in the wrong format first stopped the frame saving (the form's rule is 2–4 letters, a dash, 3–5 digits); fixed in the test. 15 passed at all sizes.
+- **Files:** `src/components/admin/frame-form.tsx`, `src/components/admin/frame-form-page.tsx`, `src/components/admin/tryon-editor.tsx`, `src/app/admin/(staff)/frames/actions.ts`, `tests/tryon.spec.ts`, `docs/requirements/Requirements_TryOn.md`, `docs/changelog.md`
+
+## 2026-11-10 · Phase 6 release 6.1 · Try-on clean-up: arms and shadows switches
+
+- **Changed:** the staff try-on editor has two new switches, both on for a new photo:
+  - **Remove arms seen through the lenses:** in a front-view product photo the side arms show through clear lenses; after the background is removed they stayed and would sit on the customer's cheeks. Each lens opening is found (the see-through area the rim encloses, including the pieces the arm splits it into) and anything inside it is cleared, keeping the rim.
+  - **Remove shadows:** pale grey, colourless pixels fade out and pieces not joined to the frame (shadow lines, specks) are dropped. Staff switch it off for a very shiny frame that loses highlights.
+- **Why:** the developer's request (2026-11-10), with a sample front-view photo; both switches can be turned off for photos that don't need them, and work the same for sunglasses (dark lenses already hide the arms).
+- **Checked:** on the developer's sample photo with each switch on and off (screenshots; the photo isn't kept in the project). The first version also cut away the rims' outer edges when both were on: a strip of background shut in between the rim and the shadow was taken for part of the lens. Now only the main lens opening and the pieces inside its area count.
+- **Tests:** `tryon.spec.ts` draws a frame with arms through the lenses and a shadow, and checks each switch changes the picture (14 passed at all sizes).
+- **Files:** `src/components/admin/tryon-editor.tsx`, `src/styles/admin.css`, `tests/tryon.spec.ts`, `docs/requirements/Requirements_TryOn.md`, `docs/changelog.md`
+
+## 2026-11-10 · Phase 6 release 6.1 · Try-on easier to find for staff
+
+- **Changed:** the frame form's Photos section now says "Virtual try-on: add a try-on picture below" with a link that jumps to the Try-on picture section; on the Add frame page it says the try-on picture is added after saving.
+- **Why:** the developer couldn't find try-on: its section sits at the very bottom of an existing frame's edit page, and the customer button only shows once a frame has try-on switched on (0 of 51 frames had it).
+- **Tests:** `tryon.spec.ts` checks the link reaches the section and the Add frame note (8 passed at 360 and 1440 px).
+- **Files:** `src/components/admin/frame-form.tsx`, `src/styles/admin.css`, `tests/tryon.spec.ts`, `docs/changelog.md`
+
 ## 2026-11-10 · Phase 6 release 6.1 · Virtual try-on demo (branch `feature/virtual-try-on`)
 
 - **Changed:**

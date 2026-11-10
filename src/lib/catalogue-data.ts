@@ -1,6 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { withRole } from "./db";
+import { tryonEnabled } from "./tryon";
 import { catalogueQuery, frameDetailQuery, liveSlugsQuery, type Kind } from "./queries/catalogue";
 
 /* Cached catalogue reads with the public role, tagged "catalogue" like the
@@ -12,7 +13,9 @@ export async function getCatalogue(kind: Kind) {
   "use cache";
   cacheTag("catalogue");
   cacheLife("hours");
-  return withRole("public", (tx) => catalogueQuery(tx, kind));
+  const items = await withRole("public", (tx) => catalogueQuery(tx, kind));
+  // With the try-on switch off, no page learns which frames have try-on
+  return tryonEnabled() ? items : items.map((f) => ({ ...f, tryon: null }));
 }
 
 export async function getFrame(kind: Kind, slug: string) {

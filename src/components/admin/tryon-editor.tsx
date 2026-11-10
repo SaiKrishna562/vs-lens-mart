@@ -5,8 +5,8 @@
    white background see-through, trims the arm tips, crops to the frame and
    marks the lens centres, all in the browser (from the developer's
    prototype). Only the finished PNG is uploaded; the server checks it again. */
-import { useEffect, useMemo, useRef, useState } from "react";
-import { saveTryon } from "@/app/admin/(staff)/frames/tryon-actions";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
+import { saveTryon, type TryonResult } from "@/app/admin/(staff)/frames/tryon-actions";
 
 export type TryonValue = { enabled: boolean; path: string | null; lensLeft: number; lensRight: number; lensY: number };
 
@@ -15,8 +15,157 @@ const MAX_OUT = 1200; // the saved picture's widest side
 
 type Source = { canvas: HTMLCanvasElement; transparent: boolean };
 
+const SOLID = 24; // alpha above this counts as part of the frame
+
+/** Shadows: pale grey, colourless pixels fade out, then any piece not joined
+    to the frame (a shadow line under a lens, specks) is dropped. A very shiny
+    frame can lose highlights, which is why staff can switch this off. */
+function removeShadows(px: Uint8ClampedArray, w: number, h: number) {
+  for (let i = 0; i < px.length; i += 4) {
+    if (!px[i + 3]) continue;
+    const mx = Math.max(px[i], px[i + 1], px[i + 2]), mn = Math.min(px[i], px[i + 1], px[i + 2]);
+    if (mx - mn < 24 && mn > 150) px[i + 3] = Math.round(px[i + 3] * Math.max(0, Math.min(1, (185 - mn) / 35)));
+  }
+  // Pieces of the picture (8 neighbours), keeping those at least 8% the size of the largest
+  const label = new Int32Array(w * h).fill(-1);
+  const sizes: number[] = [];
+  const stack: number[] = [];
+  for (let start = 0; start < w * h; start++) {
+    if (label[start] >= 0 || px[start * 4 + 3] <= SOLID) continue;
+    const id = sizes.length;
+    let n = 0;
+    label[start] = id; stack.push(start);
+    while (stack.length) {
+      const p = stack.pop()!; n++;
+      const x = p % w, y = (p - x) / w;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        const nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        const q = ny * w + nx;
+        if (label[q] < 0 && px[q * 4 + 3] > SOLID) { label[q] = id; stack.push(q); }
+      }
+    }
+    sizes.push(n);
+  }
+  if (!sizes.length) return;
+  const keep = Math.max(...sizes) * 0.08;
+  for (let p = 0; p < w * h; p++) {
+    if (label[p] >= 0 ? sizes[label[p]] < keep : px[p * 4 + 3] > 0 && px[p * 4 + 3] <= SOLID) px[p * 4 + 3] = 0;
+  }
+}
+
+/** Arms seen through clear lenses: in each half, the see-through area the rim
+    encloses (not joined to the outside) marks the lens; anything inside the
+    outline around it, shrunk a little to keep the rim, is cleared. Dark
+    sunglass lenses hide the arms already, so nothing changes there. */
+function removeArms(px: Uint8ClampedArray, w: number, h: number) {
+  const clear = (p: number) => px[p * 4 + 3] <= SOLID;
+  // Background joined to the picture's edges
+  const outside = new Uint8Array(w * h);
+  const stack: number[] = [];
+  const seed = (p: number) => { if (!outside[p] && clear(p)) { outside[p] = 1; stack.push(p); } };
+  for (let x = 0; x < w; x++) { seed(x); seed((h - 1) * w + x); }
+  for (let y = 0; y < h; y++) { seed(y * w); seed(y * w + w - 1); }
+  while (stack.length) {
+    const p = stack.pop()!;
+    const x = p % w;
+    if (x > 0) seed(p - 1);
+    if (x < w - 1) seed(p + 1);
+    if (p >= w) seed(p - w);
+    if (p < w * (h - 1)) seed(p + w);
+  }
+  let x0 = w, x1 = -1;
+  for (let p = 0; p < w * h; p++) if (!clear(p)) { const x = p % w; if (x < x0) x0 = x; if (x > x1) x1 = x; }
+  if (x1 < 0) return;
+  const mid = Math.round((x0 + x1) / 2);
+  for (const [from, to] of [[x0, mid], [mid, x1 + 1]] as const) {
+    // The enclosed see-through pieces in this half (4 neighbours). The arm splits a lens
+    // opening into pieces; a strip shut in by a shadow under the rim is a piece too, so
+    // only the largest piece and the pieces inside its area count as the lens.
+    const piece = new Int32Array(w * h).fill(-1);
+    const found: { n: number; minX: number; maxX: number; minY: number; maxY: number; sx: number; sy: number }[] = [];
+    for (let y = 0; y < h; y++) for (let x = from; x < to; x++) {
+      const start = y * w + x;
+      if (piece[start] >= 0 || !clear(start) || outside[start]) continue;
+      const id = found.length;
+      const f = { n: 0, minX: x, maxX: x, minY: y, maxY: y, sx: 0, sy: 0 };
+      piece[start] = id; stack.push(start);
+      while (stack.length) {
+        const p = stack.pop()!;
+        const px0 = p % w, py0 = (p - px0) / w;
+        f.n++; f.sx += px0; f.sy += py0;
+        if (px0 < f.minX) f.minX = px0; if (px0 > f.maxX) f.maxX = px0; if (py0 < f.minY) f.minY = py0; if (py0 > f.maxY) f.maxY = py0;
+        for (const q of [px0 > from ? p - 1 : -1, px0 < to - 1 ? p + 1 : -1, py0 > 0 ? p - w : -1, py0 < h - 1 ? p + w : -1]) {
+          if (q >= 0 && piece[q] < 0 && clear(q) && !outside[q]) { piece[q] = id; stack.push(q); }
+        }
+      }
+      found.push(f);
+    }
+    if (!found.length) continue;
+    const lens = found.reduce((a, b) => (b.n > a.n ? b : a));
+    if (lens.n < (to - from) * h * 0.005) continue; // no lens opening (dark lenses, rimless)
+    // A piece counts as lens only if nearly all of it (90%) lies within the main opening's
+    // area: the pieces an arm cuts off do; the gap under a double bridge and a strip shut
+    // in by a shadow stick out, so they don't (or the bridge and rims would be cleared)
+    const within = new Array<number>(found.length).fill(0);
+    for (let y = lens.minY; y <= lens.maxY; y++) for (let x = Math.max(from, lens.minX); x <= Math.min(to - 1, lens.maxX); x++) {
+      const id = piece[y * w + x];
+      if (id >= 0) within[id]++;
+    }
+    const keep = found.map((f, id) => f === lens || (f.n > 20 && within[id] >= f.n * 0.9));
+    // The lens pieces' left- and right-most points in each row
+    const pts: [number, number][] = [];
+    for (let y = lens.minY; y <= lens.maxY; y++) {
+      let a = -1, b = -1;
+      for (let x = from; x < to; x++) {
+        const id = piece[y * w + x];
+        if (id >= 0 && keep[id]) { if (a < 0) a = x; b = x; }
+      }
+      if (a >= 0) pts.push([a, y], [b, y]);
+    }
+    const hull = convexHull(pts);
+    if (hull.length < 3) continue;
+    // Shrink it towards its middle by about 4 px, so the rim's inner edge stays
+    const cx = hull.reduce((s, p) => s + p[0], 0) / hull.length, cy = hull.reduce((s, p) => s + p[1], 0) / hull.length;
+    const r = hull.reduce((s, p) => s + Math.hypot(p[0] - cx, p[1] - cy), 0) / hull.length;
+    const k = Math.max(0, 1 - 4 / r);
+    const poly = hull.map(([x, y]) => [cx + (x - cx) * k, cy + (y - cy) * k] as [number, number]);
+    const ys = poly.map((p) => p[1]), xs = poly.map((p) => p[0]);
+    for (let y = Math.floor(Math.min(...ys)); y <= Math.ceil(Math.max(...ys)); y++) {
+      for (let x = Math.floor(Math.min(...xs)); x <= Math.ceil(Math.max(...xs)); x++) {
+        if (x < 0 || y < 0 || x >= w || y >= h) continue;
+        if (!clear(y * w + x) && inside(poly, x, y)) px[(y * w + x) * 4 + 3] = 0;
+      }
+    }
+  }
+}
+
+/** Convex hull (monotone chain), anticlockwise. */
+function convexHull(points: [number, number][]): [number, number][] {
+  const p = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  if (p.length < 3) return p;
+  const cross = (o: number[], a: number[], b: number[]) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower: [number, number][] = [];
+  for (const q of p) { while (lower.length >= 2 && cross(lower[lower.length - 2], lower[lower.length - 1], q) <= 0) lower.pop(); lower.push(q); }
+  const upper: [number, number][] = [];
+  for (const q of p.reverse()) { while (upper.length >= 2 && cross(upper[upper.length - 2], upper[upper.length - 1], q) <= 0) upper.pop(); upper.push(q); }
+  return lower.slice(0, -1).concat(upper.slice(0, -1));
+}
+
+function inside(poly: [number, number][], x: number, y: number) {
+  for (let i = 0; i < poly.length; i++) {
+    const [ax, ay] = poly[i], [bx, by] = poly[(i + 1) % poly.length];
+    if ((bx - ax) * (y - ay) - (by - ay) * (x - ax) < 0) return false;
+  }
+  return true;
+}
+
+export type CleanOptions = { strength: number; trimLeft: number; trimRight: number; arms: boolean; shadows: boolean };
+/** A new photo starts with both clean-ups on: staff switch one off if their photo doesn't need it. */
+const START: CleanOptions = { strength: 236, trimLeft: 0, trimRight: 0, arms: true, shadows: true };
+
 /** The see-through, trimmed and cropped picture from a source photo. */
-function clean(src: Source, strength: number, trimLeft: number, trimRight: number): HTMLCanvasElement | null {
+function clean(src: Source, { strength, trimLeft, trimRight, arms, shadows }: CleanOptions): HTMLCanvasElement | null {
   const { width: w, height: h } = src.canvas;
   const work = document.createElement("canvas");
   work.width = w; work.height = h;
@@ -33,6 +182,8 @@ function clean(src: Source, strength: number, trimLeft: number, trimRight: numbe
       else if (m > strength - soft) px[i + 3] = Math.round((255 * (strength - m)) / soft);
     }
   }
+  if (shadows) removeShadows(px, w, h);
+  if (arms) removeArms(px, w, h);
   // The frame's bounding box
   let x0 = w, y0 = h, x1 = -1, y1 = -1;
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -98,12 +249,21 @@ async function loadSource(file: File): Promise<Source> {
   return { canvas, transparent };
 }
 
-export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: string; initial: TryonValue; siteOn: boolean; noun: string }) {
+/** Saves a chosen picture for a frame once it exists; null when no picture was chosen (try-on is optional). */
+export type TryonSaver = (frameId: string) => Promise<TryonResult | null>;
+export const NO_TRYON: TryonValue = { enabled: false, path: null, lensLeft: 0.27, lensRight: 0.73, lensY: 0.48 };
+
+/** On a frame's edit page (`frameId` set) it has its own Save. On the Add frame
+    page (`frameId` null) the frame form saves it right after the new frame,
+    through `saverRef`. */
+export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
+  frameId: string | null; initial: TryonValue; siteOn: boolean; noun: string; saverRef?: RefObject<TryonSaver | null>;
+}) {
   const [saved, setSaved] = useState(initial);
   const [enabled, setEnabled] = useState(initial.enabled);
   const [lens, setLens] = useState({ left: initial.lensLeft, right: initial.lensRight, y: initial.lensY });
   const [source, setSource] = useState<Source | null>(null);
-  const [opts, setOpts] = useState({ strength: 236, trimLeft: 0, trimRight: 0 });
+  const [opts, setOpts] = useState<CleanOptions>(START);
   const [loaded, setLoaded] = useState<{ path: string; img: HTMLImageElement } | null>(null);
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
@@ -122,7 +282,7 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
   const existing = loaded && loaded.path === saved.path ? loaded.img : null;
 
   // The new photo, cleaned again whenever a slider moves
-  const picture = useMemo(() => (source ? clean(source, opts.strength, opts.trimLeft, opts.trimRight) : null), [source, opts]);
+  const picture = useMemo(() => (source ? clean(source, opts) : null), [source, opts]);
   const notFound = source && !picture ? `No ${noun} found in this photo. Try a lower Background removal, or a photo on a plainer background.` : "";
 
   // Draw the preview: the picture on a chequered background, with the lens centres marked
@@ -151,25 +311,39 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
     }
   }, [shown, picture, existing, lens]);
 
+  /** Loads the saved picture back in, so the clean-up switches and trims can be applied to it. */
+  function reclean() {
+    if (!existing) return;
+    setNote(""); setError("");
+    const canvas = document.createElement("canvas");
+    canvas.width = existing.naturalWidth; canvas.height = existing.naturalHeight;
+    canvas.getContext("2d", { willReadFrequently: true })!.drawImage(existing, 0, 0);
+    const src = { canvas, transparent: true };
+    setSource(src);
+    setOpts(START);
+    const out = clean(src, START);
+    if (out) setLens(findLenses(out));
+  }
+
   async function choose(file: File | undefined) {
     setNote(""); setError("");
     if (!file) return;
     try {
       const src = await loadSource(file);
-      const start = { strength: 236, trimLeft: 0, trimRight: 0 };
+      if (!saved.path) setEnabled(true); // a first picture: they want try-on
       setSource(src);
-      setOpts(start);
-      const out = clean(src, start.strength, start.trimLeft, start.trimRight);
+      setOpts(START);
+      const out = clean(src, START);
       setLens(out ? findLenses(out) : { left: 0.27, right: 0.73, y: 0.48 });
     } catch {
       setError("That photo couldn't be opened. Use a JPG, PNG or WebP photo.");
     }
   }
 
-  async function save(remove = false) {
-    setBusy(true); setNote(""); setError("");
+  /** Sends the settings (and the cleaned picture, if a new photo was chosen) for one frame. */
+  async function send(id: string, remove: boolean): Promise<TryonResult> {
     const fd = new FormData();
-    fd.set("frameId", frameId);
+    fd.set("frameId", id);
     fd.set("enabled", String(enabled && !remove));
     fd.set("lensLeft", String(lens.left)); fd.set("lensRight", String(lens.right)); fd.set("lensY", String(lens.y));
     fd.set("remove", String(remove));
@@ -177,7 +351,19 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
       const blob = await new Promise<Blob | null>((ok) => picture.toBlob(ok, "image/png"));
       if (blob) fd.set("picture", blob, "tryon.png");
     }
-    const r = await saveTryon(fd);
+    return saveTryon(fd);
+  }
+
+  // Add frame page: the frame form calls this after the new frame is saved
+  useEffect(() => {
+    if (!saverRef) return;
+    saverRef.current = async (id) => (picture && !notFound ? send(id, false) : null);
+  });
+
+  async function save(remove = false) {
+    if (!frameId) return;
+    setBusy(true); setNote(""); setError("");
+    const r = await send(frameId, remove);
     setBusy(false);
     if (!r.ok) { setError(r.error); return; }
     setSaved({ enabled: r.enabled, path: r.path, lensLeft: lens.left, lensRight: lens.right, lensY: lens.y });
@@ -191,7 +377,7 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
   /** A clean-up slider moved: clean again and find the lenses in the new picture. */
   const tune = (next: typeof opts) => {
     setOpts(next);
-    const out = source && clean(source, next.strength, next.trimLeft, next.trimRight);
+    const out = source && clean(source, next);
     if (out) setLens(findLenses(out));
   };
   return (
@@ -208,13 +394,28 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
 
         <div className="tryon-edit__controls">
           <input ref={pick} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={(e) => { choose(e.target.files?.[0]); e.target.value = ""; }} />
-          <p><button className="btn btn--outline-dark" type="button" onClick={() => pick.current?.click()}>{hasPicture ? "Choose a new front-view photo" : "Choose a front-view photo"}</button></p>
+          <p className="tryon-edit__pick">
+            <button className="btn btn--outline-dark" type="button" onClick={() => pick.current?.click()}>{hasPicture ? "Choose a new front-view photo" : "Choose a front-view photo"}</button>
+            {existing && !source && <button className="btn btn--outline-dark" type="button" onClick={reclean}>Clean up this picture again</button>}
+          </p>
 
           {source && !source.transparent && (
             <div className="ffield">
               <label htmlFor="tr-strength">Background removal: {opts.strength}</label>
               <input id="tr-strength" type="range" min={190} max={252} value={opts.strength} onChange={(e) => tune({ ...opts, strength: +e.target.value })} />
               <span className="ffield__hint">Lower removes more. Stop before the frame itself starts to fade.</span>
+            </div>
+          )}
+          {source && (
+            <div className="tryon-edit__switches">
+              <label className="switch">
+                <span className="switch__text"><b>Remove arms seen through the lenses</b><span>For clear lenses where the side arms show inside. Switch off if the photo has none.</span></span>
+                <input type="checkbox" role="switch" checked={opts.arms} onChange={(e) => tune({ ...opts, arms: e.target.checked })} />
+              </label>
+              <label className="switch">
+                <span className="switch__text"><b>Remove shadows</b><span>The grey shadow under the frame. Switch off if parts of a shiny frame disappear.</span></span>
+                <input type="checkbox" role="switch" checked={opts.shadows} onChange={(e) => tune({ ...opts, shadows: e.target.checked })} />
+              </label>
             </div>
           )}
           {source && (
@@ -253,11 +454,18 @@ export function TryonEditor({ frameId, initial, siteOn, noun }: { frameId: strin
             <input type="checkbox" role="switch" checked={enabled && hasPicture} disabled={!hasPicture} onChange={(e) => setEnabled(e.target.checked)} />
           </label>
 
-          <div className="tryon-edit__actions">
-            <button className="btn btn--primary" type="button" disabled={busy || !!notFound || !hasPicture} onClick={() => save()}>{busy ? "Saving…" : "Save try-on"}</button>
-            {saved.path && !source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => save(true)}>Remove picture</button>}
-            {source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => { setSource(null); setError(""); setLens({ left: saved.lensLeft, right: saved.lensRight, y: saved.lensY }); }}>Cancel</button>}
-          </div>
+          {frameId ? (
+            <div className="tryon-edit__actions">
+              <button className="btn btn--primary" type="button" disabled={busy || !!notFound || !hasPicture} onClick={() => save()}>{busy ? "Saving…" : "Save try-on"}</button>
+              {saved.path && !source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => save(true)}>Remove picture</button>}
+              {source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => { setSource(null); setError(""); setLens({ left: saved.lensLeft, right: saved.lensRight, y: saved.lensY }); }}>Cancel</button>}
+            </div>
+          ) : (
+            <>
+              <p className="ffield__hint tryon-edit__with">Optional. It&apos;s saved with the {noun} when you send it for approval or save it as a draft. You can also add or change it later, on the {noun}&apos;s edit page.</p>
+              {source && <div className="tryon-edit__actions"><button className="btn btn--outline-dark" type="button" onClick={() => { setSource(null); setError(""); setEnabled(false); }}>Don&apos;t add a try-on picture</button></div>}
+            </>
+          )}
           <p className="ffield__hint" aria-live="polite">{note}</p>
           {(notFound || error) && <p className="ferr" role="alert">{notFound || error}</p>}
         </div>
