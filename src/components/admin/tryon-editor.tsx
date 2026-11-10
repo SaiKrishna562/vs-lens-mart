@@ -225,13 +225,122 @@ function findLenses(pic: HTMLCanvasElement): { left: number; right: number; y: n
       if (first < 0 || last - first < (to - from) * 0.3) continue; // no rim across this row
       for (let x = first + 1; x < last; x++) if (!solid(x, y)) { sx += x; sy += y; n++; }
     }
+    // Real lens openings are big; the small gaps around a top bar or the arms of solid sunglasses aren't
+    return n > ((to - from) * h) / 2 * 0.05 ? { x: sx / n / w, y: sy / n / h } : null;
+  };
+  // Solid lenses (sunglasses) have no see-through opening: use the middle of the solid area instead
+  const mass = (from: number, to: number) => {
+    let sx = 0, sy = 0, n = 0;
+    for (let y = 0; y < h; y += 2) for (let x = from; x < to; x += 2) if (solid(x, y)) { sx += x; sy += y; n++; }
     return n > 50 ? { x: sx / n / w, y: sy / n / h } : null;
   };
-  const l = half(0, Math.floor(w / 2));
-  const r = half(Math.ceil(w / 2), w);
+  const l = half(0, Math.floor(w / 2)) ?? mass(0, Math.floor(w / 2));
+  const r = half(Math.ceil(w / 2), w) ?? mass(Math.ceil(w / 2), w);
   if (!l || !r) return { left: 0.27, right: 0.73, y: 0.48 };
   const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
   return { left: clamp(l.x, 0.05, 0.49), right: clamp(r.x, 0.51, 0.95), y: clamp((l.y + r.y) / 2, 0.1, 0.9) };
+}
+
+/* ---------- Lens types (sunglasses) and the eraser ---------- */
+
+export type LensKind = "clear" | "tinted" | "mirror";
+type Stroke = { r: number; pts: { x: number; y: number }[] }; // fractions of the picture's width / height
+
+/** One lens, grown from its gold dot: the pixels of similar colour around it,
+    then everything inside their outline (so arm ends, logos and nose pads seen
+    through a dark lens become lens too). Null when the dot isn't on a solid lens. */
+function lensArea(px: Uint8ClampedArray, w: number, h: number, sx: number, sy: number) {
+  const at = (x: number, y: number) => (y * w + x) * 4;
+  if (sx < 0 || sy < 0 || sx >= w || sy >= h || px[at(sx, sy) + 3] < 128) return null;
+  const seed = [px[at(sx, sy)], px[at(sx, sy) + 1], px[at(sx, sy) + 2]];
+  const dist = (i: number, c: number[]) => Math.hypot(px[i] - c[0], px[i + 1] - c[1], px[i + 2] - c[2]);
+  const grown = new Uint8Array(w * h);
+  const stack = [sy * w + sx];
+  grown[sy * w + sx] = 1;
+  let n = 0;
+  while (stack.length) {
+    const p = stack.pop()!;
+    n++;
+    const x = p % w, y = (p - x) / w, here = [px[p * 4], px[p * 4 + 1], px[p * 4 + 2]];
+    for (const q of [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]) {
+      if (q < 0 || grown[q]) continue;
+      const i = q * 4;
+      // Similar to its neighbour (lenses shade gradually) and not too far from the dot's colour (stops at the rim)
+      if (px[i + 3] >= 128 && dist(i, here) < 28 && dist(i, seed) < 95) { grown[q] = 1; stack.push(q); }
+    }
+  }
+  if (n < 200) return null;
+  const pts: [number, number][] = [];
+  for (let y = 0; y < h; y++) {
+    let a = -1, b = -1;
+    for (let x = 0; x < w; x++) if (grown[y * w + x]) { if (a < 0) a = x; b = x; }
+    if (a >= 0) pts.push([a, y], [b, y]);
+  }
+  const hull = convexHull(pts);
+  if (hull.length < 3) return null;
+  // Each row's average lens colour, so a gradient lens keeps its gradient
+  const ys = hull.map((q) => q[1]), top = Math.min(...ys), bottom = Math.max(...ys);
+  const rows: (number[] | null)[] = [];
+  for (let y = top; y <= bottom; y++) {
+    let r = 0, g = 0, b = 0, k = 0;
+    for (let x = 0; x < w; x++) if (grown[y * w + x]) { const i = at(x, y); r += px[i]; g += px[i + 1]; b += px[i + 2]; k++; }
+    rows.push(k ? [r / k, g / k, b / k] : null);
+  }
+  for (let i = 0; i < rows.length; i++) if (!rows[i]) rows[i] = rows.slice(0, i).reverse().find(Boolean) ?? rows.slice(i).find(Boolean) ?? seed;
+  return { hull, top, bottom, rows: rows as number[][] };
+}
+
+/** The picture with tinted or mirrored lenses and the erased strokes. Clear
+    lenses are left as the clean-up made them (see-through). */
+function finishPicture(pic: HTMLCanvasElement, centres: { left: number; right: number; y: number }, kind: LensKind, darkness: number, strokes: Stroke[]) {
+  const out = document.createElement("canvas");
+  out.width = pic.width; out.height = pic.height;
+  const g = out.getContext("2d", { willReadFrequently: true })!;
+  g.drawImage(pic, 0, 0);
+  let lensFound = true;
+  if (kind !== "clear") {
+    const { width: w, height: h } = out;
+    const data = g.getImageData(0, 0, w, h);
+    const px = data.data;
+    for (const cx of [centres.left, centres.right]) {
+      const area = lensArea(px, w, h, Math.round(cx * w), Math.round(centres.y * h));
+      if (!area) { lensFound = false; continue; }
+      const xs = area.hull.map((q) => q[0]), left = Math.min(...xs), right = Math.max(...xs);
+      for (let y = area.top; y <= area.bottom; y++) for (let x = left; x <= right; x++) {
+        if (!inside(area.hull, x, y)) continue;
+        const i = (y * w + x) * 4;
+        let [r, gg, b] = area.rows[y - area.top];
+        if (kind === "tinted") {
+          // See-through in the lens's own colour: the eyes show, in the same shade
+          px[i] = r; px[i + 1] = gg; px[i + 2] = b; px[i + 3] = Math.round((darkness / 100) * 255);
+        } else {
+          // Mirrored / opaque: a soft reflection of sky, horizon and ground, and one light streak
+          const t = (y - area.top) / Math.max(1, area.bottom - area.top), u = (x - left) / Math.max(1, right - left);
+          const mix = (c: number, to: number, k: number) => c + (to - c) * k;
+          if (t < 0.48) { const k = 0.42 * (1 - t / 0.48) + 0.06; r = mix(r, 255, k); gg = mix(gg, 255, k); b = mix(b, 255, k); }
+          else { const k = 0.22 * ((t - 0.48) / 0.52); r = mix(r, 0, k); gg = mix(gg, 0, k); b = mix(b, 0, k); }
+          const d = u + t * 0.55;
+          if (d > 0.18 && d < 0.3) { const k = 0.22 * (1 - Math.abs(d - 0.24) / 0.06); r = mix(r, 255, k); gg = mix(gg, 255, k); b = mix(b, 255, k); }
+          px[i] = r; px[i + 1] = gg; px[i + 2] = b; px[i + 3] = 255;
+        }
+      }
+    }
+    g.putImageData(data, 0, 0);
+  }
+  // The eraser: painted strokes become see-through
+  if (strokes.length) {
+    g.globalCompositeOperation = "destination-out";
+    g.lineCap = "round"; g.lineJoin = "round";
+    for (const s of strokes) {
+      g.lineWidth = s.r * 2 * out.width;
+      g.beginPath();
+      s.pts.forEach((q, i) => (i ? g.lineTo(q.x * out.width, q.y * out.height) : g.moveTo(q.x * out.width, q.y * out.height)));
+      if (s.pts.length === 1) g.lineTo(s.pts[0].x * out.width + 0.01, s.pts[0].y * out.height);
+      g.stroke();
+    }
+    g.globalCompositeOperation = "source-over";
+  }
+  return { canvas: out, lensFound };
 }
 
 async function loadSource(file: File): Promise<Source> {
@@ -268,6 +377,12 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  // Lens type: sunglasses start tinted (see-through in their own colour), frames clear
+  const [lensKind, setLensKind] = useState<LensKind>(/sunglasses/.test(noun) ? "tinted" : "clear");
+  const [darkness, setDarkness] = useState(60);
+  const [erasing, setErasing] = useState(false);
+  const [brush, setBrush] = useState(2.5); // % of the picture's width
+  const [strokes, setStrokes] = useState<Stroke[]>([]);
   const pick = useRef<HTMLInputElement>(null);
   const view = useRef<HTMLCanvasElement>(null);
 
@@ -282,7 +397,12 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
   const existing = loaded && loaded.path === saved.path ? loaded.img : null;
 
   // The new photo, cleaned again whenever a slider moves
-  const picture = useMemo(() => (source ? clean(source, opts) : null), [source, opts]);
+  const cleaned = useMemo(() => (source ? clean(source, opts) : null), [source, opts]);
+  // ...then the lens type and anything erased
+  const finished = useMemo(() => (cleaned ? finishPicture(cleaned, lens, lensKind, darkness, strokes) : null), [cleaned, lens, lensKind, darkness, strokes]);
+  const picture = finished?.canvas ?? null;
+  const lensMissing = finished && !finished.lensFound
+    ? "A gold dot isn't on a lens. Move the dots onto the lenses, or choose Clear for clear lenses." : "";
   const notFound = source && !picture ? `No ${noun} found in this photo. Try a lower Background removal, or a photo on a plainer background.` : "";
 
   // Draw the preview: the picture on a chequered background, with the lens centres marked
@@ -321,6 +441,7 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
     const src = { canvas, transparent: true };
     setSource(src);
     setOpts(START);
+    setStrokes([]);
     const out = clean(src, START);
     if (out) setLens(findLenses(out));
   }
@@ -333,6 +454,7 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
       if (!saved.path) setEnabled(true); // a first picture: they want try-on
       setSource(src);
       setOpts(START);
+      setStrokes([]);
       const out = clean(src, START);
       setLens(out ? findLenses(out) : { left: 0.27, right: 0.73, y: 0.48 });
     } catch {
@@ -357,7 +479,7 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
   // Add frame page: the frame form calls this after the new frame is saved
   useEffect(() => {
     if (!saverRef) return;
-    saverRef.current = async (id) => (picture && !notFound ? send(id, false) : null);
+    saverRef.current = async (id) => (picture && !notFound && !lensMissing ? send(id, false) : null);
   });
 
   async function save(remove = false) {
@@ -368,15 +490,32 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
     if (!r.ok) { setError(r.error); return; }
     setSaved({ enabled: r.enabled, path: r.path, lensLeft: lens.left, lensRight: lens.right, lensY: lens.y });
     setEnabled(r.enabled);
-    setSource(null);
+    setSource(null); setStrokes([]); setErasing(false);
     setNote(remove ? "Try-on picture removed." : r.enabled ? "Saved. Try-on is on for this frame." : "Saved. Try-on is off for this frame.");
   }
+
+  /** Eraser: a press starts a stroke, moving adds to it (positions as fractions of the picture). */
+  // Listened for on the whole preview area, not just the canvas: the canvas's rounded
+  // corners don't take presses, and leftover arms are often right in those corners
+  const paint = (e: React.PointerEvent<HTMLDivElement>, start: boolean) => {
+    const c = view.current;
+    if (!c || !erasing || !source || (!start && e.buttons !== 1)) return;
+    const box = c.getBoundingClientRect();
+    const clamp = (v: number) => Math.min(1, Math.max(0, v));
+    const q = { x: clamp((e.clientX - box.left) / box.width), y: clamp((e.clientY - box.top) / box.height) };
+    if (start) {
+      setStrokes((all) => [...all, { r: brush / 200, pts: [q] }]);
+      try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* keeps working without capture */ }
+    }
+    else setStrokes((all) => all.length ? [...all.slice(0, -1), { ...all[all.length - 1], pts: [...all[all.length - 1].pts, q] }] : all);
+  };
 
   const hasPicture = !!(picture || saved.path);
   const pct = (v: number) => `${Math.round(v * 100)}%`;
   /** A clean-up slider moved: clean again and find the lenses in the new picture. */
   const tune = (next: typeof opts) => {
     setOpts(next);
+    setStrokes([]); // the picture's shape may change, so earlier erasing no longer lines up
     const out = source && clean(source, next);
     if (out) setLens(findLenses(out));
   };
@@ -387,7 +526,8 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
       <p className="photo-tip">One photo of the {noun} straight from the front, on plain white paper, lenses without reflections, nothing else in the photo. The white background is removed here; only the cleaned picture is saved.</p>
 
       <div className="tryon-edit__grid">
-        <div className="tryon-edit__preview">
+        <div className={`tryon-edit__preview${erasing && source ? " is-erasing" : ""}`}
+          onPointerDown={(e) => paint(e, true)} onPointerMove={(e) => paint(e, false)}>
           {shown ? <canvas ref={view} aria-label={`Try-on picture of this ${noun}, with the lens centres marked`} role="img" />
             : <p className="ffield__hint">No try-on picture yet.</p>}
         </div>
@@ -430,6 +570,40 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
               </div>
             </div>
           )}
+          {source && (
+            <fieldset className="tryon-edit__kind">
+              <legend>Lenses</legend>
+              <div className="tryon-edit__kinds" role="radiogroup" aria-label="Lens type">
+                {([["clear", "Clear", "See-through, like eyeglasses"], ["tinted", "Tinted", "The eyes show through, in the lens colour"], ["mirror", "Mirrored / opaque", "Solid lenses with a soft reflection"]] as const).map(([k, label, hint]) => (
+                  <label key={k} className="tryon-edit__kindopt">
+                    <input type="radio" name="lens-kind" value={k} checked={lensKind === k} onChange={() => setLensKind(k)} />
+                    <span><b>{label}</b><small>{hint}</small></span>
+                  </label>
+                ))}
+              </div>
+              {lensKind === "tinted" && (
+                <div className="ffield">
+                  <label htmlFor="tr-dark">Lens darkness: {darkness}%</label>
+                  <input id="tr-dark" type="range" min={25} max={90} value={darkness} onChange={(e) => setDarkness(+e.target.value)} />
+                  <span className="ffield__hint">How much of the eyes shows through. Match the real lenses.</span>
+                </div>
+              )}
+              {lensMissing && <p className="ferr" role="alert">{lensMissing}</p>}
+            </fieldset>
+          )}
+          {source && (
+            <div className="tryon-edit__erase">
+              <button className="btn btn--outline-dark btn--sm" type="button" aria-pressed={erasing} onClick={() => setErasing(!erasing)}>{erasing ? "Stop erasing" : "Erase bits"}</button>
+              {erasing && (
+                <>
+                  <label className="tryon-edit__brush">Brush <input type="range" min={1} max={8} step={0.5} value={brush} onChange={(e) => setBrush(+e.target.value)} aria-label="Eraser size" /></label>
+                  <button className="clear-all" type="button" disabled={!strokes.length} onClick={() => setStrokes(strokes.slice(0, -1))}>Undo</button>
+                  <button className="clear-all" type="button" disabled={!strokes.length} onClick={() => setStrokes([])}>Clear all</button>
+                </>
+              )}
+              <span className="ffield__hint">{erasing ? "Paint over anything left over, such as arms above the lenses." : "For leftover bits the switches don't remove."}</span>
+            </div>
+          )}
           {hasPicture && (
             <fieldset className="tryon-edit__lens">
               <legend>Lens centres (the gold dots)</legend>
@@ -456,9 +630,9 @@ export function TryonEditor({ frameId, initial, siteOn, noun, saverRef }: {
 
           {frameId ? (
             <div className="tryon-edit__actions">
-              <button className="btn btn--primary" type="button" disabled={busy || !!notFound || !hasPicture} onClick={() => save()}>{busy ? "Saving…" : "Save try-on"}</button>
+              <button className="btn btn--primary" type="button" disabled={busy || !!notFound || !!lensMissing || !hasPicture} onClick={() => save()}>{busy ? "Saving…" : "Save try-on"}</button>
               {saved.path && !source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => save(true)}>Remove picture</button>}
-              {source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => { setSource(null); setError(""); setLens({ left: saved.lensLeft, right: saved.lensRight, y: saved.lensY }); }}>Cancel</button>}
+              {source && <button className="btn btn--outline-dark" type="button" disabled={busy} onClick={() => { setSource(null); setError(""); setStrokes([]); setErasing(false); setLens({ left: saved.lensLeft, right: saved.lensRight, y: saved.lensY }); }}>Cancel</button>}
             </div>
           ) : (
             <>

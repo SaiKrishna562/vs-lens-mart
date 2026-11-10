@@ -11,10 +11,31 @@ export type Point = { x: number; y: number };
 export type Face = { left: Point; right: Point; width: number; box: { x: number; y: number; w: number; h: number }; faces: number };
 
 let landmarker: Promise<FaceLandmarker> | null = null;
+
+/* MediaPipe's runtime writes routine status notes through console.error and
+   console.warn ("INFO: Created TensorFlow Lite XNNPACK delegate for CPU", and
+   timestamped lines like "W1109 19:39:09.49 gl_context.cc ..."). They aren't
+   errors, but the development overlay and the tests' console checks treat
+   them as such. Only lines in those two shapes are dropped; anything else
+   still reaches the console. */
+const MEDIAPIPE_NOTE = /^(INFO: |[IWE]\d{4} \d\d:\d\d:\d\d)/;
+let quiet = false;
+function quietMediaPipeNotes() {
+  if (quiet) return;
+  quiet = true;
+  for (const level of ["error", "warn", "info", "log"] as const) {
+    const original = console[level].bind(console);
+    console[level] = (...args: unknown[]) => {
+      if (typeof args[0] === "string" && MEDIAPIPE_NOTE.test(args[0])) return;
+      original(...args);
+    };
+  }
+}
 let mode: "IMAGE" | "VIDEO" = "IMAGE";
 
 /** Loads the model once per page (the browser caches the files after the first time). */
 export function loadFaceTracker(): Promise<FaceLandmarker> {
+  quietMediaPipeNotes();
   landmarker ??= (async () => {
     const { FaceLandmarker, FilesetResolver } = await import("@mediapipe/tasks-vision");
     const files = await FilesetResolver.forVisionTasks("/tryon/wasm");

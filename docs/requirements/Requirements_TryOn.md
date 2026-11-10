@@ -112,6 +112,8 @@ On the frame form, a "Try-on picture" section, optional on both pages:
 - **Add frame:** under Photos. It has no Save of its own: the picture is saved right after the new frame (Send for approval, Save as draft or Save and publish). If the frame saves but the picture doesn't, the frame is kept and the message says to add the picture from the edit page.
 - **Edit page:** under the whole form, with its own Save try-on and Remove picture, so try-on can be added or changed any time. A link in the Photos section jumps to it.
 - Choosing a first picture switches try-on on; staff can switch it off before saving.
+- **Lenses** (a choice under the clean-up switches): **Clear** (see-through, as for eyeglasses), **Tinted** (see-through in the lens's own colour, with a Lens darkness slider, so the customer's eyes show in the same shade) or **Mirrored / opaque** (solid, with a soft sky-and-ground reflection). Sunglasses start on Tinted, frames on Clear. Each lens is found from its gold dot; its colour is redrawn evenly row by row, so a gradient lens keeps its gradient and anything seen through it (arm ends, logos) disappears. If a dot isn't on a solid lens, the editor says so and won't save.
+- **Erase bits:** staff paint over anything the switches leave (for example arms sticking up above the lenses), with a brush size, Undo and Clear all. Painting works right up to the picture's edges and corners.
 
 
 | Field | Notes |

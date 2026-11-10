@@ -70,6 +70,22 @@ async function editorReady(page: Page) {
   await page.waitForFunction(() => Object.keys(document.querySelector(".tryon-edit input[type=file]") ?? {}).some((k) => k.startsWith("__react")));
 }
 
+/** A sunglasses photo: dark rims, brown lenses, and the arms sticking up above the top corners. */
+async function sunglassesPhoto(page: Page): Promise<Buffer> {
+  const b64 = await page.evaluate(() => {
+    const c = document.createElement("canvas");
+    c.width = 1000; c.height = 420;
+    const g = c.getContext("2d")!;
+    g.fillStyle = "#ffffff"; g.fillRect(0, 0, c.width, c.height);
+    g.lineWidth = 10; g.strokeStyle = "#1a1a1a"; g.fillStyle = "#6b4a35";
+    for (const cx of [300, 700]) { g.beginPath(); g.ellipse(cx, 230, 170, 120, 0, 0, Math.PI * 2); g.fill(); g.stroke(); }
+    g.beginPath(); g.moveTo(470, 200); g.quadraticCurveTo(500, 180, 530, 200); g.stroke();
+    g.lineWidth = 8; g.beginPath(); g.moveTo(135, 170); g.lineTo(60, 40); g.moveTo(865, 170); g.lineTo(940, 40); g.stroke();
+    return c.toDataURL("image/jpeg", 0.92).split(",")[1];
+  });
+  return Buffer.from(b64, "base64");
+}
+
 const tryonRow = async () => {
   const c = await connect("owner");
   await c.query("select set_config('app.role', 'admin', false)");
@@ -227,6 +243,53 @@ test("customer: Try it on appears only on frames with try-on, opens the panel, l
   await expect(panel).toBeHidden();
   expect(errors, "no page errors").toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), "sideways scroll").toBe(0);
+});
+
+test("staff: sunglasses lenses: mirrored is found, tinted lets the eyes show through, and the eraser clears leftover arms", async ({ page }, testInfo) => {
+  await signIn(page);
+  await page.goto(`/admin/frames/${fixture.code}`);
+  await editorReady(page);
+  const sec = page.locator(".tryon-edit");
+  await sec.locator("input[type=file]").setInputFiles({ name: "sun.jpg", mimeType: "image/jpeg", buffer: await sunglassesPhoto(page) });
+  const pic = sec.getByRole("img", { name: /Try-on picture of this frame/ });
+  await expect(pic).toBeVisible();
+
+  await sec.getByRole("radio", { name: /Mirrored/ }).check();
+  await expect(sec.getByText("A gold dot isn't on a lens")).toHaveCount(0);
+  await sec.getByRole("radio", { name: /Tinted/ }).check();
+  await expect(sec.getByText("A gold dot isn't on a lens")).toHaveCount(0);
+
+  // Erase the arm sticking up at the top-left corner
+  await sec.getByRole("button", { name: "Erase bits" }).click();
+  // Mid-screen, clear of the staff area's sticky top bar
+  await pic.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  const box = (await pic.boundingBox())!;
+  await page.mouse.move(box.x + box.width * 0.005, box.y + box.height * 0.01);
+  await page.mouse.down();
+  for (const [x, y] of [[0.04, 0.12], [0.07, 0.25], [0.09, 0.35], [0.02, 0.05], [0.06, 0.06]]) await page.mouse.move(box.x + box.width * x, box.y + box.height * y, { steps: 4 });
+  await page.mouse.up();
+  await expect(sec.getByRole("button", { name: "Undo" })).toBeEnabled();
+  await sec.screenshot({ path: testInfo.outputPath("sunglasses-editor.png") });
+
+  await sec.getByRole("switch", { name: /Try-on for this/ }).check();
+  await sec.getByRole("button", { name: "Save try-on" }).click();
+  await expect(sec.getByText("Saved. Try-on is on for this frame.")).toBeVisible();
+
+  const row = await tryonRow();
+  const check = await page.evaluate(async ({ path, l, y }) => {
+    const bmp = await createImageBitmap(await (await fetch(`/media/${path}`)).blob());
+    const c = document.createElement("canvas"); c.width = bmp.width; c.height = bmp.height;
+    const g = c.getContext("2d")!; g.drawImage(bmp, 0, 0);
+    const d = g.getImageData(0, 0, c.width, c.height).data;
+    const alpha = (fx: number, fy: number) => d[(Math.round(fy * c.height) * c.width + Math.round(fx * c.width)) * 4 + 3];
+    // Opaque share of the top-left corner, where the arm was
+    let solid = 0, all = 0;
+    for (let yy = 0; yy < c.height * 0.2; yy++) for (let xx = 0; xx < c.width * 0.06; xx++) { all++; if (d[(yy * c.width + xx) * 4 + 3] > 128) solid++; }
+    return { lens: alpha(l, y), corner: solid / all };
+  }, { path: row.tryon_path!, l: row.tryon_lens_left, y: row.tryon_lens_y });
+  expect(check.lens, "tinted lens: about 60% see-through tint").toBeGreaterThan(120);
+  expect(check.lens).toBeLessThan(180);
+  expect(check.corner, "the erased arm is gone").toBeLessThan(0.05);
 });
 
 /* Add frame page: try-on is optional and saves with the new frame */

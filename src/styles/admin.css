@@ -310,3 +310,20 @@
 #sec-tryon { scroll-margin-top: calc(var(--adm-top-h) + var(--s-4)); }
 .tryon-edit__switches { display: grid; gap: var(--s-2); margin-bottom: var(--s-4); }
 .tryon-edit__pick { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+/* Try-on editor: lens type and eraser (Phase 6) */
+.tryon-edit__kind { border: 0; padding: 0; margin: 0 0 var(--s-4); }
+.tryon-edit__kind legend { font-weight: 600; font-size: var(--fs-sm); color: var(--heading); margin-bottom: var(--s-2); }
+.tryon-edit__kinds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin-bottom: var(--s-3); }
+.tryon-edit__kindopt { display: flex; gap: var(--s-2); align-items: flex-start; padding: var(--s-3); min-height: var(--tap); border: 1.5px solid var(--line); border-radius: var(--r-md); background: var(--bg); cursor: pointer; }
+.tryon-edit__kindopt:has(input:checked) { border-color: var(--accent-ink); box-shadow: inset 0 0 0 1px var(--accent-ink); }
+.tryon-edit__kindopt input { margin-top: 3px; accent-color: var(--accent-ink); }
+.tryon-edit__kindopt span { display: grid; gap: 2px; font-size: var(--fs-sm); }
+.tryon-edit__kindopt b { color: var(--heading); }
+.tryon-edit__kindopt small { color: var(--text-muted); font-size: var(--fs-xs); }
+.tryon-edit__erase { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); margin-bottom: var(--s-4); }
+.tryon-edit__erase .ffield__hint { flex-basis: 100%; }
+.tryon-edit__erase [aria-pressed="true"] { background: var(--pressed-bg); color: var(--pressed-ink); border-color: var(--pressed-bg); }
+.tryon-edit__brush { display: inline-flex; align-items: center; gap: var(--s-2); font-size: var(--fs-sm); color: var(--heading); }
+.tryon-edit__brush input { width: 8rem; accent-color: var(--accent-ink); }
+.tryon-edit__preview.is-erasing { cursor: crosshair; touch-action: none; }
+@media (max-width: 767px) { .tryon-edit__kinds { grid-template-columns: 1fr; } }

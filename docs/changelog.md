@@ -4,6 +4,18 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-10 · Phase 6 release 6.1 · Sunglasses lenses (tinted, mirrored), eraser, quieter console
+
+- **Changed:**
+  - **Lens type** in the staff try-on editor: Clear, Tinted (see-through in the lens colour, with a darkness slider) or Mirrored / opaque (solid with a soft reflection). Sunglasses start on Tinted. The lens is found from its gold dot and redrawn evenly, which also hides arm ends and logos seen through it.
+  - **Erase bits:** a brush to paint away leftovers such as arms above the lenses, with Undo and Clear all.
+  - **Gold dots on sunglasses:** solid lenses have no see-through opening, so the dots now fall back to the middle of each lens (small gaps around a top bar no longer count as openings).
+  - **Console:** MediaPipe writes routine status notes ("INFO: Created TensorFlow Lite XNNPACK delegate for CPU", timestamped "W1109 ..." lines) as errors, which the development overlay showed as a "Console Error". Only notes in those two shapes are now dropped (`face.ts`).
+- **Why:** the developer's test with SG-256 (2026-11-10): the brown lenses came out solid over the eyes, arms showed above the lenses, and the overlay appeared. They asked for opaque lenses to look like a reflection and transparent ones to show the eyes in the lens shade.
+- **Checked:** on SG-256's saved picture: tinted shows the background through the brown lens, mirrored shows the reflection, and the lens logo is gone. Found while testing: the preview's rounded corners didn't take presses, so the eraser couldn't start in a corner (where arms usually are); it now listens on the whole preview.
+- **Tests:** `tryon.spec.ts`: a generated sunglasses photo; mirrored and tinted find both lenses; the saved tinted lens is about 60% opaque; an eraser stroke clears the arm in the corner.
+- **Files:** `src/components/admin/tryon-editor.tsx`, `src/components/tryon/face.ts`, `src/styles/admin.css`, `tests/tryon.spec.ts`, `docs/requirements/Requirements_TryOn.md`, `docs/changelog.md`
+
 ## 2026-11-10 · Phase 6 release 6.1 · Tests updated for frames with try-on
 
 - **Changed:** two older checks assumed no frame had try-on. `home.spec.ts` now checks there's no try-on in the **hero** (frame cards lower down may show the "Try-on" label); `catalogue.spec.ts` now expects the "Try it on" button exactly when the frame has try-on switched on.
