@@ -193,6 +193,8 @@ async function withTryon(on: boolean) {
 }
 
 test("customer: Try it on appears only on frames with try-on, opens the panel, loads face tracking and handles a photo with no face", async ({ page }, testInfo) => {
+  // Loads the 8 MB face model and starts a camera, on top of a staff save: more than the default 30 s on a slow laptop
+  test.setTimeout(90_000);
   // The site caches the catalogue; a staff save would refresh it, so save through the staff page
   await signIn(page);
   await page.goto(`/admin/frames/${fixture.code}`);

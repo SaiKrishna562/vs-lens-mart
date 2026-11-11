@@ -4,6 +4,14 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-10 · Phase 6 release 6.1 · Try-on frames sized to the face
+
+- **Changed:** the frame on the customer's photo is now sized to the face: about 95% of the face's width cheek to cheek (how glasses sit), or, when the frame's lens and bridge sizes are stored, its real front width (2 × lens + bridge + 6 mm) with an average 63 mm pupil distance as the ruler. Kept between 1.9 and 2.8 times the eye distance; the customer's Size slider still fine-tunes it. Before, the lens centres were simply placed at 1.08 times the pupil distance, which drew wide frames such as aviators too small.
+- **Why:** the developer's try-on of SG-256 (aviators) looked short (2026-11-10): the sunglasses covered about 83% of the face's width.
+- **Note:** none of the three frames with try-on has a stored size, so they use the face-width rule; entering lens and bridge sizes on the frame form makes the fit follow the real frame.
+- **Tests:** a full run was stretched to 21 hours by the laptop sleeping; its 3 failures were re-run: the holidays and sign-in tests passed, and the customer try-on test needed more than the default 30 s (it loads the 8 MB face model and starts a camera; it took 31–42 s), so it now has 90 s. All 3 pass. The rate-limit test and the 8 others waiting on it didn't run in that full run.
+- **Files:** `src/components/tryon/draw.ts`, `src/components/tryon/tryon-panel.tsx`, `src/components/catalogue/frame-detail.tsx`, `tests/tryon.spec.ts`, `docs/changelog.md`
+
 ## 2026-11-10 · Phase 6 release 6.1 · Sunglasses lenses (tinted, mirrored), eraser, quieter console
 
 - **Changed:**

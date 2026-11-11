@@ -13,6 +13,7 @@ import { getBranches } from "@/lib/site-data";
 import { CardRow, FavButton } from "./fav-button";
 import { enquiryText, photoAlt } from "./frame-text";
 import { Gallery } from "./gallery";
+import { frontMm } from "@/components/tryon/draw";
 import { TryOn, type TryonFrame } from "@/components/tryon/tryon-panel";
 import { tryonEnabled } from "@/lib/tryon";
 
@@ -28,7 +29,8 @@ const K = {
 /** Up to 4 live frames with the same shape (sunglasses: or a lens type) or brand; in stock first. */
 /** What the try-on panel needs about a frame (only called for frames with try-on on). */
 function tryonFrame(f: CatalogueItem): TryonFrame {
-  return { code: f.code, brand: f.brand, model: f.model, href: f.href, enquiry: enquiryText(f), tryon: f.tryon! };
+  const [lens, bridge] = f.size ? f.size.split("-").map(Number) : [];
+  return { code: f.code, brand: f.brand, model: f.model, href: f.href, enquiry: enquiryText(f), tryon: f.tryon!, mm: frontMm(lens, bridge) };
 }
 
 function related(f: CatalogueItem, pool: CatalogueItem[]) {

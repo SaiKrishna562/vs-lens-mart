@@ -16,6 +16,8 @@ import { findFace, loadFaceTracker, trackFace, type Face } from "./face";
 export type TryonFrame = {
   code: string; brand: string; model: string; href: string; enquiry: string;
   tryon: { path: string; left: number; right: number; y: number };
+  /** The frame's real front width in mm, when its size is known (sizes the frame on the face) */
+  mm: number | null;
 };
 
 type Step = "start" | "camera" | "working" | "result" | "problem";
@@ -114,7 +116,7 @@ export function TryOn({ frame, others }: { frame: TryonFrame; others: TryonFrame
   /* The frame picture for the chosen frame */
   useEffect(() => {
     let live = true;
-    picture(current.tryon.path).then((img) => { if (live) setPic({ img, ...current.tryon }); }, () => { if (live) setPic(null); });
+    picture(current.tryon.path).then((img) => { if (live) setPic({ img, ...current.tryon, mm: current.mm }); }, () => { if (live) setPic(null); });
     return () => { live = false; };
   }, [current]);
 

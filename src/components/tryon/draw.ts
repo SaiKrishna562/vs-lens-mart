@@ -1,11 +1,26 @@
-/* Drawing a frame on a face (Requirements_TryOn.md 4.2): the frame picture's
-   lens centres go on the customer's pupils, turned with the line between the
-   eyes, then the customer's Size / Up-down / Tilt adjustments. The view is
+/* Drawing a frame on a face (Requirements_TryOn.md 4.2): the frame is centred
+   on the customer's eyes, turned with the line between them, and sized to the
+   face (see frameWidth), then the customer's Size / Up-down / Tilt adjustments. The view is
    cropped to the face so the frame is big enough to judge. Plain functions,
    used by the panel and the saved image. */
 import type { Face } from "./face";
 
-export type TryonPicture = { img: HTMLImageElement; left: number; right: number; y: number };
+/** `mm`: the frame's real front width in millimetres, when its lens and bridge sizes are known. */
+export type TryonPicture = { img: HTMLImageElement; left: number; right: number; y: number; mm?: number | null };
+
+/** The front width of a frame from its size, e.g. lens 58 + bridge 14: two lenses, the bridge and the end pieces. */
+export const frontMm = (lens: number | null | undefined, bridge: number | null | undefined) =>
+  lens && bridge ? 2 * lens + bridge + 6 : null;
+
+const PD_MM = 63; // an average adult's distance between the pupils, the ruler when a frame's size is known
+
+/** How wide the frame should be drawn, in canvas pixels. With the frame's size known, its real
+    width (the pupils as the ruler); otherwise 95% of the face, cheek to cheek, which is how
+    glasses sit. Kept within sensible limits of the eye distance either way. */
+function frameWidth(eyes: number, faceWidth: number, mm: number | null | undefined) {
+  const want = mm ? (mm / PD_MM) * eyes : faceWidth * 0.95;
+  return Math.min(Math.max(want, eyes * 1.9), eyes * 2.8);
+}
 export type Fit = { size: number; up: number; tilt: number }; // 1 = as found; up in % of the eye distance; tilt in degrees
 export const FIT0: Fit = { size: 1, up: 0, tilt: 0 };
 
@@ -36,10 +51,8 @@ export function drawLook(
   const R = { x: (face.right.x - crop.x) * k, y: (face.right.y - crop.y) * k };
   const eyes = Math.hypot(R.x - L.x, R.y - L.y);
   const fw = frame.img.naturalWidth, fh = frame.img.naturalHeight;
-  const lensGap = (frame.right - frame.left) * fw;
-  // Frames' lens centres sit a little wider than most people's pupils, so the picture is
-  // scaled to the eyes and then slightly up; the customer's Size fine-tunes it
-  const scale = (eyes / lensGap) * 1.08 * fit.size;
+  // The picture's width is the frame's front, so scale it to the width the face needs
+  const scale = (frameWidth(eyes, face.width * k, frame.mm) / fw) * fit.size;
   const angle = Math.atan2(R.y - L.y, R.x - L.x) + (fit.tilt * Math.PI) / 180;
   const mid = { x: (L.x + R.x) / 2, y: (L.y + R.y) / 2 };
   const anchor = { x: ((frame.left + frame.right) / 2) * fw, y: frame.y * fh };
