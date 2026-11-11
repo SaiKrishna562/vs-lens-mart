@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { workingBranch } from "@/lib/admin-branch";
@@ -18,6 +19,10 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
 }
 
 async function Shell({ children }: { children: React.ReactNode }) {
+  // Request-time from the first line: the sign-in check (Better Auth) uses random
+  // values, which Next.js reports as a "blocking route" if it meets them while
+  // pre-rendering. The staff area always depends on who's signed in anyway.
+  await connection();
   const staff = await requireStaff();
   const [slug, allBranches] = await Promise.all([workingBranch(staff), getBranches()]);
   const n = await withRole(staff.role, (tx) => counts(tx, staff.id), staff.id);

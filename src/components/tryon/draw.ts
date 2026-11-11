@@ -15,10 +15,11 @@ export const frontMm = (lens: number | null | undefined, bridge: number | null |
 const PD_MM = 63; // an average adult's distance between the pupils, the ruler when a frame's size is known
 
 /** How wide the frame should be drawn, in canvas pixels. With the frame's size known, its real
-    width (the pupils as the ruler); otherwise 95% of the face, cheek to cheek, which is how
-    glasses sit. Kept within sensible limits of the eye distance either way. */
+    width (the pupils as the ruler); otherwise 103% of the face, cheek to cheek: glasses sit
+    slightly wider than the cheeks (tuned 2026-11-11 on the developer's own fittings, where
+    95% needed the Size slider raised about 8% for both an aviator and a square frame). Kept within sensible limits of the eye distance either way. */
 function frameWidth(eyes: number, faceWidth: number, mm: number | null | undefined) {
-  const want = mm ? (mm / PD_MM) * eyes : faceWidth * 0.95;
+  const want = mm ? (mm / PD_MM) * eyes : faceWidth * 1.03;
   return Math.min(Math.max(want, eyes * 1.9), eyes * 2.8);
 }
 export type Fit = { size: number; up: number; tilt: number }; // 1 = as found; up in % of the eye distance; tilt in degrees

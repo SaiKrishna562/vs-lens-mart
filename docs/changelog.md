@@ -4,6 +4,15 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-11 · Phase 6 release 6.1 · Staff area "blocking route" warning fixed; try-on frames a little bigger
+
+- **Changed:**
+  - **Staff layout:** the shell calls `await connection()` before the sign-in check, so the staff area is request-time from its first line. The development overlay showed "Blocking Route: Next.js encountered the unstable value `crypto.getRandomValues()` while prerendering" on staff pages (it had appeared since at least 2026-11-09, on every staff page, not only when saving try-on): Better Auth's sign-in check uses random values, and Next.js 16 met them while pre-rendering. A first attempt (reading the request headers on their own line in `session.ts`) didn't stop it and was undone.
+  - **Try-on size:** frames without a stored size are drawn at 103% of the face's width cheek to cheek (was 95%).
+- **Why:** the developer's screenshots (2026-11-11): the warning appeared while preparing lenses, and both an aviator (SG-256) and a square frame (Fastrack) only fitted after raising Size by about 5–11%.
+- **Checked:** signed in on the development server with a temporary staff account (deleted afterwards) and opened the dashboard, Add sunglasses, Add frame and the frames list: no warning after the change.
+- **Files:** `src/app/admin/(staff)/layout.tsx`, `src/components/tryon/draw.ts`, `docs/changelog.md`
+
 ## 2026-11-10 · Phase 6 release 6.1 · Try-on frames sized to the face
 
 - **Changed:** the frame on the customer's photo is now sized to the face: about 95% of the face's width cheek to cheek (how glasses sit), or, when the frame's lens and bridge sizes are stored, its real front width (2 × lens + bridge + 6 mm) with an average 63 mm pupil distance as the ruler. Kept between 1.9 and 2.8 times the eye distance; the customer's Size slider still fine-tunes it. Before, the lens centres were simply placed at 1.08 times the pupil distance, which drew wide frames such as aviators too small.
