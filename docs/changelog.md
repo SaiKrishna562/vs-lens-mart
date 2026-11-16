@@ -4,6 +4,16 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-16 · Phase 5 follow-up · Navigation: larger menu items
+- **Changed:** the top menu items are larger and further apart on wide screens: 16px text with 16px each side from 1280px, and 20px each side from 1440px (the mockup has 15px text and 12px). Between 1180 and 1279px they keep the mockup's tighter 14px / 10px, because the larger size made the page scroll sideways at 1180px. Checked at 1180, 1280 and 1440px: no sideways scroll.
+- **Why:** developer request: with 7 items the bar looked short. A marked "Live additions" block, so deleting it restores the mockup sizes.
+- **Files:** `src/styles/site-chrome.css`, `docs/changelog.md`
+
+## 2026-11-16 · Phase 5 follow-up · Navigation: 7 top-level items
+- **Changed:** removed "Eye camps" from the top menu bar (desktop and phone), leaving 7 items: Home, About, Frames, Sunglasses, Lenses, Eye care, Contact. Eye camps stays reachable from the Eye care menu's card, the phone menu's Eye care section, the footer and the home page; on `/eye-camps` pages the Eye care item now gets the gold "you are here" underline. Layout test updated to 7 items, plus a new test for the Eye care link and underline.
+- **Why:** developer request: the 8-item bar felt too long, and Eye camps already sits under Eye care. **Not yet confirmed by the client**, who signed off the 8-item order on 2026-10-21. The mockups (`mockups/site.js`) still show 8 items.
+- **Files:** `src/components/site/menu-links.ts`, `tests/layout.spec.ts`, `docs/requirements/Requirements_Navigation.md`, `CLAUDE.md`, `docs/changelog.md`
+
 ## 2026-11-09 · Sprint 5.6 part D · Loading states, Add frame button, Lighthouse
 
 - **Changed:**

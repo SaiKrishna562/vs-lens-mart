@@ -205,7 +205,7 @@ Use "Since 1999" and compute the years in code. Never hard-code "25 years".
 
 Full spec (mega-menu contents, mobile accordion, sticky bar, behaviour, acceptance criteria): `docs/requirements/Requirements_Navigation.md`.
 
-The logo and a "Home" item both link to `/`. The 8 top-level items, in order (client change 2026-10-21):
+The logo and a "Home" item both link to `/`. The 7 top-level items, in order (client change 2026-10-21; Eye camps moved into the Eye care menu 2026-11-16, developer request, **not yet confirmed by the client**):
 
 1. **Home:** plain link to `/`
 2. **About:** plain link to `/about`
@@ -213,8 +213,9 @@ The logo and a "Home" item both link to `/`. The 8 top-level items, in order (cl
 4. **Sunglasses:** mega menu
 5. **Lenses:** mega menu
 6. **Eye care:** photo cards
-7. **Eye camps:** plain link to `/eye-camps`
-8. **Contact:** plain link to `/contact`
+7. **Contact:** plain link to `/contact`
+
+Eye camps (`/eye-camps`) is not a top-level item: it's a card in the Eye care menu (desktop and phone), a footer link and a home page section, and the Eye care item is underlined on its pages.
 
 On the right are the light/dark toggle, Search and WhatsApp icons. There are never cart or account icons. Favourites are a heart on frame cards and frame detail, not a nav icon. To add an item, remove one first.
 

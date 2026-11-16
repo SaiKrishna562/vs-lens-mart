@@ -6,7 +6,9 @@
 
 export type NavItem = { id: string; label: string; href: string; mega?: true };
 
-// The client's order (2026-10-21). No more than 8: to add one, remove one.
+// The client's order (2026-10-21). No more than 7: to add one, remove one.
+// Eye camps left the top level on 2026-11-16 (developer request, not yet confirmed
+// by the client); it's a card in the Eye care menu, the phone accordion and the footer.
 export const NAV: NavItem[] = [
   { id: "home", label: "Home", href: "/" },
   { id: "about", label: "About", href: "/about" },
@@ -14,7 +16,6 @@ export const NAV: NavItem[] = [
   { id: "sunglasses", label: "Sunglasses", href: "/sunglasses", mega: true },
   { id: "lenses", label: "Lenses", href: "/lenses", mega: true },
   { id: "eye-care", label: "Eye care", href: "/eye-care", mega: true },
-  { id: "eye-camps", label: "Eye camps", href: "/eye-camps" },
   { id: "contact", label: "Contact", href: "/contact" },
 ];
 
@@ -23,6 +24,7 @@ export function currentNavId(pathname: string): string | null {
   if (pathname === "/") return "home";
   if (pathname === "/gallery") return "about"; // reached from About
   if (pathname === "/book-eye-test") return "eye-care";
+  if (pathname === "/eye-camps" || pathname.startsWith("/eye-camps/")) return "eye-care"; // in the Eye care menu
   const hit = NAV.find((n) => n.href !== "/" && (pathname === n.href || pathname.startsWith(`${n.href}/`)));
   return hit?.id ?? null;
 }

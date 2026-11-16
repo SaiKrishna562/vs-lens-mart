@@ -2,7 +2,7 @@
    360 / 768 / 1440 px (playwright.config.ts projects). */
 import { expect, test, type Page } from "@playwright/test";
 
-const ORDER = ["Home", "About", "Frames", "Sunglasses", "Lenses", "Eye care", "Eye camps", "Contact"];
+const ORDER = ["Home", "About", "Frames", "Sunglasses", "Lenses", "Eye care", "Contact"];
 const isDesktop = (p: Page) => (p.viewportSize()?.width ?? 0) >= 1180;
 const isPhone = (p: Page) => (p.viewportSize()?.width ?? 0) < 768;
 
@@ -17,7 +17,7 @@ test.afterEach(async ({ page }) => {
   expect((page as Page & { errors: string[] }).errors, "console errors").toEqual([]);
 });
 
-test("8 menu items in the client's order, Home marked on the home page, no cart or account", async ({ page }) => {
+test("7 menu items in the client's order, Home marked on the home page, no cart or account", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator(".menu > li > .menu__link")).toHaveText(ORDER);
   await expect(page.locator(".acc > li > :first-child")).toHaveText(ORDER);
@@ -27,6 +27,13 @@ test("8 menu items in the client's order, Home marked on the home page, no cart 
   await expect(page.locator('.site-header :is([aria-label*="cart" i], [aria-label*="account" i], [aria-label*="favourite" i])')).toHaveCount(0);
   await expect(page.locator(".utility__cta a")).toHaveAttribute("href", "/book-eye-test");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), "sideways scroll").toBe(0);
+});
+
+test("Eye camps sits in the Eye care menu, which is marked current on /eye-camps", async ({ page }) => {
+  await page.goto("/eye-camps");
+  await expect(page.locator('.menu > li > .menu__link[aria-current="page"]')).toHaveText("Eye care");
+  await expect(page.locator('#mega-eye-care a[href="/eye-camps"]')).toHaveCount(1);
+  await expect(page.locator('.acc a[href="/eye-camps"]')).toHaveCount(1);
 });
 
 test("shop facts come from the database, with Since 1999 and no year count", async ({ page }) => {

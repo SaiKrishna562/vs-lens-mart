@@ -453,6 +453,17 @@
   .menu__link::after { left: 10px; right: 10px; }
   .nav__inner { gap: var(--s-4); }
 }
+/* Live additions: larger, roomier menu items now that the bar has 7 items, not 8
+   (developer request 2026-11-16). Mockup values: 15px text, 12px each side
+   (14px / 10px at 1180–1279px, kept: there's no room to grow there). Delete this block to go back. */
+@media (min-width: 1280px) {
+  .menu__link { padding: 0 16px; font-size: 1rem; }
+  .menu__link::after { left: 16px; right: 16px; }
+}
+@media (min-width: 1440px) {
+  .menu__link { padding: 0 20px; }
+  .menu__link::after { left: 20px; right: 20px; }
+}
 @media (max-width: 1179px) {
   .menu, .mega { display: none; }
   .burger { display: inline-grid; }
