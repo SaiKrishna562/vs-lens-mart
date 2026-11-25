@@ -33,7 +33,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | D5 | Instagram / Facebook / YouTube links | `https://example.com/instagram`, `https://example.com/facebook`, `https://example.com/youtube` | [ ] |
 | D6 | Google rating shown on site | "4.8 ★ from 120 reviews" (only until Google Business Profiles exist) | [ ] |
 | D7 | Eye test price | Free eye test | [ ] |
-| D8 | Logo | The client asked for a new logo (2026-10-21). Until the file arrives, mockups use the placeholder `mockups/assets/logo-placeholder.svg` (a "VS" badge marked "LOGO"). The old `docs/logo.png` is no longer used | [ ] |
+| D8 | Logo | The client asked for a new logo (2026-10-21). Until the file arrives, mockups use the placeholder `mockups/assets/logo-placeholder.svg` (a "VS" badge marked "LOGO"). The old `docs/logo.png` is no longer used (removed from the repository 2026-11-25; still in git history) | [ ] |
 | D9 | Retention period shown on `/privacy` (website MVP) | Booking and enquiry details are kept for 1 year, then deleted. Customer and prescription records (store system, later) follow X7 | [ ] |
 
 ## 3. Dummy content
@@ -63,7 +63,7 @@ Source: `docs/prescription_card.jpg`, received 2026-10-09.
 | C13 | Frame categories | Eyeglasses · Computer glasses (Sunglasses is its own page). Frame code format `VSF-1024` | [ ] |
 | C24 | Category photos (menus and homepage) | AI-generated portraits for Men / Women / Kids frames and sunglasses (`public/dummy/naiv/men-frames.png` and so on, gitignored): the desktop mega-menu "Shop for" tiles and the homepage "Find your frame" tiles (Sunglasses uses `woman-sunglasses`); also the Eye care menu cards (`Book-an-eyetest`, `our-branches`, `eye-camps`; the branch photo is an invented shop front, not the real one). Development only; never in a production build | [ ] |
 | C25 | Try-on sample pictures (Phase 6) | Development only, not in use yet: see-through front-view pictures for a few seed frames, and a sample face for the staff preview and the tests, kept out of git (the face from a person who agreed to it). Added to the DUMMY register in `site-config.ts` when release 6.1 first uses them. Real try-on pictures come from the client's own frame photos (`Requirements_TryOn.md`) | [ ] |
-| C12 | Homepage hero photo | The photo part of `docs/Premium Eyewear Visionary Hero.png` (AI-generated people), cropped to `mockups/assets/hero-dummy.jpg`. Mockups only; never live. In the app: an AI-generated hero slideshow in `public/dummy/hero/` (gitignored), development only; production shows no photo until the client's real ones arrive | [ ] |
+| C12 | Homepage hero photo | The photo part of `docs/Premium Eyewear Visionary Hero.png` (removed from the repository 2026-11-25; still in git history) (AI-generated people), cropped to `mockups/assets/hero-dummy.jpg`. Mockups only; never live. In the app: an AI-generated hero slideshow in `public/dummy/hero/` (gitignored), development only; production shows no photo until the client's real ones arrive | [ ] |
 | C11 | Photos | Grey placeholders with a label (already in `mockups/styles.css`). Internet photos only after approval, see section 6 | [ ] |
 
 ## 4. Dummy answers to the 8 (+1) contradictions

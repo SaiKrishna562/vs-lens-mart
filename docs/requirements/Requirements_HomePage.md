@@ -5,7 +5,7 @@ Route: `/`
 Plan version: v1.2 (Figure 1, "Homepage section structure")
 Sources:
 - `docs/plan/VS_Lens_Mart_Plan_v1.2.docx` section 2
-- homepage design image (`docs/Premium Eyewear Visionary Hero.png`)
+- homepage design image (`docs/Premium Eyewear Visionary Hero.png` (removed from the repository 2026-11-25; still in git history))
 - `docs/client-answers.md` (form Q7–17)
 - `docs/dummy-data.md`
 - `CLAUDE.md`

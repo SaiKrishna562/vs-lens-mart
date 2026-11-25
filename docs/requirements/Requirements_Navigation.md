@@ -2,7 +2,7 @@
 
 Status: Approved by the client 2026-10-21 (mockups reviewed together on Google Meet; changes applied). Built in sprint 5.1 (2026-10-23); acceptance criteria covered by `tests/layout.spec.ts` and `tests/menu-data.spec.ts`.
 Plan version: v1.1 (navigation update), updated 2026-10-09 with the client's form and prescription card
-Sources: project plan v1.1 section 3 "Navigation bar (mega menu)", `docs/client-answers.md` (incl. the 160-question form), `docs/prescription_card.jpg`, `docs/dummy-data.md`, homepage design image (`docs/Premium Eyewear Visionary Hero.png`), navigation mockup (`docs/vs_lens_mart_navbar_mega_menu.html`), `CLAUDE.md`
+Sources: project plan v1.1 section 3 "Navigation bar (mega menu)", `docs/client-answers.md` (incl. the 160-question form), `docs/prescription_card.jpg`, `docs/dummy-data.md`, homepage design image (`docs/Premium Eyewear Visionary Hero.png` (removed from the repository 2026-11-25; still in git history)), navigation mockup (`docs/vs_lens_mart_navbar_mega_menu.html`), `CLAUDE.md`
 
 **Dummy values:** where the client hasn't answered, mockups and development use the `DUMMY` values from `docs/dummy-data.md`, visibly tagged. They never go live. "TODO (client)" below means the real value is still needed before launch.
 
@@ -44,7 +44,7 @@ Always visible above the main navigation on desktop.
 ### 4.1 Left: logo
 
 - The VS logo plus "LENS MART" and "EST. 1999" link to `/`. There's also a "Home" menu item (client change 2026-10-21).
-- **TODO (client):** the new logo file. On 2026-10-21 the client asked for a new logo; the file hasn't arrived. Until it does, mockups use a placeholder, `mockups/assets/logo-placeholder.svg` (`DUMMY` D8). The old `docs/logo.png` (which spells "FAMLY") is no longer used.
+- **TODO (client):** the new logo file. On 2026-10-21 the client asked for a new logo; the file hasn't arrived. Until it does, mockups use a placeholder, `mockups/assets/logo-placeholder.svg` (`DUMMY` D8). The old `docs/logo.png` (which spells "FAMLY") is no longer used (removed from the repository 2026-11-25; still in git history).
 
 ### 4.2 Centre: 7 top-level items
 

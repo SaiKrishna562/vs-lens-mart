@@ -4,6 +4,11 @@ All notable changes to the VS Lens Mart website project documentation and plan a
 
 New entries go at the top, newest first. Each entry starts with a heading `## YYYY-MM-DD · Phase/Sprint · Area`, followed by **Changed**, **Why** and **Files** lines (see `CLAUDE.md`). The v1.0 and v1.1 entries further down are older, plan-version entries.
 
+## 2026-11-25 · Submission · README and repository clean-up
+- **Changed:** added `README.md` (overview, features, stack, security, requirements, setup, commands, structure). Removed files not needed in the repository: the scratch note `changes to the mockups.txt`, the archived plans `docs/plan/archive/` (v1.0, v1.1), and the old design images `docs/Premium Eyewear Visionary Hero.png` (AI-generated people) and `docs/logo.png`. The documents that mention them now say they were removed (they're still in git history).
+- **Why:** preparing `main` for submission to the professor's GitHub repository. Virtual try-on stays on `feature/virtual-try-on`, unmerged.
+- **Files:** `README.md`, `CLAUDE.md`, `docs/dummy-data.md`, `docs/open-questions.md`, `docs/requirements/Requirements_HomePage.md`, `docs/requirements/Requirements_Navigation.md`, `docs/changelog.md`, and the removed files above
+
 ## 2026-11-16 · Phase 5 follow-up · Navigation: larger menu items
 - **Changed:** the top menu items are larger and further apart on wide screens: 16px text with 16px each side from 1280px, and 20px each side from 1440px (the mockup has 15px text and 12px). Between 1180 and 1279px they keep the mockup's tighter 14px / 10px, because the larger size made the page scroll sideways at 1180px. Checked at 1180, 1280 and 1440px: no sideways scroll.
 - **Why:** developer request: with 7 items the bar looked short. A marked "Live additions" block, so deleting it restores the mockup sizes.

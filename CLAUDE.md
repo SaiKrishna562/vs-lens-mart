@@ -59,7 +59,7 @@ When documents disagree, the higher one wins:
 1. `CLAUDE.md`: global rules
 2. `ROADMAP.md`: scope
 3. `docs/requirements/Requirements_<Page>.md`: page details
-4. `docs/plan/VS_Lens_Mart_Plan_v1.2.docx`: background only. Some of its figures are v1.1 drawings; their captions say what changed. Older versions are in `docs/plan/archive/`; don't use them.
+4. `docs/plan/VS_Lens_Mart_Plan_v1.2.docx`: background only. Some of its figures are v1.1 drawings; their captions say what changed. Older versions were in `docs/plan/archive/` (removed from the repository 2026-11-25; still in git history); don't use them.
 
 Other docs:
 - `docs/client-answers.md` and `docs/open-questions.md`: what the client has and hasn't confirmed. The raw form export is `docs/client-details.xlsx`.
@@ -67,7 +67,7 @@ Other docs:
 - `docs/prescription_card.jpg`: the shop's real prescription card (fields, Indresham number, address).
 - `docs/changelog.md`: the change history.
 - `docs/ai-fluency-log.md`: the AI usage log.
-- The homepage design image and `docs/vs_lens_mart_navbar_mega_menu.html`: the navigation mockup.
+- `docs/vs_lens_mart_navbar_mega_menu.html`: the navigation mockup. The homepage design image (`docs/Premium Eyewear Visionary Hero.png`) was removed from the repository on 2026-11-25 (it shows AI-generated people); it's still in git history.
 
 ## Working rules
 
